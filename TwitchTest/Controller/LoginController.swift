@@ -7,16 +7,20 @@
 //
 
 import UIKit
+import FirebaseDatabase
+import FirebaseAuth
+import JGProgressHUD
 
-//let themePinkColor = UIColor(red: 250/255, green: 134/255, blue: 190/255, alpha: 1)
-//let specialPurple = UIColor(red: 162/255, green: 117/255, blue: 227/255, alpha: 1)
 let themeGrayColor = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
 let specialYellow = UIColor(red: 230/255, green: 179/255, blue: 30/255, alpha: 1)
+let specialGray = UIColor(red: 202/255, green: 202/255, blue: 202/255, alpha: 1)
 let safeAreaHeight_Top = UIApplication.shared.keyWindow!.safeAreaInsets.top
 let safeAreaHeight_Bottom = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
 
 
 class LoginController: UIViewController {
+    
+    
     let logoImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -76,6 +80,7 @@ class LoginController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: "輸入密碼...", attributes: [NSAttributedString.Key.foregroundColor : specialYellow])
         textField.backgroundColor = UIColor.clear
         textField.textColor = specialYellow
+        textField.isSecureTextEntry = true
         return textField
     }()
     let loginButton: UIButton = {
@@ -86,6 +91,7 @@ class LoginController: UIViewController {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
     let registerButton: UIButton = {
@@ -98,6 +104,7 @@ class LoginController: UIViewController {
         button.layer.borderWidth = 2
         button.layer.borderColor = specialYellow.cgColor
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return button
     }()
     lazy var stackView: UIStackView = {
@@ -113,7 +120,8 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = themeGrayColor
-
+        accountTextField.text = "q@q.com"
+        passwordTextField.text = "Qqqqqq"
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)
         
@@ -128,6 +136,7 @@ class LoginController: UIViewController {
         
         setUpConstraints()
         addKeyboardObserver()
+        print(UserDefaults.standard.bool(forKey: "notLoginYet"))
     }
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
@@ -182,6 +191,54 @@ class LoginController: UIViewController {
         
 
     }
+    
+    @objc func handleLogin(){
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "登入中..."
+        hud.show(in: self.view)
+        if let account = accountTextField.text,let password = passwordTextField.text{
+            if account.isEmpty || password.isEmpty{
+                hud.dismiss(afterDelay: 1)
+                let alert = Alert(message: "尚有欄位未輸入", title: "錯誤", with: self)
+                alert.alert_BugReport()
+            }else{
+                Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
+                    if let error = error{
+                        hud.dismiss(afterDelay: 1)
+
+                        let errorCode = (error as NSError).code
+                        self.detectErrorCode(code: errorCode)
+                    }else{
+                        hud.dismiss(afterDelay: 1)
+                        UserDefaults.standard.setIsLogIn(value: true)
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                    
+                }
+
+            }
+        }
+    }
+    func detectErrorCode(code: Int){
+        
+        switch code {
+        case 17008:
+            let alert = Alert(message: "帳號格式不符", title: "錯誤", with: self)
+            alert.alert_BugReport()
+        case 17009:
+            let alert = Alert(message: "密碼錯誤", title: "錯誤", with: self)
+            alert.alert_BugReport()
+        case 17011:
+            let alert = Alert(message: "帳號尚未註冊", title: "錯誤", with: self)
+            alert.alert_BugReport()
+        
+        default:
+            return
+        }
+    }
+    @objc func handleRegister(){
+        self.present(RegisterController(), animated: true, completion: nil)
+    }
     func addKeyboardObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
@@ -191,11 +248,16 @@ class LoginController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
-            self.view.frame = CGRect(x: 0, y: -keyboardHeight, width: self.view.frame.width, height: self.view.frame.height)
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.frame = CGRect(x: 0, y: -keyboardHeight, width: self.view.frame.width, height: self.view.frame.height)
+            }, completion: nil)
+            
         }
     }
     @objc func handleKeyboardHide(_ notification: Notification){
-        self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        }, completion: nil)
     }
 }
 class LeftPaddedTextField: UITextField {

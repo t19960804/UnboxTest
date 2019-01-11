@@ -9,4 +9,9 @@ target 'TwitchTest' do
 	pod 'SwiftyJSON', '~> 4.0'
 	pod 'Alamofire', '~> 4.7'
 	pod 'SDWebImage', '~> 4.0'
+	pod 'Firebase/Core'
+	pod 'Firebase/Database'
+	pod 'Firebase/Auth'
+	pod 'Firebase/Storage'
+	pod 'JGProgressHUD'
 end

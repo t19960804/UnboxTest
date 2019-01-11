@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10846921E5FAFE006F890E /* LoginController.swift */; };
+		0B10846C21E732FF006F890E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B10846B21E732FF006F890E /* GoogleService-Info.plist */; };
+		0B10846E21E738B4006F890E /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10846D21E738B4006F890E /* RegisterController.swift */; };
+		0B10847021E84E36006F890E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10846F21E84E36006F890E /* Alert.swift */; };
+		0B10847221E88A03006F890E /* UserDefaultExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847121E88A03006F890E /* UserDefaultExtension.swift */; };
 		0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413C21E59E8800BD3886 /* AppDelegate.swift */; };
 		0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413E21E59E8800BD3886 /* ViewController.swift */; };
 		0BC3414221E59E8800BD3886 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BC3414021E59E8800BD3886 /* Main.storyboard */; };
@@ -22,6 +26,10 @@
 /* Begin PBXFileReference section */
 		0A8720CE5B1B0818AA928023 /* Pods_TwitchTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TwitchTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B10846921E5FAFE006F890E /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		0B10846B21E732FF006F890E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0B10846D21E738B4006F890E /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
+		0B10846F21E84E36006F890E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		0B10847121E88A03006F890E /* UserDefaultExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultExtension.swift; sourceTree = "<group>"; };
 		0BC3413921E59E8800BD3886 /* TwitchTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BC3413C21E59E8800BD3886 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0BC3413E21E59E8800BD3886 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -87,6 +95,8 @@
 				0BC3414521E59E8C00BD3886 /* LaunchScreen.storyboard */,
 				0BC3414821E59E8C00BD3886 /* Info.plist */,
 				0BC3413E21E59E8800BD3886 /* ViewController.swift */,
+				0B10846B21E732FF006F890E /* GoogleService-Info.plist */,
+				0B10847121E88A03006F890E /* UserDefaultExtension.swift */,
 			);
 			path = TwitchTest;
 			sourceTree = "<group>";
@@ -102,8 +112,9 @@
 		0BC3415121E5A6E000BD3886 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */,
+				0B10846D21E738B4006F890E /* RegisterController.swift */,
 				0B10846921E5FAFE006F890E /* LoginController.swift */,
+				0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -112,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				0BC3415521E5A93900BD3886 /* InternetService.swift */,
+				0B10846F21E84E36006F890E /* Alert.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -187,6 +199,7 @@
 				0BC3414721E59E8C00BD3886 /* LaunchScreen.storyboard in Resources */,
 				0BC3414421E59E8C00BD3886 /* Assets.xcassets in Resources */,
 				0BC3414221E59E8800BD3886 /* Main.storyboard in Resources */,
+				0B10846C21E732FF006F890E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,16 +238,26 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TwitchTest/Pods-TwitchTest-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -251,8 +274,11 @@
 				0BC3415621E5A93900BD3886 /* InternetService.swift in Sources */,
 				0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */,
 				0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */,
+				0B10846E21E738B4006F890E /* RegisterController.swift in Sources */,
 				0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */,
+				0B10847221E88A03006F890E /* UserDefaultExtension.swift in Sources */,
 				0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */,
+				0B10847021E84E36006F890E /* Alert.swift in Sources */,
 				0BC3415321E5A6F900BD3886 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

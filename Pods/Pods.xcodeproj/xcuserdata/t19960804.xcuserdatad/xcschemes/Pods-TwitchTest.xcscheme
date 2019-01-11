@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "70D2E8C4371C4360EEDF91DB605DABB6"
+               BlueprintIdentifier = "92352B26ECD13F5DC3E69886C61EBCE3"
                BuildableName = "Pods_TwitchTest.framework"
                BlueprintName = "Pods-TwitchTest"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "70D2E8C4371C4360EEDF91DB605DABB6"
+            BlueprintIdentifier = "92352B26ECD13F5DC3E69886C61EBCE3"
             BuildableName = "Pods_TwitchTest.framework"
             BlueprintName = "Pods-TwitchTest"
             ReferencedContainer = "container:Pods.xcodeproj">
