@@ -15,7 +15,7 @@ private let reuseIdentifier = "Cell"
 
 class AllCommodityCollectionViewController: UICollectionViewController{
     
-    let category = ["3c產品","美妝","家電","動漫模型","運動用品","零食","精品","嬰幼兒用品"]
+    let category = ["3C產品","美妝","家電","動漫模型","運動用品","零食","精品","嬰幼兒用品"]
     
     
     override func viewDidLoad() {
@@ -52,10 +52,8 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         try? Auth.auth().signOut()
         UserDefaults.standard.setIsLogIn(value: false)
         self.present(LoginController(), animated: true, completion: nil)
-
     }
   
-    //操你媽
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -64,9 +62,13 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CategoryCell
-//        cell.categoryImageView.image = UIImage(named: category[indexPath.row])
-//        cell.categoryLabel.text = category[indexPath.row]
+        cell.categoryImageView.image = UIImage(named: category[indexPath.row])?.withRenderingMode(.alwaysTemplate)
+        cell.categoryLabel.text = category[indexPath.row]
         return cell
     }
-
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let categoryCollectionViewController = ArticlesCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        categoryCollectionViewController.navigationItem.title = category[indexPath.row]
+        self.navigationController?.pushViewController(categoryCollectionViewController, animated: true)
+    }
 }

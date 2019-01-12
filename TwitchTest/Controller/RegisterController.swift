@@ -8,23 +8,32 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
+import FirebaseStorage
+
 import JGProgressHUD
 
 class RegisterController: UIViewController {
     
-    let uploadingImageView: UIImageView = {
+    lazy var uploadingImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "camera64")?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: "user256")?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = specialYellow
         imageView.backgroundColor = UIColor.clear
-        imageView.contentMode = .center
+        imageView.contentMode = .scaleAspectFit
+        
         imageView.layer.cornerRadius = 100
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = specialYellow.cgColor
         imageView.layer.borderWidth = 3
+        imageView.isUserInteractionEnabled = true
+        //手勢
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleOpenAlbum))
+        imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
+    
     let label_1: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -216,7 +225,13 @@ class RegisterController: UIViewController {
         
         
     }
-    
+    @objc func handleOpenAlbum(){
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
+    }
     @objc func handleRegister(){
         
         let hud = JGProgressHUD(style: .dark)
@@ -228,15 +243,41 @@ class RegisterController: UIViewController {
                 let alert = Alert(message: "尚有欄位未輸入", title: "錯誤", with: self)
                 alert.alert_BugReport()
             }else{
+                //新增帳號
                 Auth.auth().createUser(withEmail: account, password: password) { (result, error) in
                     if let error = error{
                         hud.dismiss(afterDelay: 1)
                         let errorCode = (error as NSError).code
                         self.detectErrorCode(code: errorCode)
                     }else{
+                        let imageUID = NSUUID().uuidString
+                        guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
+                        //圖片存進Storage,再從裡面抓出URL
+                        let ref = Storage.storage().reference().child("userImages").child(imageUID)
+                        ref.putData(userImage, metadata: nil, completion: { (metadata, error) in
+                            if let error = error{
+                                print("error:",error)
+                            }
+                            //抓出在Storage的URL
+                            ref.downloadURL(completion: { (url, error) in
+                                if let error = error{
+                                    print("error:",error)
+                                }
+                                //新增user後,user有自帶的uid
+                                guard let userUID = result?.user.uid else{return}
+                                let values: [String : Any] = ["暱稱" : userName,
+                                                              "帳號" : account,
+                                                              "頭像網址" : url?.absoluteString as Any]
+                                self.addUserToDataBase(uid: userUID, values: values)
+                            })
+
+                        })
+                       
+                        
+                        
                         hud.dismiss(afterDelay: 1)
                         //dismiss所有的Controller,回到根畫面
-                       self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
                         UserDefaults.standard.set(false, forKey: "notLoginYet")
                         UserDefaults.standard.synchronize()
                     }
@@ -245,8 +286,17 @@ class RegisterController: UIViewController {
             }
         }
     }
+    
+    
+    func addUserToDataBase(uid: String,values: [String : Any]){
+        let ref = Database.database().reference().child("users").child(uid)
+        ref.setValue(values) { (error, metaData) in
+            if let error = error{
+                print("error:",error)
+            }
+        }
+    }
     func detectErrorCode(code: Int){
-
         switch code {
         case 17007:
             let alert = Alert(message: "帳號已被使用", title: "錯誤", with: self)
@@ -286,3 +336,16 @@ class RegisterController: UIViewController {
     }
 }
 
+//相簿存取
+extension RegisterController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+    //完成選取
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
+        self.dismiss(animated: true, completion: nil)
+        uploadingImageView.image = getImage
+    }
+    //按下取消
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
