@@ -199,8 +199,8 @@ class LoginController: UIViewController {
         if let account = accountTextField.text,let password = passwordTextField.text{
             if account.isEmpty || password.isEmpty{
                 hud.dismiss(afterDelay: 1)
-                let alert = Alert(message: "尚有欄位未輸入", title: "錯誤", with: self)
-                alert.alert_BugReport()
+                Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
+                
             }else{
                 Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
                     if let error = error{
@@ -223,15 +223,11 @@ class LoginController: UIViewController {
         
         switch code {
         case 17008:
-            let alert = Alert(message: "帳號格式不符", title: "錯誤", with: self)
-            alert.alert_BugReport()
+            Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
         case 17009:
-            let alert = Alert(message: "密碼錯誤", title: "錯誤", with: self)
-            alert.alert_BugReport()
+            Alert.alert_BugReport(message: "密碼錯誤", title: "錯誤", with: self)
         case 17011:
-            let alert = Alert(message: "帳號尚未註冊", title: "錯誤", with: self)
-            alert.alert_BugReport()
-        
+            Alert.alert_BugReport(message: "帳號尚未註冊", title: "錯誤", with: self)
         default:
             return
         }

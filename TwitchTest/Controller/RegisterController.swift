@@ -240,8 +240,7 @@ class RegisterController: UIViewController {
         if let userName = userNameTextField.text,let account = accountTextField.text,let password = passwordTextField.text{
             if userName.isEmpty || account.isEmpty || password.isEmpty{
                 hud.dismiss(afterDelay: 1)
-                let alert = Alert(message: "尚有欄位未輸入", title: "錯誤", with: self)
-                alert.alert_BugReport()
+                Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
             }else{
                 //新增帳號
                 Auth.auth().createUser(withEmail: account, password: password) { (result, error) in
@@ -299,14 +298,11 @@ class RegisterController: UIViewController {
     func detectErrorCode(code: Int){
         switch code {
         case 17007:
-            let alert = Alert(message: "帳號已被使用", title: "錯誤", with: self)
-            alert.alert_BugReport()
+            Alert.alert_BugReport(message: "帳號已被使用", title: "錯誤", with: self)
         case 17008:
-            let alert = Alert(message: "帳號格式不符", title: "錯誤", with: self)
-            alert.alert_BugReport()
+            Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
         case 17026:
-            let alert = Alert(message: "密碼不足6位數", title: "錯誤", with: self)
-            alert.alert_BugReport()
+            Alert.alert_BugReport(message: "密碼不足6位數", title: "錯誤", with: self)
         default:
             return
         }
