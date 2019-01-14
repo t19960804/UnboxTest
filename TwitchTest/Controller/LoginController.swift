@@ -14,6 +14,9 @@ import JGProgressHUD
 let themeGrayColor = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
 let specialYellow = UIColor(red: 230/255, green: 179/255, blue: 30/255, alpha: 1)
 let specialGray = UIColor(red: 202/255, green: 202/255, blue: 202/255, alpha: 1)
+let specialWhite = UIColor(red: 252/255, green: 250/255, blue: 241/255, alpha: 1)
+let heartPink  = UIColor(red: 248 / 255, green: 94 / 255, blue: 159 / 255, alpha: 1)
+
 let safeAreaHeight_Top = UIApplication.shared.keyWindow!.safeAreaInsets.top
 let safeAreaHeight_Bottom = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
 
@@ -259,11 +262,11 @@ class LoginController: UIViewController {
 class LeftPaddedTextField: UITextField {
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 10, height: bounds.height)
+        return CGRect(x: bounds.origin.x + 5, y: bounds.origin.y, width: bounds.width + 5, height: bounds.height)
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 10, height: bounds.height)
+        return CGRect(x: bounds.origin.x + 5, y: bounds.origin.y, width: bounds.width + 5, height: bounds.height)
     }
     
 }

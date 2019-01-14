@@ -22,7 +22,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         super.viewDidLoad()
         setUpNavBar()
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialGray
+        self.collectionView.backgroundColor = specialWhite
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
             layout.itemSize = CGSize(width: (self.view.frame.width - 30) / 2, height: 250)

@@ -11,47 +11,194 @@ import FirebaseStorage
 import FirebaseDatabase
 
 class PostArticleController: UIViewController {
-    
+    var loveImageViews = [UIImageView]()
     var kindOfCategory: String?
+    let viewBackGround: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = specialGray
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        return view
+    }()
     lazy var uploadImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
-        imageView.backgroundColor = UIColor.red
+        imageView.backgroundColor = UIColor.white
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
+        imageView.layer.masksToBounds = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleChooseImage))
         imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
-    let titleTextView: UITextField = {
-        let textField = UITextField()
+    //
+    let titleBackGround: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    let titleTextField: LeftPaddedTextField = {
+        let textField = LeftPaddedTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "輸入標題..."
+        textField.font = UIFont.systemFont(ofSize: 20)
+        textField.textColor = themeGrayColor
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入標題...", attributes: [NSAttributedString.Key.foregroundColor : specialGray])
         return textField
     }()
+    let reviewBackGround: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.white
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    let reviewTextView: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = UIColor.white
+        textView.text = "輸入評論..."
+        textView.textColor = specialGray
+        textView.layer.cornerRadius = 8
+        textView.font = UIFont.systemFont(ofSize: 20)
+        textView.layer.masksToBounds = true
+        return textView
+    }()
+    let loveImageView_1 = LoveImageView(tintColor: heartPink)
+    let loveImageView_2 = LoveImageView(tintColor: heartPink)
+    let loveImageView_3 = LoveImageView(tintColor: heartPink)
+    let loveImageView_4 = LoveImageView(tintColor: heartPink)
+    let loveImageView_5 = LoveImageView(tintColor: heartPink)
+    
+    lazy var heartStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(loveImageView_1)
+        stackView.addArrangedSubview(loveImageView_2)
+        stackView.addArrangedSubview(loveImageView_3)
+        stackView.addArrangedSubview(loveImageView_4)
+        stackView.addArrangedSubview(loveImageView_5)
+        stackView.distribution = .fillEqually
+        stackView.axis = .horizontal
+        stackView.spacing = 7
+        return stackView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(uploadImageView)
-        self.view.addSubview(titleTextView)
+        reviewTextView.delegate = self
         self.view.backgroundColor = UIColor.white
+        
+        
+        
+        self.view.addSubview(viewBackGround)
+        self.view.addSubview(uploadImageView)
+        self.view.addSubview(titleBackGround)
+        self.view.addSubview(titleTextField)
+        self.view.addSubview(reviewBackGround)
+        self.view.addSubview(reviewTextView)
+        self.view.addSubview(heartStackView)
         setUpNavBar()
         setUpConstraints()
+        addTapGesture()
     }
-    
+    func addTapGesture(){
+        
+        loveImageViews.append(loveImageView_1)
+        loveImageViews.append(loveImageView_2)
+        loveImageViews.append(loveImageView_3)
+        loveImageViews.append(loveImageView_4)
+        loveImageViews.append(loveImageView_5)
+        
+        let tap_1 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_1))
+        let tap_2 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_2))
+        let tap_3 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_3))
+        let tap_4 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_4))
+        let tap_5 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_5))
+        
+        loveImageView_1.addGestureRecognizer(tap_1)
+        loveImageView_2.addGestureRecognizer(tap_2)
+        loveImageView_3.addGestureRecognizer(tap_3)
+        loveImageView_4.addGestureRecognizer(tap_4)
+        loveImageView_5.addGestureRecognizer(tap_5)
+        
+    }
+    //
+    @objc func handleHeartPressed_1(){
+        print("1")
+    }
+    @objc func handleHeartPressed_2(){
+        print("2")
+    }
+    @objc func handleHeartPressed_3(){
+        for i in 0...loveImageViews.count - 1{
+            if i <= 2{
+                loveImageViews[i].tintColor = heartPink
+            }else{
+                loveImageViews[i].tintColor = themeGrayColor
+            }
+        }
+    }
+    @objc func handleHeartPressed_4(){
+        print("4")
+    }
+    @objc func handleHeartPressed_5(){
+        print("5")
+    }
+    //
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     func setUpNavBar(){
         self.navigationItem.title = "發表文章"
         let uploadButtonItem = UIBarButtonItem(title: "上傳", style: .plain, target: self, action: #selector(handleUploadArticle))
         self.navigationItem.rightBarButtonItem = uploadButtonItem
     }
     func setUpConstraints(){
-        uploadImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 10).isActive = true
-        uploadImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 8).isActive = true
-        uploadImageView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -8).isActive = true
-        uploadImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.25).isActive = true
         
-        titleTextView.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 10).isActive = true
-        titleTextView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 8).isActive = true
+        viewBackGround.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 10).isActive = true
+        viewBackGround.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
+        viewBackGround.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
+        viewBackGround.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -(safeAreaHeight_Bottom)).isActive = true
+        
+        
+        uploadImageView.topAnchor.constraint(equalTo: viewBackGround.topAnchor, constant: 8).isActive = true
+        uploadImageView.leftAnchor.constraint(equalTo: viewBackGround.leftAnchor, constant: 8).isActive = true
+        uploadImageView.rightAnchor.constraint(equalTo: viewBackGround.rightAnchor, constant: -8).isActive = true
+        uploadImageView.heightAnchor.constraint(equalTo: viewBackGround.heightAnchor, multiplier: 0.25).isActive = true
+        
+        titleBackGround.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 18).isActive = true
+        titleBackGround.leftAnchor.constraint(equalTo: uploadImageView.leftAnchor).isActive = true
+        titleBackGround.rightAnchor.constraint(equalTo: uploadImageView.rightAnchor).isActive = true
+        titleBackGround.heightAnchor.constraint(equalToConstant: 60).isActive = true
+
+        titleTextField.centerYAnchor.constraint(equalTo: titleBackGround.centerYAnchor).isActive = true
+        titleTextField.leftAnchor.constraint(equalTo: titleBackGround.leftAnchor, constant: 5).isActive = true
+        titleTextField.heightAnchor.constraint(equalTo: titleBackGround.heightAnchor, multiplier: 0.75).isActive = true
+        titleTextField.rightAnchor.constraint(equalTo: titleBackGround.rightAnchor, constant: -5).isActive = true
+
+        reviewBackGround.topAnchor.constraint(equalTo: titleBackGround.bottomAnchor, constant: 10).isActive = true
+        reviewBackGround.leftAnchor.constraint(equalTo: uploadImageView.leftAnchor).isActive = true
+        reviewBackGround.rightAnchor.constraint(equalTo: uploadImageView.rightAnchor).isActive = true
+        reviewBackGround.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        
+        reviewTextView.topAnchor.constraint(equalTo: reviewBackGround.topAnchor, constant: 5).isActive = true
+        reviewTextView.leftAnchor.constraint(equalTo: reviewBackGround.leftAnchor, constant: 5).isActive = true
+        reviewTextView.rightAnchor.constraint(equalTo: reviewBackGround.rightAnchor, constant: -5).isActive = true
+        reviewTextView.bottomAnchor.constraint(equalTo: reviewBackGround.bottomAnchor, constant: -5).isActive = true
+
+        heartStackView.topAnchor.constraint(equalTo: reviewTextView.bottomAnchor, constant: 8).isActive = true
+        heartStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        heartStackView.widthAnchor.constraint(equalTo: viewBackGround.widthAnchor, multiplier: 0.7).isActive = true
+        heartStackView.bottomAnchor.constraint(equalTo: viewBackGround.bottomAnchor, constant: -8).isActive = true
     }
     @objc func handleUploadArticle(){
         //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
@@ -62,11 +209,13 @@ class PostArticleController: UIViewController {
             if let error = error{
                 print("error:",error)
             }
-           
             ref.downloadURL(completion: { (url, error) in
-                if let downloadURL = url?.absoluteString{
-                    self.addArticleDataToDataBase(downloadURL: downloadURL)
+                if let error = error{
+                    print("error:",error)
                 }
+                guard let downloadURL = url?.absoluteString else{return}
+                self.addArticleDataToDataBase(downloadURL: downloadURL)
+                
             })
         }
         
@@ -74,9 +223,9 @@ class PostArticleController: UIViewController {
     func addArticleDataToDataBase(downloadURL: String){
         let articleUID = NSUUID().uuidString
         //插入"文章"
-        guard let title = self.titleTextView.text else{return}
-        let values: [String : Any] = ["標題" : title,
-                                      "圖片URL" : downloadURL as Any]
+        guard let title = self.titleTextField.text else{return}
+        let values: [String : Any] = ["title" : title,
+                                      "imageURL" : downloadURL as Any]
         guard let category = self.kindOfCategory else{return}
         let ref = Database.database().reference()
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in
@@ -96,8 +245,8 @@ class PostArticleController: UIViewController {
     }
 }
 
-//相簿存取
-extension PostArticleController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+//相簿存取 + TextView的PlaceHolder處理
+extension PostArticleController: UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextViewDelegate{
     //完成選取
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
@@ -107,5 +256,20 @@ extension PostArticleController: UIImagePickerControllerDelegate,UINavigationCon
     //按下取消
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if reviewTextView.textColor == specialGray{
+            reviewTextView.text = ""
+            reviewTextView.textColor = themeGrayColor
+        }
+        
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if reviewTextView.text.isEmpty{
+            reviewTextView.textColor = specialGray
+            reviewTextView.text = "輸入評論..."
+        }
+        
     }
 }

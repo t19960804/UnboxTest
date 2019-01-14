@@ -49,14 +49,8 @@ class ArticlesCell: UICollectionViewCell {
         label.textColor = themeGrayColor
         return label
     }()
-    let loveImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "like512")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = UIColor(red: 248 / 255, green: 94 / 255, blue: 159 / 255, alpha: 1)
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+    let loveImageView = LoveImageView(tintColor: heartPink)
+
     let checkButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.translatesAutoresizingMaskIntoConstraints = false
