@@ -22,7 +22,11 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         super.viewDidLoad()
         setUpNavBar()
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialWhite
+//        self.collectionView.backgroundColor = specialWhite
+        self.collectionView.backgroundColor = themeGrayColor
+
+        
+        
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
             layout.itemSize = CGSize(width: (self.view.frame.width - 30) / 2, height: 250)
@@ -67,8 +71,8 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         return cell
     }
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let categoryCollectionViewController = ArticlesCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        categoryCollectionViewController.navigationItem.title = category[indexPath.row]
-        self.navigationController?.pushViewController(categoryCollectionViewController, animated: true)
+        let articlesCollectionViewController = ArticlesCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        articlesCollectionViewController.category = category[indexPath.row]
+        self.navigationController?.pushViewController(articlesCollectionViewController, animated: true)
     }
 }

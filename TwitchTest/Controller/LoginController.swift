@@ -196,9 +196,9 @@ class LoginController: UIViewController {
     }
     
     @objc func handleLogin(){
-        let hud = JGProgressHUD(style: .dark)
+        let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = "登入中..."
-        hud.show(in: self.view)
+        hud.show(in: self.view, animated: true)
         if let account = accountTextField.text,let password = passwordTextField.text{
             if account.isEmpty || password.isEmpty{
                 hud.dismiss(afterDelay: 1)
@@ -212,7 +212,7 @@ class LoginController: UIViewController {
                         let errorCode = (error as NSError).code
                         self.detectErrorCode(code: errorCode)
                     }else{
-                        hud.dismiss(afterDelay: 1)
+                        hud.dismiss(animated: true)
                         UserDefaults.standard.setIsLogIn(value: true)
                         self.dismiss(animated: true, completion: nil)
                     }

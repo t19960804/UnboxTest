@@ -11,12 +11,14 @@
 		0B10846C21E732FF006F890E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B10846B21E732FF006F890E /* GoogleService-Info.plist */; };
 		0B10846E21E738B4006F890E /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10846D21E738B4006F890E /* RegisterController.swift */; };
 		0B10847221E88A03006F890E /* UserDefaultExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847121E88A03006F890E /* UserDefaultExtension.swift */; };
-		0B10847421E9DEC8006F890E /* CategoryCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847321E9DEC8006F890E /* CategoryCollectionViewController.swift */; };
+		0B10847421E9DEC8006F890E /* ArticlesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847321E9DEC8006F890E /* ArticlesCollectionViewController.swift */; };
 		0B10847621E9EC4A006F890E /* ArticlesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847521E9EC4A006F890E /* ArticlesCell.swift */; };
 		0B10847821EAE670006F890E /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847721EAE670006F890E /* Alert.swift */; };
 		0B10847A21EB269B006F890E /* PostArticleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847921EB269B006F890E /* PostArticleController.swift */; };
 		0B10847D21EC3FEE006F890E /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847C21EC3FEE006F890E /* Article.swift */; };
 		0B10847F21EC8B5E006F890E /* LoveImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10847E21EC8B5E006F890E /* LoveImageView.swift */; };
+		0B10848221ED9A45006F890E /* ImageDownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */; };
+		0B10848421EF19E4006F890E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848321EF19E4006F890E /* User.swift */; };
 		0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413C21E59E8800BD3886 /* AppDelegate.swift */; };
 		0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413E21E59E8800BD3886 /* ViewController.swift */; };
 		0BC3414221E59E8800BD3886 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BC3414021E59E8800BD3886 /* Main.storyboard */; };
@@ -34,12 +36,14 @@
 		0B10846B21E732FF006F890E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B10846D21E738B4006F890E /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		0B10847121E88A03006F890E /* UserDefaultExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultExtension.swift; sourceTree = "<group>"; };
-		0B10847321E9DEC8006F890E /* CategoryCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewController.swift; sourceTree = "<group>"; };
+		0B10847321E9DEC8006F890E /* ArticlesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesCollectionViewController.swift; sourceTree = "<group>"; };
 		0B10847521E9EC4A006F890E /* ArticlesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesCell.swift; sourceTree = "<group>"; };
 		0B10847721EAE670006F890E /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		0B10847921EB269B006F890E /* PostArticleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostArticleController.swift; sourceTree = "<group>"; };
 		0B10847C21EC3FEE006F890E /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		0B10847E21EC8B5E006F890E /* LoveImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveImageView.swift; sourceTree = "<group>"; };
+		0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadHelper.swift; sourceTree = "<group>"; };
+		0B10848321EF19E4006F890E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0BC3413921E59E8800BD3886 /* TwitchTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BC3413C21E59E8800BD3886 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0BC3413E21E59E8800BD3886 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,8 +83,17 @@
 			isa = PBXGroup;
 			children = (
 				0B10847C21EC3FEE006F890E /* Article.swift */,
+				0B10848321EF19E4006F890E /* User.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0B10848021ED9A22006F890E /* Extenstion */ = {
+			isa = PBXGroup;
+			children = (
+				0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */,
+			);
+			path = Extenstion;
 			sourceTree = "<group>";
 		};
 		0BC3413021E59E8800BD3886 = {
@@ -104,6 +117,7 @@
 		0BC3413B21E59E8800BD3886 /* TwitchTest */ = {
 			isa = PBXGroup;
 			children = (
+				0B10848021ED9A22006F890E /* Extenstion */,
 				0B10847B21EC3FCE006F890E /* Model */,
 				0BC3415421E5A84300BD3886 /* Service */,
 				0BC3415121E5A6E000BD3886 /* Controller */,
@@ -136,7 +150,7 @@
 				0B10846D21E738B4006F890E /* RegisterController.swift */,
 				0B10846921E5FAFE006F890E /* LoginController.swift */,
 				0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */,
-				0B10847321E9DEC8006F890E /* CategoryCollectionViewController.swift */,
+				0B10847321E9DEC8006F890E /* ArticlesCollectionViewController.swift */,
 				0B10847921EB269B006F890E /* PostArticleController.swift */,
 			);
 			path = Controller;
@@ -296,8 +310,9 @@
 			files = (
 				0B10847F21EC8B5E006F890E /* LoveImageView.swift in Sources */,
 				0B10847D21EC3FEE006F890E /* Article.swift in Sources */,
-				0B10847421E9DEC8006F890E /* CategoryCollectionViewController.swift in Sources */,
+				0B10847421E9DEC8006F890E /* ArticlesCollectionViewController.swift in Sources */,
 				0B10847821EAE670006F890E /* Alert.swift in Sources */,
+				0B10848421EF19E4006F890E /* User.swift in Sources */,
 				0BC3415621E5A93900BD3886 /* InternetService.swift in Sources */,
 				0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */,
 				0B10847A21EB269B006F890E /* PostArticleController.swift in Sources */,
@@ -307,6 +322,7 @@
 				0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */,
 				0B10847221E88A03006F890E /* UserDefaultExtension.swift in Sources */,
 				0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */,
+				0B10848221ED9A45006F890E /* ImageDownloadHelper.swift in Sources */,
 				0BC3415321E5A6F900BD3886 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

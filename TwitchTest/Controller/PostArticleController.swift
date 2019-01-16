@@ -9,10 +9,14 @@
 import UIKit
 import FirebaseStorage
 import FirebaseDatabase
+import FirebaseAuth
+import JGProgressHUD
 
 class PostArticleController: UIViewController {
     var loveImageViews = [UIImageView]()
     var kindOfCategory: String?
+    let hud = JGProgressHUD(style: .light)
+    
     let viewBackGround: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +38,6 @@ class PostArticleController: UIViewController {
         imageView.addGestureRecognizer(tapGesture)
         return imageView
     }()
-    //
     let titleBackGround: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -72,11 +75,11 @@ class PostArticleController: UIViewController {
         textView.layer.masksToBounds = true
         return textView
     }()
-    let loveImageView_1 = LoveImageView(tintColor: heartPink)
-    let loveImageView_2 = LoveImageView(tintColor: heartPink)
-    let loveImageView_3 = LoveImageView(tintColor: heartPink)
-    let loveImageView_4 = LoveImageView(tintColor: heartPink)
-    let loveImageView_5 = LoveImageView(tintColor: heartPink)
+    let loveImageView_1 = LoveImageView(tintColor: themeGrayColor)
+    let loveImageView_2 = LoveImageView(tintColor: themeGrayColor)
+    let loveImageView_3 = LoveImageView(tintColor: themeGrayColor)
+    let loveImageView_4 = LoveImageView(tintColor: themeGrayColor)
+    let loveImageView_5 = LoveImageView(tintColor: themeGrayColor)
     
     lazy var heartStackView: UIStackView = {
         let stackView = UIStackView()
@@ -96,9 +99,7 @@ class PostArticleController: UIViewController {
         super.viewDidLoad()
         reviewTextView.delegate = self
         self.view.backgroundColor = UIColor.white
-        
-        
-        
+    
         self.view.addSubview(viewBackGround)
         self.view.addSubview(uploadImageView)
         self.view.addSubview(titleBackGround)
@@ -133,33 +134,43 @@ class PostArticleController: UIViewController {
     }
     //
     @objc func handleHeartPressed_1(){
-        print("1")
+        pressHeart(number: 1)
     }
     @objc func handleHeartPressed_2(){
-        print("2")
+        pressHeart(number: 2)
     }
     @objc func handleHeartPressed_3(){
-        for i in 0...loveImageViews.count - 1{
-            if i <= 2{
-                loveImageViews[i].tintColor = heartPink
-            }else{
-                loveImageViews[i].tintColor = themeGrayColor
-            }
-        }
+        pressHeart(number: 3)
     }
     @objc func handleHeartPressed_4(){
-        print("4")
+        pressHeart(number: 4)
     }
     @objc func handleHeartPressed_5(){
-        print("5")
+        pressHeart(number: 5)
     }
-    //
+    //點擊愛心變色
+    func pressHeart(number: Int){
+        for i in 0...loveImageViews.count - 1{
+            loveImageViews[i].tintColor = (i <= number - 1) ? heartPink : themeGrayColor
+        }
+    }
+    //判斷幾顆愛心
+    func numberOfHeart() -> Int{
+        
+        var count = 0
+        for love in loveImageViews{
+            if love.tintColor == heartPink{
+                count += 1
+            }
+        }
+        return count
+    }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     func setUpNavBar(){
         self.navigationItem.title = "發表文章"
-        let uploadButtonItem = UIBarButtonItem(title: "上傳", style: .plain, target: self, action: #selector(handleUploadArticle))
+        let uploadButtonItem = UIBarButtonItem(title: "上傳", style: .plain, target: self, action: #selector(alertWhenPostArticle))
         self.navigationItem.rightBarButtonItem = uploadButtonItem
     }
     func setUpConstraints(){
@@ -200,7 +211,23 @@ class PostArticleController: UIViewController {
         heartStackView.widthAnchor.constraint(equalTo: viewBackGround.widthAnchor, multiplier: 0.7).isActive = true
         heartStackView.bottomAnchor.constraint(equalTo: viewBackGround.bottomAnchor, constant: -8).isActive = true
     }
-    @objc func handleUploadArticle(){
+    
+    @objc func alertWhenPostArticle(){
+        
+        let alert = UIAlertController(title: "提示", message: "確定上傳?", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "確定", style: .default) { (action) in
+            self.handleUploadArticle()
+        }
+        let cancleAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alert.addAction(confirmAction)
+        alert.addAction(cancleAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func handleUploadArticle(){
+        hud.textLabel.text = "上傳中"
+        hud.show(in: self.view, animated: true)
         //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
         let imageUID = NSUUID().uuidString
         let ref = Storage.storage().reference().child("ArticleImages").child(imageUID)
@@ -221,11 +248,19 @@ class PostArticleController: UIViewController {
         
     }
     func addArticleDataToDataBase(downloadURL: String){
+        
+        
+        //
         let articleUID = NSUUID().uuidString
         //插入"文章"
         guard let title = self.titleTextField.text else{return}
-        let values: [String : Any] = ["title" : title,
-                                      "imageURL" : downloadURL as Any]
+        guard let review = self.reviewTextView.text else{return}
+        let values: [String : Any] = [  "author" : (Auth.auth().currentUser?.uid)!,
+                                        "title" : title,
+                                        "imageURL" : downloadURL as Any,
+                                        "review" : review,
+                                        "numberOfHeart" : "\(numberOfHeart())",
+                                        "date" : getTimeStamp()]
         guard let category = self.kindOfCategory else{return}
         let ref = Database.database().reference()
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in
@@ -234,7 +269,14 @@ class PostArticleController: UIViewController {
             }
         })
         //插入"類別中的文章"
-        ref.child("類別").child(category).child(articleUID).setValue(1)
+        ref.child("類別").child(category).child(articleUID).setValue(1) { (error, ref) in
+            if let error = error{
+                print("error:",error)
+            }
+            self.hud.dismiss(animated: true)
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
     @objc func handleChooseImage(){
         let picker = UIImagePickerController()
@@ -242,6 +284,14 @@ class PostArticleController: UIViewController {
         picker.allowsEditing = true
         picker.delegate = self
         self.present(picker, animated: true, completion: nil)
+    }
+    //取得時間
+    func getTimeStamp() -> String{
+        let date = Date()
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy年MM月dd日 HH:mm:ss"
+        let dateNow = dateFormat.string(from: date)
+        return dateNow
     }
 }
 
