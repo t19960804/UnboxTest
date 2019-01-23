@@ -16,14 +16,12 @@ private let reuseIdentifier = "Cell"
 
 class ArticlesCollectionViewController: UICollectionViewController {
     var articlesArray = [Article]()
-    var usersArray = [User]()
     var timer: Timer?
     let hud = JGProgressHUD(style: .light)
     var category: String?{
         didSet{
             self.navigationItem.title = category!
             fetchArticlesFromdDataBase()
-            
         }
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -38,13 +36,14 @@ class ArticlesCollectionViewController: UICollectionViewController {
 
         
         self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = themeGrayColor
+        self.collectionView.backgroundColor = specialGray
         self.navigationController?.navigationBar.tintColor = UIColor.white
-
+        self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.showsHorizontalScrollIndicator = false
         
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
-            layout.itemSize = CGSize(width: self.view.frame.width - 20, height: 250)
+            layout.itemSize = CGSize(width: self.view.frame.width - 20, height: 450)
             layout.minimumLineSpacing = 10
             layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         }
@@ -61,22 +60,17 @@ class ArticlesCollectionViewController: UICollectionViewController {
             ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String : Any]
                 let article = Article(value: dictionary)
-                self.articlesArray.append(article)
+                let author = dictionary["author"] as! String
                 //透過文章中的author找尋作者資料
-                ref.child("users").child(dictionary["author"] as! String).observeSingleEvent(of: .value, with: { (snapshot) in
+                ref.child("users").child(author).observeSingleEvent(of: .value, with: { (snapshot) in
                     let dictionary = snapshot.value as! [String : Any]
                     let user = User(value: dictionary)
-                    ////////////////
-                    article.author2 = user
-                    ////////////////
-                    self.usersArray.append(user)
+                    article.author = user
+                    self.articlesArray.append(article)
                     //不延遲會無法載入圖片
                     self.attemptReloadTableView()
                 }, withCancel: nil)
-                
-                
             })
-            
         }, withCancel: nil)
     }
     private func attemptReloadTableView(){
@@ -94,17 +88,17 @@ class ArticlesCollectionViewController: UICollectionViewController {
     }
     func setUpNavBar(){
         let pencilImage = UIImage(named: "edit")
-        let userImage = UIImage(named: "user2")
+        let searchImage = UIImage(named: "search")
         let postArticleButton = UIBarButtonItem(image:pencilImage, style: .plain, target: self, action: #selector(handlePostArticle))
-        let checkSelfButton = UIBarButtonItem(image:userImage, style: .plain, target: self, action: #selector(handleCheckSelf))
-        self.navigationItem.rightBarButtonItems = [checkSelfButton,postArticleButton]
+        let searchButton = UIBarButtonItem(image:searchImage, style: .plain, target: self, action: #selector(handleSearch))
+        self.navigationItem.rightBarButtonItems = [postArticleButton,searchButton]
     }
     @objc func handlePostArticle(){
         let postArticleController = PostArticleController()
         postArticleController.kindOfCategory = self.navigationItem.title
         self.navigationController?.pushViewController(postArticleController, animated: true)
     }
-    @objc func handleCheckSelf(){
+    @objc func handleSearch(){
         print("self")
     }
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -117,12 +111,21 @@ class ArticlesCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ArticlesCell
         cell.article = articlesArray[indexPath.row]
-        cell.user = articlesArray[indexPath.row].author2
-        //cell.user = usersArray[indexPath.row]
+        cell.delegate = self
         return cell
     }
     
-    
    
 
+}
+extension ArticlesCollectionViewController: ArticleCellDelegate{
+    func pushToArticleDetail(article: Article) {
+        let articleDetailController = ArticleDeatailController()
+        articleDetailController.article = article
+        self.navigationController?.pushViewController(articleDetailController, animated: true)
+    }
+    
+    
+    
+    
 }

@@ -342,6 +342,6 @@ extension RegisterController: UIImagePickerControllerDelegate,UINavigationContro
     }
     //按下取消
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
 }

@@ -18,6 +18,7 @@ class LoveImageView: UIImageView {
         self.tintColor = tintColor
         self.contentMode = .scaleAspectFit
         self.isUserInteractionEnabled = true
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

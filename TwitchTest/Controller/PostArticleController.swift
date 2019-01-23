@@ -151,7 +151,7 @@ class PostArticleController: UIViewController {
     //點擊愛心變色
     func pressHeart(number: Int){
         for i in 0...loveImageViews.count - 1{
-            loveImageViews[i].tintColor = (i <= number - 1) ? heartPink : themeGrayColor
+            loveImageViews[i].tintColor = (i <= number - 1) ? specialYellow : themeGrayColor
         }
     }
     //判斷幾顆愛心
@@ -159,7 +159,7 @@ class PostArticleController: UIViewController {
         
         var count = 0
         for love in loveImageViews{
-            if love.tintColor == heartPink{
+            if love.tintColor == specialYellow{
                 count += 1
             }
         }
@@ -213,7 +213,6 @@ class PostArticleController: UIViewController {
     }
     
     @objc func alertWhenPostArticle(){
-        
         let alert = UIAlertController(title: "提示", message: "確定上傳?", preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "確定", style: .default) { (action) in
             self.handleUploadArticle()
@@ -224,32 +223,56 @@ class PostArticleController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
-    
-    func handleUploadArticle(){
-        hud.textLabel.text = "上傳中"
-        hud.show(in: self.view, animated: true)
-        //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
-        let imageUID = NSUUID().uuidString
-        let ref = Storage.storage().reference().child("ArticleImages").child(imageUID)
-        guard let jpgImage = uploadImageView.image?.jpegData(compressionQuality: 1) else{return}
-        ref.putData(jpgImage, metadata: nil) { (metadata, error) in
-            if let error = error{
-                print("error:",error)
+    func whatKindOfError() -> String?{
+        if let title = titleTextField.text,let review = reviewTextView.text{
+            if title.isEmpty || review.isEmpty{
+                return UploadError.NotFillYet.rawValue
+            }else if uploadImageView.image == nil{
+                return UploadError.NoImage.rawValue
+            }else if numberOfHeart() == 0{
+                return UploadError.NoEvaluate.rawValue
+            }else{
+                return nil
             }
-            ref.downloadURL(completion: { (url, error) in
+        }
+        return nil
+    }
+    func handleUploadArticle(){
+        let error = whatKindOfError()
+        switch error {
+        case UploadError.NotFillYet.rawValue:
+            Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
+        case UploadError.NoImage.rawValue:
+            Alert.alert_BugReport(message: "請選擇照片", title: "錯誤", with: self)
+        case UploadError.NoEvaluate.rawValue:
+            Alert.alert_BugReport(message: "請給予評價", title: "錯誤", with: self)
+        default:
+            hud.textLabel.text = "上傳中"
+            hud.show(in: self.view, animated: true)
+            //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
+            let imageUID = NSUUID().uuidString
+            let ref = Storage.storage().reference().child("ArticleImages").child(imageUID)
+            guard let jpgImage = uploadImageView.image?.jpegData(compressionQuality: 1) else{return}
+            ref.putData(jpgImage, metadata: nil) { (metadata, error) in
                 if let error = error{
                     print("error:",error)
                 }
-                guard let downloadURL = url?.absoluteString else{return}
-                self.addArticleDataToDataBase(downloadURL: downloadURL)
-                
-            })
+                ref.downloadURL(completion: { (url, error) in
+                    if let error = error{
+                        print("error:",error)
+                    }
+                    guard let downloadURL = url?.absoluteString else{return}
+                    self.addArticleDataToDataBase(downloadURL: downloadURL)
+                    
+                })
+            }
         }
+
+        
+       
         
     }
     func addArticleDataToDataBase(downloadURL: String){
-        
-        
         //
         let articleUID = NSUUID().uuidString
         //插入"文章"
@@ -300,12 +323,12 @@ extension PostArticleController: UIImagePickerControllerDelegate,UINavigationCon
     //完成選取
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
-        self.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         uploadImageView.image = getImage
     }
     //按下取消
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -322,4 +345,10 @@ extension PostArticleController: UIImagePickerControllerDelegate,UINavigationCon
         }
         
     }
+}
+
+enum UploadError: String{
+    case NotFillYet
+    case NoImage
+    case NoEvaluate
 }

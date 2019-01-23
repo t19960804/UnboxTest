@@ -22,9 +22,9 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         super.viewDidLoad()
         setUpNavBar()
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-//        self.collectionView.backgroundColor = specialWhite
         self.collectionView.backgroundColor = themeGrayColor
-
+        self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.showsHorizontalScrollIndicator = false
         
         
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -46,11 +46,16 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         self.navigationItem.title = "商品分類"
         //NavBar顏色
         self.navigationController?.navigationBar.barTintColor = themeGrayColor
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         //NavBar的Title顏色
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        let button = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
-        button.tintColor = UIColor.white
-        self.navigationItem.leftBarButtonItem = button
+        let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
+        let settingButton = UIBarButtonItem(image: UIImage(named: "settings"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleSettings))
+        self.navigationItem.leftBarButtonItem = logoutButton
+        self.navigationItem.rightBarButtonItem = settingButton
+    }
+    @objc func handleSettings(){
+        print("settings")
     }
     @objc func handleLogout(){
         try? Auth.auth().signOut()
