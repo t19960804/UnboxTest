@@ -8,7 +8,6 @@
 
 
 import UIKit
-import SwiftyJSON
 import FirebaseAuth
 
 private let reuseIdentifier = "Cell"
@@ -44,19 +43,17 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     }
     func setUpNavBar(){
         self.navigationItem.title = "商品分類"
-        //NavBar顏色
-        self.navigationController?.navigationBar.barTintColor = themeGrayColor
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        
+        self.navigationController?.navigationBar.tintColor = UIColor.black
         //NavBar的Title顏色
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
-        let settingButton = UIBarButtonItem(image: UIImage(named: "settings"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleSettings))
+        
         self.navigationItem.leftBarButtonItem = logoutButton
-        self.navigationItem.rightBarButtonItem = settingButton
     }
-    @objc func handleSettings(){
-        print("settings")
-    }
+    
     @objc func handleLogout(){
         try? Auth.auth().signOut()
         UserDefaults.standard.setIsLogIn(value: false)

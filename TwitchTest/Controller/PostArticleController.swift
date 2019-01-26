@@ -98,8 +98,7 @@ class PostArticleController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         reviewTextView.delegate = self
-        self.view.backgroundColor = UIColor.white
-    
+        self.view.backgroundColor = themeGrayColor
         self.view.addSubview(viewBackGround)
         self.view.addSubview(uploadImageView)
         self.view.addSubview(titleBackGround)
@@ -273,12 +272,12 @@ class PostArticleController: UIViewController {
         
     }
     func addArticleDataToDataBase(downloadURL: String){
-        //
         let articleUID = NSUUID().uuidString
-        //插入"文章"
+        guard let userUID = Auth.auth().currentUser?.uid else {return}
+        
         guard let title = self.titleTextField.text else{return}
         guard let review = self.reviewTextView.text else{return}
-        let values: [String : Any] = [  "author" : (Auth.auth().currentUser?.uid)!,
+        let values: [String : Any] = [  "authorUID" : userUID,
                                         "title" : title,
                                         "imageURL" : downloadURL as Any,
                                         "review" : review,
@@ -286,19 +285,43 @@ class PostArticleController: UIViewController {
                                         "date" : getTimeStamp()]
         guard let category = self.kindOfCategory else{return}
         let ref = Database.database().reference()
+        //插入"文章"
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in
             if let error = error{
                 print("error:",error)
+                return
             }
         })
         //插入"類別中的文章"
         ref.child("類別").child(category).child(articleUID).setValue(1) { (error, ref) in
             if let error = error{
                 print("error:",error)
+                return
             }
             self.hud.dismiss(animated: true)
             self.navigationController?.popViewController(animated: true)
         }
+        //插入"使用者-文章"
+        ref.child("使用者-文章").child(userUID).child(articleUID).setValue(1) { (error, ref) in
+            if let error = error{
+                print("error:",error)
+                return
+            }
+        }
+        //先取得當前使用者的文章數量,成功上傳時將它+1,更新到使用者的資料中
+        let userRef = ref.child("使用者").child(userUID)
+        userRef.observeSingleEvent(of: .value) { (snapshot) in
+            let dictionary = snapshot.value as! [String : Any]
+            if let numbersOfArticleNow = dictionary["numbersOfArticle"] as? Int{
+                userRef.updateChildValues(["numbersOfArticle" : numbersOfArticleNow + 1]) { (error, ref) in
+                    if let error = error{
+                        print("error:",error)
+                        return
+                    }
+                }
+            }
+        }
+        
         
     }
     @objc func handleChooseImage(){

@@ -12,6 +12,7 @@ import FirebaseDatabase
 import FirebaseAuth
 class Article {
     var author: User?
+    var authorUID: String?
     var imageURL: String?
     var title: String?
     var review: String?
@@ -24,6 +25,7 @@ class Article {
         self.review = value["review"] as? String
         self.numberOfHeart = value["numberOfHeart"] as? String
         self.date = value["date"] as? String
+        self.authorUID = value["authorUID"] as? String
     }
     
     

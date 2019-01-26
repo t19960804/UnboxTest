@@ -11,9 +11,19 @@ import FirebaseDatabase
 import FirebaseAuth
 import JGProgressHUD
 
-let themeGrayColor = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
-let specialYellow = UIColor(red: 230/255, green: 179/255, blue: 30/255, alpha: 1)
-let specialGray = UIColor(red: 202/255, green: 202/255, blue: 202/255, alpha: 1)
+//let themeGrayColor = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
+//let specialYellow = UIColor(red: 230/255, green: 179/255, blue: 30/255, alpha: 1)
+//let specialGray = UIColor(red: 228/255, green: 231/255, blue: 233/255, alpha: 1)
+//
+//let specialWhite = UIColor(red: 252/255, green: 250/255, blue: 241/255, alpha: 1)
+//let heartPink  = UIColor(red: 248 / 255, green: 94 / 255, blue: 159 / 255, alpha: 1)
+
+let themeGrayColor = UIColor.white
+
+let specialGray2 = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
+let specialYellow = UIColor(red: 255/255, green: 107/255, blue: 214/255, alpha: 1)
+let specialGray = UIColor(red: 228/255, green: 231/255, blue: 233/255, alpha: 1)
+
 let specialWhite = UIColor(red: 252/255, green: 250/255, blue: 241/255, alpha: 1)
 let heartPink  = UIColor(red: 248 / 255, green: 94 / 255, blue: 159 / 255, alpha: 1)
 
@@ -123,7 +133,7 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = themeGrayColor
-        accountTextField.text = "q@q.com"
+        accountTextField.text = "Asiagodtone@q.com"
         passwordTextField.text = "Qqqqqq"
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)

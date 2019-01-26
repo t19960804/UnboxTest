@@ -36,8 +36,9 @@ class ArticlesCollectionViewController: UICollectionViewController {
 
         
         self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialGray
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.collectionView.backgroundColor = themeGrayColor
+       
+        
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
         
@@ -50,6 +51,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         setUpNavBar()
         
     }
+    //MARK: - Fetch資料
     func fetchArticlesFromdDataBase(){
         guard let category = self.navigationItem.title else{return}
         let ref = Database.database().reference()
@@ -60,9 +62,9 @@ class ArticlesCollectionViewController: UICollectionViewController {
             ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String : Any]
                 let article = Article(value: dictionary)
-                let author = dictionary["author"] as! String
+                let author = dictionary["authorUID"] as! String
                 //透過文章中的author找尋作者資料
-                ref.child("users").child(author).observeSingleEvent(of: .value, with: { (snapshot) in
+                ref.child("使用者").child(author).observeSingleEvent(of: .value, with: { (snapshot) in
                     let dictionary = snapshot.value as! [String : Any]
                     let user = User(value: dictionary)
                     article.author = user
@@ -73,6 +75,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
             })
         }, withCancel: nil)
     }
+    
     private func attemptReloadTableView(){
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
@@ -81,6 +84,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.articlesArray.sort {$0.date! > $1.date!}
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            print("load")
             let firstIndexPath = IndexPath(item: 0, section: 0)
             self.collectionView.scrollToItem(at: firstIndexPath, at: .top, animated: true)
         }

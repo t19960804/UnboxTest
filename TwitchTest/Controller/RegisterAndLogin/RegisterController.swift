@@ -155,7 +155,7 @@ class RegisterController: UIViewController {
         
         self.view.addSubview(stackView)
         
-        accountTextField.text = "q@q.com"
+        accountTextField.text = "Asiagodtone@q.com"
         passwordTextField.text = "Qqqqqq"
         
         setUpConstraints()
@@ -266,7 +266,8 @@ class RegisterController: UIViewController {
                                 guard let userUID = result?.user.uid else{return}
                                 let values: [String : Any] = ["userName" : userName,
                                                               "account" : account,
-                                                              "imageURL" : url?.absoluteString as Any]
+                                                              "imageURL" : url?.absoluteString as Any,
+                                                              "numbersOfArticle" : 0]
                                 self.addUserToDataBase(uid: userUID, values: values)
                             })
 
@@ -277,8 +278,7 @@ class RegisterController: UIViewController {
                         hud.dismiss(afterDelay: 1)
                         //dismiss所有的Controller,回到根畫面
                         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
-                        UserDefaults.standard.set(false, forKey: "notLoginYet")
-                        UserDefaults.standard.synchronize()
+                         UserDefaults.standard.setIsLogIn(value: true)
                     }
                     
                 }
@@ -288,7 +288,7 @@ class RegisterController: UIViewController {
     
     
     func addUserToDataBase(uid: String,values: [String : Any]){
-        let ref = Database.database().reference().child("users").child(uid)
+        let ref = Database.database().reference().child("使用者").child(uid)
         ref.setValue(values) { (error, metaData) in
             if let error = error{
                 print("error:",error)

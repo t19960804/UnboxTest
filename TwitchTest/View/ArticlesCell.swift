@@ -21,12 +21,13 @@ class ArticlesCell: UICollectionViewCell {
     
     var article: Article?{
         didSet{
-            if let title = article?.title,let imageURL = article?.imageURL,let numberOfHearts = article?.numberOfHeart,let userImageURL = article?.author?.imageURL,let review = article?.review{
+            if let title = article?.title,let imageURL = article?.imageURL,let numberOfHearts = article?.numberOfHeart,let userImageURL = article?.author?.imageURL,let review = article?.review,let userName = article?.author?.userName{
                 self.commodityNameLabel.text = title
                 self.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURL)!)
                 self.userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
                 self.reviewTextView.text = review
-                lightUpTheHearts(number: Int(numberOfHearts)!)
+                self.userNameLabel.text = userName
+                lightUpTheHearts(number: Int(numberOfHearts) ?? 1)
             }
             
         }
@@ -34,11 +35,12 @@ class ArticlesCell: UICollectionViewCell {
     let backView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10
         view.backgroundColor = UIColor.white
+        view.layer.cornerRadius = 10
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowRadius = 2
+
         view.layer.shadowOpacity = 0.7
-        view.layer.shadowRadius = 5
-        view.layer.shadowOffset = CGSize(width: 5, height: 5)
         view.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
         return view
     }()
@@ -47,8 +49,8 @@ class ArticlesCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.gray
         view.layer.cornerRadius = 10
-        view.layer.shadowOffset = CGSize(width: 5, height: 5)
-        view.layer.shadowRadius = 5
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.7
         view.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
         return view
@@ -65,7 +67,6 @@ class ArticlesCell: UICollectionViewCell {
     lazy var userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = themeGrayColor
         imageView.layer.cornerRadius = ((self.frame.height * 0.2) - 21) / 2
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -76,7 +77,6 @@ class ArticlesCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = themeGrayColor
-        label.text = "Asia Tone"
         return label
     }()
     let commodityNameLabel: UILabel = {
@@ -170,6 +170,12 @@ class ArticlesCell: UICollectionViewCell {
         }
     }
     func setUpConstraints(){
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.frame.width * 0.45, height: 40)
+        gradientLayer.colors = [UIColor.black.cgColor,UIColor.clear.cgColor]
+        commodityImageView.layer.insertSublayer(gradientLayer, at: 0)
+        
         backView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         backView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         backView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 30).isActive = true
@@ -192,11 +198,12 @@ class ArticlesCell: UICollectionViewCell {
         
         userNameLabel.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor).isActive = true
         userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 8).isActive = true
-
-        commodityNameLabel.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 7).isActive = true
+        userNameLabel.rightAnchor.constraint(equalTo: backView.rightAnchor, constant: -8).isActive = true
+        
+        commodityNameLabel.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 0).isActive = true
         commodityNameLabel.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 7).isActive = true
         commodityNameLabel.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -7).isActive = true
-        commodityNameLabel.heightAnchor.constraint(equalTo: commodityImageView.heightAnchor, multiplier: 0.2).isActive = true
+        commodityNameLabel.heightAnchor.constraint(equalTo: commodityImageView.heightAnchor, multiplier: 0.15).isActive = true
         
         loveImageStackView.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 7).isActive = true
         loveImageStackView.leftAnchor.constraint(equalTo: userImageView.leftAnchor).isActive = true

@@ -43,9 +43,9 @@ class CategoryCell: UICollectionViewCell {
         self.backgroundColor = specialYellow
 //        self.layer.cornerRadius = 8
 //        self.layer.masksToBounds = false
-        self.layer.shadowOffset = CGSize(width: 0, height: 5)
-        self.layer.shadowOpacity = 0.5
-        self.layer.shadowRadius = 8
+        self.layer.shadowOffset = CGSize(width: 2, height: 2)
+        self.layer.shadowOpacity = 0.7
+        self.layer.shadowRadius = 2
         self.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
         setUpConstraints()
     }

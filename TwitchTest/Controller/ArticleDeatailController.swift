@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ArticleDeatailController: UIViewController {
     var reviewTextViewHeightAnchor: NSLayoutConstraint?
     var article: Article?{
@@ -30,7 +31,6 @@ class ArticleDeatailController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.bounces = false
-        
         return scrollView
     }()
     let backGroundView: UIView = {
@@ -40,11 +40,21 @@ class ArticleDeatailController: UIViewController {
     }()
     ////////////////////////////
     var loveImageViewArray = [UIImageView]()
+    let background_commodityImageView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowRadius = 2
+        view.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
+        view.layer.shadowOpacity = 0.7
+        return view
+    }()
     let commodityImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
         return imageView
     }()
     let titleLabel: UILabel = {
@@ -111,24 +121,20 @@ class ArticleDeatailController: UIViewController {
         return button
     }()
     override func viewWillAppear(_ animated: Bool) {
-        loveImageViewArray.append(loveImageView_1)
-        loveImageViewArray.append(loveImageView_2)
-        loveImageViewArray.append(loveImageView_3)
-        loveImageViewArray.append(loveImageView_4)
-        loveImageViewArray.append(loveImageView_5)
-        
         lightUpTheHearts(number: Int((article?.numberOfHeart)!)!)
-        
         reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 20
 
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = specialWhite
+        self.view.backgroundColor = themeGrayColor
         self.view.addSubview(myScrollView)
         self.navigationItem.title = "商品詳情"
         myScrollView.addSubview(backGroundView)
-        backGroundView.addSubview(commodityImageView)
+        
+        backGroundView.addSubview(background_commodityImageView)
+        background_commodityImageView.addSubview(commodityImageView)
+        
         backGroundView.addSubview(titleLabel)
         backGroundView.addSubview(userImageView)
         backGroundView.addSubview(userNameLabel)
@@ -136,13 +142,20 @@ class ArticleDeatailController: UIViewController {
         backGroundView.addSubview(reviewTextView)
         backGroundView.addSubview(commentButton)
         
+        loveImageViewArray.append(loveImageView_1)
+        loveImageViewArray.append(loveImageView_2)
+        loveImageViewArray.append(loveImageView_3)
+        loveImageViewArray.append(loveImageView_4)
+        loveImageViewArray.append(loveImageView_5)
         setUpConstraints()
        
     }
     @objc func handleToUserInfo(){
         let userInfoController = UserInfoController()
+        userInfoController.article = article
         self.navigationController?.pushViewController(userInfoController, animated: true)
     }
+    
     //計算動態TextView高度
     func estimateTextViewFrame(string: String,fontSize: UIFont) -> CGRect{
         //size,限制的size,不然不知道哪裡換行
@@ -161,7 +174,12 @@ class ArticleDeatailController: UIViewController {
     }
     func setUpConstraints(){
         
-        myScrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
+        gradientLayer.colors = [UIColor.black.cgColor,UIColor.clear.cgColor]
+        commodityImageView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        myScrollView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
         myScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         myScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         myScrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
@@ -171,13 +189,20 @@ class ArticleDeatailController: UIViewController {
         backGroundView.topAnchor.constraint(equalTo: myScrollView.topAnchor).isActive = true
         backGroundView.centerXAnchor.constraint(equalTo: myScrollView.centerXAnchor).isActive = true
         
-        commodityImageView.topAnchor.constraint(equalTo: backGroundView.topAnchor).isActive = true
-        commodityImageView.leftAnchor.constraint(equalTo: backGroundView.leftAnchor).isActive = true
-        commodityImageView.rightAnchor.constraint(equalTo: backGroundView.rightAnchor).isActive = true
-        commodityImageView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        background_commodityImageView.topAnchor.constraint(equalTo: backGroundView.topAnchor).isActive = true
+        background_commodityImageView.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
+        background_commodityImageView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.8).isActive = true
+        background_commodityImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45).isActive = true
+        
+        commodityImageView.topAnchor.constraint(equalTo: background_commodityImageView.topAnchor).isActive = true
+        commodityImageView.leftAnchor.constraint(equalTo: background_commodityImageView.leftAnchor).isActive = true
+        commodityImageView.bottomAnchor.constraint(equalTo: background_commodityImageView.bottomAnchor).isActive = true
+        commodityImageView.rightAnchor.constraint(equalTo: background_commodityImageView.rightAnchor).isActive = true
+
+        
 
         titleLabel.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 8).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 8).isActive = true
         titleLabel.widthAnchor.constraint(equalTo: commodityImageView.widthAnchor, multiplier: 0.8).isActive = true
 
         userImageView.topAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: 10).isActive = true
@@ -188,8 +213,8 @@ class ArticleDeatailController: UIViewController {
         userNameLabel.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor).isActive = true
         userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 8).isActive = true
 
-        loveImageStackView.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor).isActive = true
-        loveImageStackView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -15).isActive = true
+        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
+        loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
         loveImageStackView.widthAnchor.constraint(equalToConstant: 150).isActive = true
         loveImageStackView.heightAnchor.constraint(equalToConstant: 35).isActive = true
 

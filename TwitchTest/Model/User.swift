@@ -13,10 +13,12 @@ class User{
     var account: String?
     var imageURL: String?
     var userName: String?
+    var numbersOfArticle: Int?
     
     init(value: [String : Any]) {
         self.account = value["account"] as? String
         self.imageURL = value["imageURL"] as? String
         self.userName = value["userName"] as? String
+        self.numbersOfArticle = value["numbersOfArticle"] as? Int
     }
 }
