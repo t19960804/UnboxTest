@@ -11,21 +11,14 @@ import FirebaseDatabase
 import FirebaseAuth
 import JGProgressHUD
 
-//let themeGrayColor = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
-//let specialYellow = UIColor(red: 230/255, green: 179/255, blue: 30/255, alpha: 1)
-//let specialGray = UIColor(red: 228/255, green: 231/255, blue: 233/255, alpha: 1)
-//
-//let specialWhite = UIColor(red: 252/255, green: 250/255, blue: 241/255, alpha: 1)
-//let heartPink  = UIColor(red: 248 / 255, green: 94 / 255, blue: 159 / 255, alpha: 1)
 
-let themeGrayColor = UIColor.white
 
-let specialGray2 = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
-let specialYellow = UIColor(red: 255/255, green: 107/255, blue: 214/255, alpha: 1)
+let themeColor = UIColor(red: 252/255, green: 81/255, blue: 133/255, alpha: 1)
+let specialWhite = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+let specialCyan = UIColor(red: 63/255, green: 193/255, blue: 201/255, alpha: 1)
 let specialGray = UIColor(red: 228/255, green: 231/255, blue: 233/255, alpha: 1)
-
-let specialWhite = UIColor(red: 252/255, green: 250/255, blue: 241/255, alpha: 1)
-let heartPink  = UIColor(red: 248 / 255, green: 94 / 255, blue: 159 / 255, alpha: 1)
+let specialGray2 = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
+let shadowGray = UIColor(red: 120/255, green: 121/255, blue: 122/255, alpha: 1.0)
 
 let safeAreaHeight_Top = UIApplication.shared.keyWindow!.safeAreaInsets.top
 let safeAreaHeight_Bottom = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
@@ -38,7 +31,7 @@ class LoginController: UIViewController {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "unboxing")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = specialYellow
+        imageView.tintColor = themeColor
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -46,15 +39,15 @@ class LoginController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "開箱趣"
-        label.textColor = specialYellow
+        label.textColor = themeColor
         label.font = UIFont.boldSystemFont(ofSize: 25)
         return label
     }()
     let accountTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.textColor = specialYellow
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入帳號...", attributes: [NSAttributedString.Key.foregroundColor : specialYellow])
+        textField.textColor = themeColor
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入帳號...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
         return textField
     }()
     let label_1: UILabel = {
@@ -62,7 +55,7 @@ class LoginController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "帳號"
-        label.textColor = specialYellow
+        label.textColor = themeColor
         return label
     }()
     let label_2: UILabel = {
@@ -71,36 +64,36 @@ class LoginController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "密碼"
         
-        label.textColor = specialYellow
+        label.textColor = themeColor
         return label
     }()
     let bottomLine_1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = specialYellow
+        view.backgroundColor = themeColor
         return view
     }()
     let bottomLine_2: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = specialYellow
+        view.backgroundColor = themeColor
 
         return view
     }()
     let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入密碼...", attributes: [NSAttributedString.Key.foregroundColor : specialYellow])
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入密碼...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
         textField.backgroundColor = UIColor.clear
-        textField.textColor = specialYellow
+        textField.textColor = themeColor
         textField.isSecureTextEntry = true
         return textField
     }()
     let loginButton: UIButton = {
        let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("登入", for: UIControl.State.normal)
-        button.backgroundColor = specialYellow
-        button.setTitleColor(themeGrayColor, for: UIControl.State.normal)
+        button.backgroundColor = themeColor
+        button.setTitleColor(specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.masksToBounds = true
@@ -111,11 +104,11 @@ class LoginController: UIViewController {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("註冊", for: UIControl.State.normal)
         button.backgroundColor = UIColor.clear
-        button.setTitleColor(specialYellow, for: UIControl.State.normal)
+        button.setTitleColor(themeColor, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.borderWidth = 2
-        button.layer.borderColor = specialYellow.cgColor
+        button.layer.borderColor = themeColor.cgColor
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return button
@@ -132,7 +125,7 @@ class LoginController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = themeGrayColor
+        self.view.backgroundColor = specialWhite
         accountTextField.text = "Asiagodtone@q.com"
         passwordTextField.text = "Qqqqqq"
         self.view.addSubview(logoImageView)

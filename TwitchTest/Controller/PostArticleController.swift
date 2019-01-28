@@ -51,7 +51,7 @@ class PostArticleController: UIViewController {
         let textField = LeftPaddedTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 20)
-        textField.textColor = themeGrayColor
+        textField.textColor = UIColor.black
         textField.attributedPlaceholder = NSAttributedString(string: "輸入標題...", attributes: [NSAttributedString.Key.foregroundColor : specialGray])
         return textField
     }()
@@ -75,11 +75,11 @@ class PostArticleController: UIViewController {
         textView.layer.masksToBounds = true
         return textView
     }()
-    let loveImageView_1 = LoveImageView(tintColor: themeGrayColor)
-    let loveImageView_2 = LoveImageView(tintColor: themeGrayColor)
-    let loveImageView_3 = LoveImageView(tintColor: themeGrayColor)
-    let loveImageView_4 = LoveImageView(tintColor: themeGrayColor)
-    let loveImageView_5 = LoveImageView(tintColor: themeGrayColor)
+    let loveImageView_1 = LoveImageView(tintColor: specialWhite)
+    let loveImageView_2 = LoveImageView(tintColor: specialWhite)
+    let loveImageView_3 = LoveImageView(tintColor: specialWhite)
+    let loveImageView_4 = LoveImageView(tintColor: specialWhite)
+    let loveImageView_5 = LoveImageView(tintColor: specialWhite)
     
     lazy var heartStackView: UIStackView = {
         let stackView = UIStackView()
@@ -98,7 +98,7 @@ class PostArticleController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         reviewTextView.delegate = self
-        self.view.backgroundColor = themeGrayColor
+        self.view.backgroundColor = specialWhite
         self.view.addSubview(viewBackGround)
         self.view.addSubview(uploadImageView)
         self.view.addSubview(titleBackGround)
@@ -150,7 +150,7 @@ class PostArticleController: UIViewController {
     //點擊愛心變色
     func pressHeart(number: Int){
         for i in 0...loveImageViews.count - 1{
-            loveImageViews[i].tintColor = (i <= number - 1) ? specialYellow : themeGrayColor
+            loveImageViews[i].tintColor = (i <= number - 1) ? themeColor : specialWhite
         }
     }
     //判斷幾顆愛心
@@ -158,7 +158,7 @@ class PostArticleController: UIViewController {
         
         var count = 0
         for love in loveImageViews{
-            if love.tintColor == specialYellow{
+            if love.tintColor == themeColor{
                 count += 1
             }
         }
@@ -357,7 +357,7 @@ extension PostArticleController: UIImagePickerControllerDelegate,UINavigationCon
     func textViewDidBeginEditing(_ textView: UITextView) {
         if reviewTextView.textColor == specialGray{
             reviewTextView.text = ""
-            reviewTextView.textColor = themeGrayColor
+            reviewTextView.textColor = UIColor.black
         }
         
     }

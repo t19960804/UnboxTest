@@ -35,13 +35,13 @@ class ArticlesCell: UICollectionViewCell {
     let backView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = specialWhite
         view.layer.cornerRadius = 10
         view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 2
 
         view.layer.shadowOpacity = 0.7
-        view.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
+        view.layer.shadowColor = shadowGray.cgColor
         return view
     }()
     let background_commodityImageView: UIView = {
@@ -52,7 +52,7 @@ class ArticlesCell: UICollectionViewCell {
         view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.7
-        view.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
+        view.layer.shadowColor = shadowGray.cgColor
         return view
     }()
     let commodityImageView: UIImageView = {
@@ -76,13 +76,13 @@ class ArticlesCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = themeGrayColor
+        label.textColor = UIColor.black
         return label
     }()
     let commodityNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = specialWhite
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
@@ -91,8 +91,8 @@ class ArticlesCell: UICollectionViewCell {
     let reviewTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = specialWhite
         textView.font = UIFont.systemFont(ofSize: 17)
-//        textView.text = "Desire 12s 雖承襲近期 Desire 系列的機身塑膠材質設計，不過透過配色與細節使其質感不比金屬或是玻璃來的差，雖 Desire 12s 主打是基於 Desire 系列的升級版本，但整體設計也調整不少，除了相機模組較 Desire 12s 更凸出些，機身後方下半部加入與 U 12+ 相似的雷雕處理，下半部也大幅減少指紋沾留的機會。"
         textView.textContainer.lineBreakMode = .byTruncatingTail
         textView.textContainer.maximumNumberOfLines = 12
         textView.isEditable = false
@@ -105,16 +105,16 @@ class ArticlesCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("查看", for: UIControl.State.normal)
         button.setTitleColor(specialWhite, for: UIControl.State.normal)
-        button.backgroundColor = specialYellow
+        button.backgroundColor = themeColor
         button.layer.cornerRadius = 5
         button.addTarget(self, action: #selector(handleCheckCommodity), for: .touchUpInside)
         return button
     }()
-    let loveImageView_1 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_2 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_3 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_4 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_5 = LoveImageView(tintColor: specialYellow)
+    let loveImageView_1 = LoveImageView(tintColor: themeColor)
+    let loveImageView_2 = LoveImageView(tintColor: themeColor)
+    let loveImageView_3 = LoveImageView(tintColor: themeColor)
+    let loveImageView_4 = LoveImageView(tintColor: themeColor)
+    let loveImageView_5 = LoveImageView(tintColor: themeColor)
     
     lazy var loveImageStackView: UIStackView = {
         let stackView = UIStackView()

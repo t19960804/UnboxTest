@@ -19,7 +19,7 @@ class CategoryCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 8
-        imageView.tintColor = themeGrayColor
+        imageView.tintColor = specialWhite
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -27,7 +27,7 @@ class CategoryCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = themeGrayColor
+        label.textColor = specialWhite
         return label
     }()
     
@@ -40,13 +40,13 @@ class CategoryCell: UICollectionViewCell {
         self.contentView.layer.cornerRadius = 8
         self.contentView.layer.masksToBounds = true
         
-        self.backgroundColor = specialYellow
-//        self.layer.cornerRadius = 8
-//        self.layer.masksToBounds = false
+        self.backgroundColor = themeColor
         self.layer.shadowOffset = CGSize(width: 2, height: 2)
         self.layer.shadowOpacity = 0.7
         self.layer.shadowRadius = 2
-        self.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
+//        self.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
+        self.layer.shadowColor = UIColor(red: 120/255, green: 121/255, blue: 122/255, alpha: 1.0).cgColor
+
         setUpConstraints()
     }
     func setUpConstraints(){

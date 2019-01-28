@@ -16,6 +16,7 @@ class UserInfoController: UIViewController {
             if let userImageURL = article?.author?.imageURL,let userName = article?.author?.userName{
                 userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
                 userNameLabel.text = userName
+                
             }
         }
     }
@@ -42,21 +43,14 @@ class UserInfoController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "AsiaGodTone")
-//        imageView.layer.borderColor = specialYellow.cgColor
-//        imageView.layer.borderWidth = 2
         imageView.layer.cornerRadius = 75
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
-    let userNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = specialWhite
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.text = "AsiaGodTone"
-        return label
-    }()
+
+    let userNameLabel = UserInfoLabel(content: "", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
+//    let messageLabel = UserInfoLabel(content: "尚無文章!", fontSize: .boldSystemFont(ofSize: 30), textColor: specialGray2)
     let follwerLabel = UserInfoLabel(content: "追蹤人數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
     let numberOfArticleLabel = UserInfoLabel(content: "文章數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
     let follwerNumberLabel = UserInfoLabel(content: "123", fontSize: .boldSystemFont(ofSize: 30), textColor: specialWhite)
@@ -70,6 +64,20 @@ class UserInfoController: UIViewController {
         stackView.distribution = .fillEqually
         return stackView
     }()
+    let followerButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("追蹤", for: .normal)
+        button.setTitleColor(specialWhite, for: .normal)
+        button.backgroundColor = specialCyan
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.layer.cornerRadius = 10
+        button.layer.shadowOffset = CGSize(width: 0, height: 3)
+        button.layer.shadowColor = shadowGray.cgColor
+        button.layer.shadowOpacity = 0.7
+        button.layer.shadowRadius = 2
+        return button
+    }()
     lazy var stackView_Number: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -79,42 +87,48 @@ class UserInfoController: UIViewController {
         stackView.distribution = .fillEqually
         return stackView
     }()
-    lazy var articlesCollectionView: UICollectionView = {
-       let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 18, left: 18, bottom: 18, right: 18)
-        layout.itemSize = CGSize(width: self.view.frame.width - 36, height: ((self.view.frame.height * 0.5) - (36 + 18)) / 2)
-        layout.minimumLineSpacing = 18
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UserInfoCell.self, forCellWithReuseIdentifier: cellID)
-        collectionView.backgroundColor = specialWhite
-        return collectionView
-    }()
+    
     
     override func viewWillAppear(_ animated: Bool) {
         fetchNumbersOfArticle()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "個人資料"
+        self.view.backgroundColor = specialWhite
         self.view.addSubview(backImageView)
         self.view.addSubview(backView)
         self.view.addSubview(userImageView)
         self.view.addSubview(userNameLabel)
         self.view.addSubview(stackView_Label)
         self.view.addSubview(stackView_Number)
-        self.view.addSubview(articlesCollectionView)
+        self.view.addSubview(followerButton)
         
         
-        
-        
-        articlesCollectionView.delegate = self
-        articlesCollectionView.dataSource = self
+        setUpNavBar()
         setUpConstraints()
-        setUpCollectionView()
         fetchArticles()
+        buttonActionAdd()
         
+    }
+    func buttonActionAdd(){
+        let tap = UITapGestureRecognizer(target: self, action:  #selector(handleCheckArticles))
+        articleNumberLabel.addGestureRecognizer(tap)
+    }
+    func setUpNavBar(){
+        self.navigationItem.title = "個人資料"
+        let settingImg = UIImage(named: "settings2")
+        let settingBarButton = UIBarButtonItem(image: settingImg, style: .plain, target: self, action: #selector(handleSetting))
+        let isCurrentUser = article?.authorUID == Auth.auth().currentUser?.uid
+        self.navigationItem.rightBarButtonItems = isCurrentUser ? [] : [settingBarButton]
+        followerButton.isHidden = isCurrentUser ? true : false
+    }
+    @objc func handleCheckArticles(){
+        let articlesController = ArticlesController(collectionViewLayout: UICollectionViewFlowLayout())
+        articlesController.articlesArray = self.articlesArray
+        self.navigationController?.pushViewController(articlesController, animated: true)
+    }
+    @objc func handleSetting(){
+        print("set")
     }
     //監聽文章數的變化
     func fetchNumbersOfArticle(){
@@ -140,23 +154,18 @@ class UserInfoController: UIViewController {
                     let user = User(value: dictionary)
                     article.author = user
                     self.articlesArray.append(article)
-                    self.attemptReloadTableView()
+                    self.attemptReload()
                 })
             })
         }
     }
-    private func attemptReloadTableView(){
+    private func attemptReload(){
         self.timer?.invalidate()
-        self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+        self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false)
     }
-    @objc func handleReloadTable(){
+    @objc func handleReload(){
         self.articlesArray.sort {$0.date! > $1.date!}
-        DispatchQueue.main.async {
-            self.articlesCollectionView.reloadData()
-        }
-        
     }
-    //取得使用者的文章
     func setUpConstraints(){
         
         backImageView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: 0).isActive = true
@@ -187,30 +196,11 @@ class UserInfoController: UIViewController {
         stackView_Number.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
         stackView_Number.heightAnchor.constraint(equalToConstant: 40).isActive = true
         stackView_Number.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 1).isActive = true
+        
+        followerButton.centerYAnchor.constraint(equalTo: backView.bottomAnchor).isActive = true
+        followerButton.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
+        followerButton.heightAnchor.constraint(equalTo: backView.heightAnchor, multiplier: 0.1).isActive = true
+        followerButton.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 0.45).isActive = true
     }
-    func setUpCollectionView(){
-        articlesCollectionView.topAnchor.constraint(equalTo: backView.bottomAnchor).isActive = true
-        articlesCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        articlesCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        articlesCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-    }
+}
 
-}
-extension UserInfoController: UICollectionViewDelegate,UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return articlesArray.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = articlesCollectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! UserInfoCell
-        cell.article = articlesArray[indexPath.row]
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let articleDetailController = ArticleDeatailController()
-        articleDetailController.article = articlesArray[indexPath.row]
-        self.navigationController?.pushViewController(articleDetailController, animated: true)
-    }
-    
-    
-}

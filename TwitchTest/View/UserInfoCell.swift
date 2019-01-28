@@ -34,7 +34,7 @@ class UserInfoCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.orange
+        imageView.backgroundColor = specialWhite
         return imageView
     }()
     let commodityNameLabel: UILabel = {
@@ -45,11 +45,11 @@ class UserInfoCell: UICollectionViewCell {
         label.textColor = specialWhite
         return label
     }()
-    let loveImageView_1 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_2 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_3 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_4 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_5 = LoveImageView(tintColor: specialYellow)
+    let loveImageView_1 = LoveImageView(tintColor: themeColor)
+    let loveImageView_2 = LoveImageView(tintColor: themeColor)
+    let loveImageView_3 = LoveImageView(tintColor: themeColor)
+    let loveImageView_4 = LoveImageView(tintColor: themeColor)
+    let loveImageView_5 = LoveImageView(tintColor: themeColor)
     
     
     lazy var loveImageStackView: UIStackView = {

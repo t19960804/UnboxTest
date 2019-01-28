@@ -17,7 +17,7 @@ class ArticleDeatailController: UIViewController {
                 let userName = article?.author?.userName,let review = article?.review{
                 commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURl)!)
                 userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
-                titleLabel.text = title
+//                titleLabel.text = title
                 userNameLabel.text = userName
                 reviewTextView.text = review
             }
@@ -43,9 +43,9 @@ class ArticleDeatailController: UIViewController {
     let background_commodityImageView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowOffset = CGSize(width: 0, height: 4)
         view.layer.shadowRadius = 2
-        view.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
+        view.layer.shadowColor = UIColor(red: 120/255, green: 121/255, blue: 122/255, alpha: 1.0).cgColor
         view.layer.shadowOpacity = 0.7
         return view
     }()
@@ -69,7 +69,7 @@ class ArticleDeatailController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 35
+        imageView.layer.cornerRadius = 20
         imageView.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleToUserInfo))
         imageView.addGestureRecognizer(tapGesture)
@@ -79,14 +79,14 @@ class ArticleDeatailController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = UIColor.black
+        label.textColor = specialWhite
         return label
     }()
-    let loveImageView_1 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_2 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_3 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_4 = LoveImageView(tintColor: specialYellow)
-    let loveImageView_5 = LoveImageView(tintColor: specialYellow)
+    let loveImageView_1 = LoveImageView(tintColor: themeColor)
+    let loveImageView_2 = LoveImageView(tintColor: themeColor)
+    let loveImageView_3 = LoveImageView(tintColor: themeColor)
+    let loveImageView_4 = LoveImageView(tintColor: themeColor)
+    let loveImageView_5 = LoveImageView(tintColor: themeColor)
     
     
     lazy var loveImageStackView: UIStackView = {
@@ -110,14 +110,20 @@ class ArticleDeatailController: UIViewController {
         textView.isEditable = false
         return textView
     }()
+
     let commentButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = specialYellow
-        button.setTitle("留言板", for: UIControl.State.normal)
-        button.setTitleColor(specialWhite, for: UIControl.State.normal)
+        button.backgroundColor = themeColor
+        button.setTitle("留言板", for: .normal)
+        button.setTitleColor(specialWhite, for: .normal)
         button.layer.cornerRadius = 10
-        button.clipsToBounds = true
+        button.layer.shadowRadius = 2
+        button.layer.shadowOpacity = 0.7
+        button.layer.shadowColor = shadowGray.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 3)
+
+
         return button
     }()
     override func viewWillAppear(_ animated: Bool) {
@@ -127,20 +133,23 @@ class ArticleDeatailController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = themeGrayColor
+        self.view.backgroundColor = specialWhite
         self.view.addSubview(myScrollView)
         self.navigationItem.title = "商品詳情"
         myScrollView.addSubview(backGroundView)
         
         backGroundView.addSubview(background_commodityImageView)
         background_commodityImageView.addSubview(commodityImageView)
+        backGroundView.addSubview(commentButton)
+        
         
         backGroundView.addSubview(titleLabel)
         backGroundView.addSubview(userImageView)
         backGroundView.addSubview(userNameLabel)
-        backGroundView.addSubview(loveImageStackView)
+//        backGroundView.addSubview(loveImageStackView)
         backGroundView.addSubview(reviewTextView)
-        backGroundView.addSubview(commentButton)
+        
+        
         
         loveImageViewArray.append(loveImageView_1)
         loveImageViewArray.append(loveImageView_2)
@@ -161,7 +170,7 @@ class ArticleDeatailController: UIViewController {
         //size,限制的size,不然不知道哪裡換行
         //usesLineFragmentOrigin,文本将以每行组成的矩形为单位计算整个文本的尺寸
         //attributes,字體大小
-        let constraintSize = CGSize(width: self.view.frame.width * 0.9, height: 1000)
+        let constraintSize = CGSize(width: self.view.frame.width * 0.8, height: 1000)
         let estimateFrame = NSString(string: string).boundingRect(with: constraintSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font : fontSize], context: nil)
         return estimateFrame
     }
@@ -205,30 +214,34 @@ class ArticleDeatailController: UIViewController {
         titleLabel.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 8).isActive = true
         titleLabel.widthAnchor.constraint(equalTo: commodityImageView.widthAnchor, multiplier: 0.8).isActive = true
 
-        userImageView.topAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: 10).isActive = true
-        userImageView.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 10).isActive = true
-        userImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        userImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        userImageView.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 5).isActive = true
+        userImageView.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 5).isActive = true
+        userImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        userImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
 
         userNameLabel.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor).isActive = true
         userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 8).isActive = true
 
-        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
-        loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
-        loveImageStackView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        loveImageStackView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+//        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
+//        loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
+//        loveImageStackView.widthAnchor.constraint(equalToConstant: 150).isActive = true
+//        loveImageStackView.heightAnchor.constraint(equalToConstant: 35).isActive = true
 
         
-        reviewTextView.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 20).isActive = true
-        reviewTextView.leftAnchor.constraint(equalTo: userImageView.leftAnchor).isActive = true
-        reviewTextView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.95).isActive = true
+        reviewTextView.topAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: 40).isActive = true
+        reviewTextView.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor).isActive = true
+        reviewTextView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.85).isActive = true
         reviewTextViewHeightAnchor = reviewTextView.heightAnchor.constraint(equalToConstant: 200)
         reviewTextViewHeightAnchor?.isActive = true
         
-        commentButton.topAnchor.constraint(equalTo: reviewTextView.bottomAnchor, constant: 20).isActive = true
         commentButton.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
-        commentButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        commentButton.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.7).isActive = true
+        commentButton.centerYAnchor.constraint(equalTo: commodityImageView.bottomAnchor).isActive = true
+        commentButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        commentButton.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.5).isActive = true
+        
+        
+
+        
     }
 
 

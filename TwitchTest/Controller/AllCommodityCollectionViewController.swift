@@ -21,7 +21,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         super.viewDidLoad()
         setUpNavBar()
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = themeGrayColor
+        self.collectionView.backgroundColor = specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
         

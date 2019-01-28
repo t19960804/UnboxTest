@@ -12,9 +12,11 @@ import UIKit
 class UserInfoLabel: UILabel {
     init(content: String,fontSize: UIFont,textColor: UIColor) {
         super.init(frame: .zero)
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.text = content
         self.textColor = textColor
         self.font = fontSize
+        self.isUserInteractionEnabled = true
         self.textAlignment = .center
     }
     
