@@ -308,21 +308,6 @@ class PostArticleController: UIViewController {
                 return
             }
         }
-        //先取得當前使用者的文章數量,成功上傳時將它+1,更新到使用者的資料中
-        let userRef = ref.child("使用者").child(userUID)
-        userRef.observeSingleEvent(of: .value) { (snapshot) in
-            let dictionary = snapshot.value as! [String : Any]
-            if let numbersOfArticleNow = dictionary["numbersOfArticle"] as? Int{
-                userRef.updateChildValues(["numbersOfArticle" : numbersOfArticleNow + 1]) { (error, ref) in
-                    if let error = error{
-                        print("error:",error)
-                        return
-                    }
-                }
-            }
-        }
-        
-        
     }
     @objc func handleChooseImage(){
         let picker = UIImagePickerController()

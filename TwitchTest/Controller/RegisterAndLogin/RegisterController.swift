@@ -266,8 +266,7 @@ class RegisterController: UIViewController {
                                 guard let userUID = result?.user.uid else{return}
                                 let values: [String : Any] = ["userName" : userName,
                                                               "account" : account,
-                                                              "imageURL" : url?.absoluteString as Any,
-                                                              "numbersOfArticle" : 0]
+                                                              "imageURL" : url?.absoluteString as Any]
                                 self.addUserToDataBase(uid: userUID, values: values)
                             })
 
