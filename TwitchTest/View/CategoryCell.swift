@@ -12,7 +12,12 @@ import UIKit
 
 
 class CategoryCell: UICollectionViewCell {
-    
+    var category: String?{
+        didSet{
+            self.categoryImageView.image = UIImage(named: category!)?.withRenderingMode(.alwaysTemplate)
+            self.categoryLabel.text = category
+        }
+    }
     let categoryImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +49,6 @@ class CategoryCell: UICollectionViewCell {
         self.layer.shadowOffset = CGSize(width: 2, height: 2)
         self.layer.shadowOpacity = 0.7
         self.layer.shadowRadius = 2
-//        self.layer.shadowColor = UIColor(red: 44.0/255.0, green: 62.0/255.0, blue: 80.0/255.0, alpha: 1.0).cgColor
         self.layer.shadowColor = UIColor(red: 120/255, green: 121/255, blue: 122/255, alpha: 1.0).cgColor
 
         setUpConstraints()

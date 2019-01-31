@@ -126,23 +126,22 @@ class LoginController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = specialWhite
-        accountTextField.text = "Asiagodtone@q.com"
-        passwordTextField.text = "Qqqqqq"
+        
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)
-        
         self.view.addSubview(label_1)
         self.view.addSubview(accountTextField)
         self.view.addSubview(bottomLine_1)
         self.view.addSubview(label_2)
         self.view.addSubview(passwordTextField)
         self.view.addSubview(bottomLine_2)
-        
         self.view.addSubview(stackView)
+        
+        accountTextField.text = "Asiagodtone@q.com"
+        passwordTextField.text = "Qqqqqq"
         
         setUpConstraints()
         addKeyboardObserver()
-        print(UserDefaults.standard.bool(forKey: "notLoginYet"))
     }
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
@@ -198,6 +197,24 @@ class LoginController: UIViewController {
 
     }
     
+    
+    func detectErrorCode(code: Int){
+        switch code {
+        case 17008:
+            Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
+        case 17009:
+            Alert.alert_BugReport(message: "密碼錯誤", title: "錯誤", with: self)
+        case 17011:
+            Alert.alert_BugReport(message: "帳號尚未註冊", title: "錯誤", with: self)
+        default:
+            return
+        }
+    }
+    func addKeyboardObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    //MARK: - Selector方法
     @objc func handleLogin(){
         let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = "登入中..."
@@ -211,7 +228,7 @@ class LoginController: UIViewController {
                 Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
                     if let error = error{
                         hud.dismiss(afterDelay: 1)
-
+                        
                         let errorCode = (error as NSError).code
                         self.detectErrorCode(code: errorCode)
                     }else{
@@ -221,30 +238,14 @@ class LoginController: UIViewController {
                     }
                     
                 }
-
+                
             }
-        }
-    }
-    func detectErrorCode(code: Int){
-        
-        switch code {
-        case 17008:
-            Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
-        case 17009:
-            Alert.alert_BugReport(message: "密碼錯誤", title: "錯誤", with: self)
-        case 17011:
-            Alert.alert_BugReport(message: "帳號尚未註冊", title: "錯誤", with: self)
-        default:
-            return
         }
     }
     @objc func handleRegister(){
         self.present(RegisterController(), animated: true, completion: nil)
     }
-    func addKeyboardObserver(){
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
-    }
+    
     @objc func handleKeyboardShow(_ notification: Notification){
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue

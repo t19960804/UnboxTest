@@ -25,6 +25,7 @@
 		0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A821F9A5280056C617 /* CustomNavController.swift */; };
 		0B8EC3AB21FAFE9F0056C617 /* UserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */; };
 		0B8EC3AE21FEF2890056C617 /* ArticlesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */; };
+		0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */; };
 		0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413C21E59E8800BD3886 /* AppDelegate.swift */; };
 		0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413E21E59E8800BD3886 /* ViewController.swift */; };
 		0BC3414221E59E8800BD3886 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BC3414021E59E8800BD3886 /* Main.storyboard */; };
@@ -56,6 +57,7 @@
 		0B8EC3A821F9A5280056C617 /* CustomNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavController.swift; sourceTree = "<group>"; };
 		0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoCell.swift; sourceTree = "<group>"; };
 		0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesController.swift; sourceTree = "<group>"; };
+		0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersController.swift; sourceTree = "<group>"; };
 		0BC3413921E59E8800BD3886 /* TwitchTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BC3413C21E59E8800BD3886 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0BC3413E21E59E8800BD3886 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				0B8EC3A321F86D310056C617 /* UserInfoController.swift */,
 				0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */,
+				0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */,
 			);
 			path = "UserInfo-RelativeController";
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				0B10848421EF19E4006F890E /* User.swift in Sources */,
 				0BC3415621E5A93900BD3886 /* InternetService.swift in Sources */,
 				0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */,
+				0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */,
 				0B10847A21EB269B006F890E /* PostArticleController.swift in Sources */,
 				0B8EC3AB21FAFE9F0056C617 /* UserInfoCell.swift in Sources */,
 				0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */,

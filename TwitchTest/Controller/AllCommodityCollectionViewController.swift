@@ -20,11 +20,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpNavBar()
-        self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialWhite
-        self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.showsHorizontalScrollIndicator = false
-        
+        setUpCollectionView()
         
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
@@ -40,6 +36,12 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         }
         
         
+    }
+    func setUpCollectionView(){
+        self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView.backgroundColor = specialWhite
+        self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.showsHorizontalScrollIndicator = false
     }
     func setUpNavBar(){
         self.navigationItem.title = "商品分類"
@@ -68,8 +70,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CategoryCell
-        cell.categoryImageView.image = UIImage(named: category[indexPath.row])?.withRenderingMode(.alwaysTemplate)
-        cell.categoryLabel.text = category[indexPath.row]
+        cell.category = category[indexPath.row]
         return cell
     }
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

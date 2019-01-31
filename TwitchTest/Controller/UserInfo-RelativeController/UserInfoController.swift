@@ -13,10 +13,10 @@ import FirebaseDatabase
 class UserInfoController: UIViewController {
     var article: Article?{
         didSet{
-            if let userImageURL = article?.author?.imageURL,let userName = article?.author?.userName{
+            if let userImageURL = article?.author?.imageURL,let userName = article?.author?.userName,let authorUID = article?.authorUID{
                 userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
                 userNameLabel.text = userName
-                
+                self.authorUID = authorUID
             }
         }
     }
@@ -24,9 +24,11 @@ class UserInfoController: UIViewController {
     var articlesArray = [Article]()
     var timer: Timer?
     let ref = Database.database().reference()
-    lazy var authorUID = article?.authorUID
+    var authorUID = String()
+    
+    
     let userUID = Auth.auth().currentUser?.uid
-    var result = Bool()
+    var followersArray = [User]()
     
     let backImageView: UIImageView = {
         let imageView = UIImageView()
@@ -66,8 +68,19 @@ class UserInfoController: UIViewController {
     let userNameLabel = UserInfoLabel(content: "", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
     let follwerLabel = UserInfoLabel(content: "追蹤人數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
     let numberOfArticleLabel = UserInfoLabel(content: "文章數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
-    let follwerNumberLabel = UserInfoLabel(content: "123", fontSize: .boldSystemFont(ofSize: 30), textColor: specialWhite)
     let aboutMeLabel = UserInfoLabel(content: "關於我", fontSize: .boldSystemFont(ofSize: 25), textColor: UIColor.black)
+    
+    lazy var follwerNumberLabel: UILabel = {
+        let label = UILabel()
+        label.isUserInteractionEnabled = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.textColor = specialWhite
+        label.textAlignment = .center
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleCheckFollowers))
+        label.addGestureRecognizer(tap)
+        return label
+    }()
     lazy var articleNumberLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -163,30 +176,46 @@ class UserInfoController: UIViewController {
         setUpTopView()
         setUpBottomView()
         fetchArticles()
-        
+        fetchFollowers()
     }
     func setUpNavBar(){
         self.navigationItem.title = "個人資料"
         let settingImg = UIImage(named: "settings2")
         let settingBarButton = UIBarButtonItem(image: settingImg, style: .plain, target: self, action: #selector(handleSetting))
-        let isCurrentUser = article?.authorUID == Auth.auth().currentUser?.uid
+        let isCurrentUser = authorUID == Auth.auth().currentUser?.uid
         self.navigationItem.rightBarButtonItems = isCurrentUser ? [settingBarButton] : []
         followerButton.isHidden = isCurrentUser ? true : false
+        
+        
     }
     
     //MARK: - 追蹤處理
+    private func isSubscribing(completion:@escaping (Bool)->Void){
+        ref.child("使用者").child(userUID!).observeSingleEvent(of: .value) { (snapshot) in
+            let dictionary = snapshot.value as! [String : Any]
+            if let followersArray = dictionary["followers"] as? [String]{
+                for items in followersArray{
+                    if items == self.authorUID{
+                        completion(true)
+                        return
+                    }
+                }
+                completion(false)
+            }
+            
+        }
+    }
     private func addFollowers(uid: String){
         let userRef = ref.child("使用者").child(userUID!)
         //找尋當前使用者的追蹤名單
         userRef.observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
-            //第一次的時候會無法轉型
+            //第一次因為沒有followers節點會導致無法轉型,新增追蹤者時手用陣列包住
             if var follwersArray = dictionary["followers"] as? [String]{
                 follwersArray.append(uid)
                 self.updateFollowers(value: follwersArray)
             }else{
-                guard let authorUID = self.article?.authorUID else{return}
-                self.updateFollowers(value: [authorUID])
+                self.updateFollowers(value: [self.authorUID])
             }
             
         }
@@ -200,35 +229,41 @@ class UserInfoController: UIViewController {
             }
         }
     }
-    //MARK: - 點擊處理
+    private func deleteFollowers(followerUID: String){
+        let userRef = ref.child("使用者").child(userUID!)
+        //找尋當前使用者的追蹤名單
+        userRef.observeSingleEvent(of: .value) { (snapshot) in
+            let dictionary = snapshot.value as! [String : Any]
+            if let follwersArray = dictionary["followers"] as? [String]{
+                let newFollowersArray = follwersArray.filter({ (uid) -> Bool in
+                    return uid != followerUID
+                })
+                self.updateFollowers(value: newFollowersArray)
+            }            
+        }
+    }
+    //MARK: - Seletor方法
+    @objc func handleCheckFollowers(){
+        let followersController = FollowersController()
+        followersController.followersArray = self.followersArray
+        self.navigationController?.pushViewController(followersController, animated: true)
+       
+        
+    }
     @objc func handleFollow(){
-        //背景白色代表未追蹤
+        //按下時判斷背景顏色是否為白色,白色代表未追蹤
         let notFollwYet = followerButton.backgroundColor == specialWhite
+        let titleColor: UIColor = notFollwYet ? specialWhite : specialCyan
+        let title: String = notFollwYet ? "已追蹤" : "追蹤"
         followerButton.backgroundColor = notFollwYet ? specialCyan : specialWhite
+        followerButton.setTitleColor(titleColor, for: .normal)
+        followerButton.setTitle(title, for: .normal)
         
         if notFollwYet{
-            followerButton.setTitleColor(specialWhite, for: .normal)
-            followerButton.setTitle("已追蹤", for: .normal)
-            guard let authorUID = self.authorUID else{return}
             addFollowers(uid: authorUID)
         }else{
-            followerButton.setTitleColor(specialCyan, for: .normal)
-            followerButton.setTitle("追蹤", for: .normal)
-            let userRef = ref.child("使用者").child(userUID!)
-            //找尋當前使用者的追蹤名單
-            userRef.observeSingleEvent(of: .value) { (snapshot) in
-                let dictionary = snapshot.value as! [String : Any]
-                //第一次的時候會無法轉型
-                if let follwersArray = dictionary["followers"] as? [String]{
-                    let newFollowersArray = follwersArray.filter({ (uid) -> Bool in
-                        return uid != (self.article?.authorUID)!
-                    })
-                    self.updateFollowers(value: newFollowersArray)
-                }else{
-                    self.updateFollowers(value: [])
-                }
-                
-            }
+            guard let authorUID = self.article?.authorUID else{return}
+            deleteFollowers(followerUID: authorUID)
         }
     }
     @objc func handleCheckArticles(){
@@ -239,10 +274,15 @@ class UserInfoController: UIViewController {
     @objc func handleSetting(){
         print("set")
     }
+    @objc func handleReload(){
+        self.articlesArray.sort {$0.date! > $1.date!}
+        self.articleNumberLabel.text = String(articlesArray.count)
+        self.follwerNumberLabel.text = String(followersArray.count)
+    }
     //MARK: - Fetch文章
     //不能放ViewWillAppear,陣列會重複.append
     func fetchArticles(){
-        ref.child("使用者-文章").child(authorUID!).observe(.childAdded) { (snapshot) in
+        ref.child("使用者-文章").child(authorUID).observe(.childAdded) { (snapshot) in
             let articleUID = snapshot.key
             //用Key找文章
             self.ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
@@ -259,30 +299,27 @@ class UserInfoController: UIViewController {
             })
         }
     }
-    //確認是否有訂閱
-    func isSubscribing(completion:@escaping (Bool)->Void){
-        ref.child("使用者").child(userUID!).observeSingleEvent(of: .value) { (snapshot) in
+    func fetchFollowers(){
+        ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
-            if let followersArray = dictionary["followers"] as? [String]{
-                for items in followersArray{
-                    if items == self.article?.authorUID{
-                        completion(true)
-                        return
-                    }
+            //如果能轉型就至少有一位追蹤者
+            if let followers = dictionary["followers"] as? [String]{
+                for followerUID in followers{
+                    self.ref.child("使用者").child(followerUID).observeSingleEvent(of: .value, with: { (snapshot) in
+                        let dictionary = snapshot.value as! [String : Any]
+                        let user = User(value: dictionary)
+                        self.followersArray.append(user)
+                        self.attemptReload()
+                    })
                 }
-                completion(false)
             }
-            
-        }
+        })
     }
     private func attemptReload(){
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false)
     }
-    @objc func handleReload(){
-        self.articlesArray.sort {$0.date! > $1.date!}
-        self.articleNumberLabel.text = String(articlesArray.count)
-    }
+    
     func setUpTopView(){
         
         backImageView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: 0).isActive = true

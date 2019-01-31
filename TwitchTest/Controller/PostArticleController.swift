@@ -224,7 +224,7 @@ class PostArticleController: UIViewController {
     }
     func whatKindOfError() -> String?{
         if let title = titleTextField.text,let review = reviewTextView.text{
-            if title.isEmpty || review.isEmpty{
+            if title.isEmpty || review.isEmpty || review == "輸入評論..."{
                 return UploadError.NotFillYet.rawValue
             }else if uploadImageView.image == nil{
                 return UploadError.NoImage.rawValue
@@ -250,15 +250,17 @@ class PostArticleController: UIViewController {
             hud.show(in: self.view, animated: true)
             //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
             let imageUID = NSUUID().uuidString
-            let ref = Storage.storage().reference().child("ArticleImages").child(imageUID)
+            let imageRef = Storage.storage().reference().child("ArticleImages").child(imageUID)
             guard let jpgImage = uploadImageView.image?.jpegData(compressionQuality: 1) else{return}
-            ref.putData(jpgImage, metadata: nil) { (metadata, error) in
+            imageRef.putData(jpgImage, metadata: nil) { (metadata, error) in
                 if let error = error{
                     print("error:",error)
+                    return
                 }
-                ref.downloadURL(completion: { (url, error) in
+                imageRef.downloadURL(completion: { (url, error) in
                     if let error = error{
                         print("error:",error)
+                        return
                     }
                     guard let downloadURL = url?.absoluteString else{return}
                     self.addArticleDataToDataBase(downloadURL: downloadURL)
@@ -274,7 +276,6 @@ class PostArticleController: UIViewController {
     func addArticleDataToDataBase(downloadURL: String){
         let articleUID = NSUUID().uuidString
         guard let userUID = Auth.auth().currentUser?.uid else {return}
-        
         guard let title = self.titleTextField.text else{return}
         guard let review = self.reviewTextView.text else{return}
         let values: [String : Any] = [  "authorUID" : userUID,

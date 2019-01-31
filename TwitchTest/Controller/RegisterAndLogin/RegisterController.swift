@@ -233,7 +233,6 @@ class RegisterController: UIViewController {
         self.present(picker, animated: true, completion: nil)
     }
     @objc func handleRegister(){
-        
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "驗證中..."
         hud.show(in: self.view)
@@ -252,15 +251,17 @@ class RegisterController: UIViewController {
                         let imageUID = NSUUID().uuidString
                         guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
                         //圖片存進Storage,再從裡面抓出URL
-                        let ref = Storage.storage().reference().child("userImages").child(imageUID)
-                        ref.putData(userImage, metadata: nil, completion: { (metadata, error) in
+                        let imageRef = Storage.storage().reference().child("userImages").child(imageUID)
+                        imageRef.putData(userImage, metadata: nil, completion: { (metadata, error) in
                             if let error = error{
                                 print("error:",error)
+                                return
                             }
                             //抓出在Storage的URL
-                            ref.downloadURL(completion: { (url, error) in
+                            imageRef.downloadURL(completion: { (url, error) in
                                 if let error = error{
                                     print("error:",error)
+                                    return
                                 }
                                 //新增user後,user有自帶的uid
                                 guard let userUID = result?.user.uid else{return}
@@ -271,9 +272,6 @@ class RegisterController: UIViewController {
                             })
 
                         })
-                       
-                        
-                        
                         hud.dismiss(afterDelay: 1)
                         //dismiss所有的Controller,回到根畫面
                         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
@@ -306,12 +304,14 @@ class RegisterController: UIViewController {
             return
         }
     }
-    @objc func handleCancel(){
-        self.dismiss(animated: true, completion: nil)
-    }
+    
     func addKeyboardObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    //MARK: - Selector方法
+    @objc func handleCancel(){
+        self.dismiss(animated: true, completion: nil)
     }
     @objc func handleKeyboardShow(_ notification: Notification){
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {

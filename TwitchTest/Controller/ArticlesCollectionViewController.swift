@@ -53,13 +53,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
-        
-        self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialWhite
-        self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.showsHorizontalScrollIndicator = false
-        
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
             layout.itemSize = CGSize(width: self.view.frame.width - 20, height: 450)
@@ -68,7 +61,16 @@ class ArticlesCollectionViewController: UICollectionViewController {
         }
         self.view.addSubview(messageLabel)
         self.navigationItem.rightBarButtonItems = [postArticleButton,searchButton]
+        searchBar.delegate = self
+        setUpCollectionView()
         setUpMessageLabel()
+
+    }
+    func setUpCollectionView(){
+        self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView.backgroundColor = specialWhite
+        self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.showsHorizontalScrollIndicator = false
     }
     func setUpMessageLabel(){
         messageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
@@ -104,6 +106,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
     }
+    //MARK: - Selector方法
     @objc func handleReloadTable(){
         self.articlesArray.sort {$0.date! > $1.date!}
         self.filterdArticles = self.articlesArray
