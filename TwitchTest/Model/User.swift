@@ -10,12 +10,14 @@ import Foundation
 
 
 class User{
+    var uid: String?
     var account: String?
     var imageURL: String?
     var userName: String?
     var followers: [String]?
     
     init(value: [String : Any]) {
+        self.uid = value["uid"] as? String
         self.account = value["account"] as? String
         self.imageURL = value["imageURL"] as? String
         self.userName = value["userName"] as? String

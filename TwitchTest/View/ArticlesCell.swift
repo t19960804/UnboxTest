@@ -152,7 +152,6 @@ class ArticlesCell: UICollectionViewCell {
         self.addSubview(reviewTextView)
         self.addSubview(checkButton)
         
-
         setUpConstraints()
         
         

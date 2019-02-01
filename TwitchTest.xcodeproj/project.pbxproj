@@ -34,6 +34,7 @@
 		0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */; };
 		0BC3415321E5A6F900BD3886 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3415221E5A6F900BD3886 /* CategoryCell.swift */; };
 		0BC3415621E5A93900BD3886 /* InternetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3415521E5A93900BD3886 /* InternetService.swift */; };
+		0BE3DF9B2203FE9500D53734 /* FollowersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */; };
 		DC86726B53D73FC2DECA9729 /* Pods_TwitchTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A8720CE5B1B0818AA928023 /* Pods_TwitchTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommodityCollectionViewController.swift; sourceTree = "<group>"; };
 		0BC3415221E5A6F900BD3886 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		0BC3415521E5A93900BD3886 /* InternetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetService.swift; sourceTree = "<group>"; };
+		0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersTableViewCell.swift; sourceTree = "<group>"; };
 		42B0C38300061E065A1D7C5B /* Pods-TwitchTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.release.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.release.xcconfig"; sourceTree = "<group>"; };
 		F5AA30C4EABCBB51605B34AA /* Pods-TwitchTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.debug.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,6 +185,7 @@
 				0B10847521E9EC4A006F890E /* ArticlesCell.swift */,
 				0B10847E21EC8B5E006F890E /* LoveImageView.swift */,
 				0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */,
+				0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */,
 				0B10848221ED9A45006F890E /* ImageDownloadHelper.swift in Sources */,
 				0BC3415321E5A6F900BD3886 /* CategoryCell.swift in Sources */,
+				0BE3DF9B2203FE9500D53734 /* FollowersTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

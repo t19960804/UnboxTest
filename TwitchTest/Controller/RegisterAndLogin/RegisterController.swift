@@ -265,7 +265,8 @@ class RegisterController: UIViewController {
                                 }
                                 //新增user後,user有自帶的uid
                                 guard let userUID = result?.user.uid else{return}
-                                let values: [String : Any] = ["userName" : userName,
+                                let values: [String : Any] = ["uid" : userUID,
+                                                              "userName" : userName,
                                                               "account" : account,
                                                               "imageURL" : url?.absoluteString as Any]
                                 self.addUserToDataBase(uid: userUID, values: values)
