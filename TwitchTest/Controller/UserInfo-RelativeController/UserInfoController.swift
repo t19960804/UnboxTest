@@ -185,8 +185,6 @@ class UserInfoController: UIViewController {
         let isCurrentUser = authorUID == Auth.auth().currentUser?.uid
         self.navigationItem.rightBarButtonItems = isCurrentUser ? [settingBarButton] : []
         followerButton.isHidden = isCurrentUser ? true : false
-        
-        
     }
     
     //MARK: - 追蹤處理
@@ -205,7 +203,7 @@ class UserInfoController: UIViewController {
             
         }
     }
-    private func addFollowers(uid: String){
+    func addFollowers(uid: String){
         let userRef = ref.child("使用者").child(userUID!)
         //找尋當前使用者的追蹤名單
         userRef.observeSingleEvent(of: .value) { (snapshot) in
@@ -229,7 +227,7 @@ class UserInfoController: UIViewController {
             }
         }
     }
-    private func deleteFollowers(followerUID: String){
+    func deleteFollowers(followerUID: String){
         let userRef = ref.child("使用者").child(userUID!)
         //找尋當前使用者的追蹤名單
         userRef.observeSingleEvent(of: .value) { (snapshot) in
@@ -247,8 +245,6 @@ class UserInfoController: UIViewController {
         let followersController = FollowersController()
         followersController.followersArray = self.followersArray
         self.navigationController?.pushViewController(followersController, animated: true)
-       
-        
     }
     @objc func handleFollow(){
         //按下時判斷背景顏色是否為白色,白色代表未追蹤
@@ -282,6 +278,11 @@ class UserInfoController: UIViewController {
     //MARK: - Fetch文章
     //不能放ViewWillAppear,陣列會重複.append
     func fetchArticles(){
+        //防止疊加
+        if self.articlesArray.isEmpty == false{
+            self.articlesArray.removeAll()
+            self.attemptReload()
+        }
         ref.child("使用者-文章").child(authorUID).observe(.childAdded) { (snapshot) in
             let articleUID = snapshot.key
             //用Key找文章
@@ -301,6 +302,11 @@ class UserInfoController: UIViewController {
     }
     func fetchFollowers(){
         ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
+            //防止疊加
+            if self.followersArray.isEmpty == false{
+                self.followersArray.removeAll()
+                self.attemptReload()
+            }
             let dictionary = snapshot.value as! [String : Any]
             //如果能轉型就至少有一位追蹤者
             if let followers = dictionary["followers"] as? [String]{
