@@ -161,7 +161,7 @@ class ArticleDeatailController: UIViewController {
     }
     @objc func handleToUserInfo(){
         let userInfoController = UserInfoController()
-        userInfoController.article = article
+        userInfoController.user = article?.author
         self.navigationController?.pushViewController(userInfoController, animated: true)
     }
     

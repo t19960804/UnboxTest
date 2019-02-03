@@ -11,21 +11,21 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class UserInfoController: UIViewController {
-    var article: Article?{
+    var user: User?{
         didSet{
-            if let userImageURL = article?.author?.imageURL,let userName = article?.author?.userName,let authorUID = article?.authorUID{
+            if let userImageURL = user?.imageURL,let userName = user?.userName,let authorUID = user?.uid{
                 userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
                 userNameLabel.text = userName
                 self.authorUID = authorUID
             }
         }
     }
+
     let cellID = "Cell"
     var articlesArray = [Article]()
     var timer: Timer?
     let ref = Database.database().reference()
     var authorUID = String()
-    
     
     let userUID = Auth.auth().currentUser?.uid
     var followersArray = [User]()
@@ -69,7 +69,8 @@ class UserInfoController: UIViewController {
     let follwerLabel = UserInfoLabel(content: "追蹤人數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
     let numberOfArticleLabel = UserInfoLabel(content: "文章數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
     let aboutMeLabel = UserInfoLabel(content: "關於我", fontSize: .boldSystemFont(ofSize: 25), textColor: UIColor.black)
-    
+    lazy var editBarButton = UIBarButtonItem(title: "編輯", style: .plain, target: self, action: #selector(handleEditing))
+
     lazy var follwerNumberLabel: UILabel = {
         let label = UILabel()
         label.isUserInteractionEnabled = true
@@ -95,7 +96,6 @@ class UserInfoController: UIViewController {
     let abouMeTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.text = "專門開箱模型\n歡迎相關廠商聯絡喔\n電話:0975007219\nFaceBook專頁:Andy開箱趣"
         textView.textAlignment = .center
         textView.textColor = UIColor(red: 172/255, green: 169/255, blue: 168/255, alpha: 1)
         textView.font = UIFont.systemFont(ofSize: 18)
@@ -175,18 +175,44 @@ class UserInfoController: UIViewController {
         setUpNavBar()
         setUpTopView()
         setUpBottomView()
-        fetchArticles()
-        fetchFollowers()
+        fetchArticles { (user) in
+            self.abouMeTextView.text = user.aboutMe
+            self.articlesArray.sort {$0.date! > $1.date!}
+            self.articleNumberLabel.text = String(self.articlesArray.count)
+        }
+        fetchFollowers_2 {
+            self.follwerNumberLabel.text = String(self.followersArray.count)
+        }
+//        fetchFollowers()
+        addKeyBoardObserver()
     }
     func setUpNavBar(){
         self.navigationItem.title = "個人資料"
-        let settingImg = UIImage(named: "settings2")
-        let settingBarButton = UIBarButtonItem(image: settingImg, style: .plain, target: self, action: #selector(handleSetting))
         let isCurrentUser = authorUID == Auth.auth().currentUser?.uid
-        self.navigationItem.rightBarButtonItems = isCurrentUser ? [settingBarButton] : []
+        self.navigationItem.rightBarButtonItems = isCurrentUser ? [editBarButton] : []
         followerButton.isHidden = isCurrentUser ? true : false
     }
-    
+    //MARK: - 鍵盤處理
+    func addKeyBoardObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func handleKeyBoardShow(_ notification: Notification){
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.view.frame = CGRect(x: 0, y: -keyboardHeight, width: self.view.frame.width, height: self.view.frame.height)
+            }, completion: nil)
+            
+        }
+    }
+    @objc func handleKeyBoardHide(_ notification: Notification){
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        }, completion: nil)
+    }
     //MARK: - 追蹤處理
     private func isSubscribing(completion:@escaping (Bool)->Void){
         ref.child("使用者").child(userUID!).observeSingleEvent(of: .value) { (snapshot) in
@@ -258,7 +284,7 @@ class UserInfoController: UIViewController {
         if notFollwYet{
             addFollowers(uid: authorUID)
         }else{
-            guard let authorUID = self.article?.authorUID else{return}
+            guard let authorUID = user?.uid else{return}
             deleteFollowers(followerUID: authorUID)
         }
     }
@@ -267,21 +293,41 @@ class UserInfoController: UIViewController {
         articlesController.articlesArray = self.articlesArray
         self.navigationController?.pushViewController(articlesController, animated: true)
     }
-    @objc func handleSetting(){
-        print("set")
+    @objc func handleEditing(){
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(handleSaveUserInfo))
+        abouMeTextView.isEditable = true
+        abouMeTextView.becomeFirstResponder()
+    }
+    @objc func handleSaveUserInfo(){
+        //First Responder 代表的是目前畫面中，處於焦點狀態的元件
+        //而當輸入文字時，這個輸入框就是 First Responder
+        //所以如果要隱藏鍵盤，當然就是將 First Responder 取消，也就是使用resignFirstResponder()方法。
+        self.navigationItem.rightBarButtonItem = editBarButton
+        abouMeTextView.isEditable = false
+        abouMeTextView.resignFirstResponder()
+        saveUserInfo(with: abouMeTextView.text)
+    }
+    func saveUserInfo(with userInfo: String){
+        guard let userUID = userUID else{return}
+        ref.child("使用者").child(userUID).updateChildValues(["aboutMe" : userInfo]) { (error, ref) in
+            if let error = error{
+                print("error:",error)
+                return
+            }
+        }
     }
     @objc func handleReload(){
         self.articlesArray.sort {$0.date! > $1.date!}
         self.articleNumberLabel.text = String(articlesArray.count)
         self.follwerNumberLabel.text = String(followersArray.count)
     }
-    //MARK: - Fetch文章
+    //MARK: - Fetch資料
     //不能放ViewWillAppear,陣列會重複.append
-    func fetchArticles(){
+    func fetchArticles(completion: @escaping (User) -> Void){
         //防止疊加
         if self.articlesArray.isEmpty == false{
             self.articlesArray.removeAll()
-            self.attemptReload()
+//            self.attemptReload()
         }
         ref.child("使用者-文章").child(authorUID).observe(.childAdded) { (snapshot) in
             let articleUID = snapshot.key
@@ -289,13 +335,13 @@ class UserInfoController: UIViewController {
             self.ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String : Any]
                 guard let authorUID = dictionary["authorUID"] as? String else{return}
-                let article = Article(value: dictionary)
+                var article = Article(value: dictionary)
                 self.ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
                     let dictionary = snapshot.value as! [String : Any]
                     let user = User(value: dictionary)
                     article.author = user
                     self.articlesArray.append(article)
-                    self.attemptReload()
+                    completion(user)
                 })
             })
         }
@@ -316,6 +362,28 @@ class UserInfoController: UIViewController {
                         let user = User(value: dictionary)
                         self.followersArray.append(user)
                         self.attemptReload()
+                    })
+                }
+            }
+        })
+    }
+    func fetchFollowers_2(completion: @escaping () -> Void){
+        ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
+            //防止疊加
+            if self.followersArray.isEmpty == false{
+                self.followersArray.removeAll()
+                completion()
+            }
+            let dictionary = snapshot.value as! [String : Any]
+            //如果能轉型就至少有一位追蹤者
+            if let followers = dictionary["followers"] as? [String]{
+                for followerUID in followers{
+                    self.ref.child("使用者").child(followerUID).observeSingleEvent(of: .value, with: { (snapshot) in
+                        let dictionary = snapshot.value as! [String : Any]
+                        let user = User(value: dictionary)
+                        self.followersArray.append(user)
+                        completion()
+                        return
                     })
                 }
             }
@@ -376,7 +444,6 @@ class UserInfoController: UIViewController {
         abouMeTextView.topAnchor.constraint(equalTo: aboutMeLabel.bottomAnchor, constant: 0).isActive = true
         abouMeTextView.leftAnchor.constraint(equalTo: bottomView.leftAnchor, constant: 9).isActive = true
         abouMeTextView.rightAnchor.constraint(equalTo: bottomView.rightAnchor, constant: -9).isActive = true
-//        abouMeTextView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         abouMeTextView.heightAnchor.constraint(equalTo: bottomView.heightAnchor, multiplier: 0.7).isActive = true
 
     }

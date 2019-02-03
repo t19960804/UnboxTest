@@ -86,7 +86,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
             let articleUID = snapshot.key
             ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String : Any]
-                let article = Article(value: dictionary)
+                var article = Article(value: dictionary)
                 let author = dictionary["authorUID"] as! String
                 //透過文章中的author找尋作者資料
                 ref.child("使用者").child(author).observeSingleEvent(of: .value, with: { (snapshot) in

@@ -10,7 +10,8 @@ import Foundation
 import SwiftyJSON
 import FirebaseDatabase
 import FirebaseAuth
-class Article {
+
+struct Article {
     var author: User?
     var authorUID: String?
     var imageURL: String?

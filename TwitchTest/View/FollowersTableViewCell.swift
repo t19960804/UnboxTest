@@ -11,10 +11,15 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
+protocol FollowersTableViewCell_Delegate {
+    func isSubscribing(userUID: String,completion: @escaping (String) -> Void)
+}
+
+
 class FollowersTableViewCell: UITableViewCell {
     
-    
-    var followersController: FollowersController?
+    var delegate: FollowersTableViewCell_Delegate?
+    //
     let ref = Database.database().reference()
     let userUID = Auth.auth().currentUser?.uid
     var user: User?{
@@ -22,19 +27,17 @@ class FollowersTableViewCell: UITableViewCell {
             if let imageURl = user?.imageURL,let userName = user?.userName,let userUID = user?.uid{
                 self.userImageView.downLoadImageInCache(downLoadURL: URL(string: imageURl)!)
                 self.nameLabel.text = userName
-                followersController?.isSubscribing(userUID: userUID, completion: { (result) in
+                delegate?.isSubscribing(userUID: userUID, completion: { (result) in
                     if result == "本人"{
                         self.followButton.isHidden = true
                     }else if result == "已追蹤"{
-                        self.followButton.setTitle(result, for: .normal)
-                        self.followButton.setTitleColor(specialWhite, for: .normal)
-                        self.followButton.backgroundColor = specialCyan
+                        self.setUpFollowButton(title: result, titleColor: specialWhite, backgroundColor: specialCyan)
                     }else{
-                        self.followButton.setTitle(result, for: .normal)
-                        self.followButton.setTitleColor(specialCyan, for: .normal)
-                        self.followButton.backgroundColor = specialWhite
+                        self.setUpFollowButton(title: result, titleColor: specialCyan, backgroundColor: specialWhite)
+
                     }
                 })
+
             }
             
         }
@@ -58,8 +61,8 @@ class FollowersTableViewCell: UITableViewCell {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("追蹤", for: .normal)
-        button.setTitleColor(specialWhite, for: .normal)
-        button.backgroundColor = specialCyan
+        button.setTitleColor(specialCyan, for: .normal)
+        button.backgroundColor = specialWhite
         button.layer.cornerRadius = 8
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
@@ -70,26 +73,32 @@ class FollowersTableViewCell: UITableViewCell {
         self.addSubview(userImageView)
         self.addSubview(nameLabel)
         self.addSubview(followButton)
+        self.selectionStyle = .none
         setUpConstraints()
-       
+    }
+    func setUpFollowButton(title: String,titleColor: UIColor,backgroundColor: UIColor){
+        self.followButton.setTitle(title, for: .normal)
+        self.followButton.setTitleColor(titleColor, for: .normal)
+        self.followButton.backgroundColor = backgroundColor
     }
     @objc func handleFollow(){
-        if followButton.backgroundColor == specialWhite{
-            followButton.setTitle("已追蹤", for: .normal)
-            followButton.setTitleColor(specialWhite, for: .normal)
-            followButton.backgroundColor = specialCyan
-            guard let userUID = user?.uid else{return}
-            addFollowers(uid: userUID)
-        }else{
-            followButton.setTitle("追蹤", for: .normal)
-            followButton.setTitleColor(specialCyan, for: .normal)
-            followButton.backgroundColor = specialWhite
-            guard let userUID = user?.uid else{return}
+        guard let userUID = user?.uid else{return}
+        let isFollowing = followButton.titleLabel?.text == "已追蹤"
+        let title = isFollowing ? "追蹤" : "已追蹤"
+        let titleColor = isFollowing ? specialCyan : specialWhite
+        
+        followButton.backgroundColor = isFollowing ? specialWhite :specialCyan
+        followButton.setTitle(title, for: .normal)
+        followButton.setTitleColor(titleColor, for: .normal)
+        
+        if isFollowing{
             deleteFollowers(followerUID: userUID)
+        }else{
+            addFollowers(uid: userUID)
         }
+
     }
     func addFollowers(uid: String){
-        
         let userRef = ref.child("使用者").child(userUID!)
         //找尋當前使用者的追蹤名單
         userRef.observeSingleEvent(of: .value) { (snapshot) in

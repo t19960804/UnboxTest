@@ -94,7 +94,6 @@ class ArticlesCell: UICollectionViewCell {
         textView.backgroundColor = specialWhite
         textView.font = UIFont.systemFont(ofSize: 17)
         textView.textContainer.lineBreakMode = .byTruncatingTail
-        textView.textContainer.maximumNumberOfLines = 12
         textView.isEditable = false
         textView.isScrollEnabled = false
         return textView
