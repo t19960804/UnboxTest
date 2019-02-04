@@ -44,10 +44,6 @@ class UserInfoController: UIViewController {
         let gradient = CAGradientLayer()
         let color1 = UIColor(red: 237/255, green: 110/255, blue: 160/255, alpha: 1)
         let color2 = UIColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
-        
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 1, y: 1)
-
         gradient.colors = [color2.cgColor,color1.cgColor]
         gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height * 0.5)
         view.layer.addSublayer(gradient)
@@ -175,16 +171,16 @@ class UserInfoController: UIViewController {
         setUpNavBar()
         setUpTopView()
         setUpBottomView()
+        addKeyBoardObserver()
+
         fetchArticles { (user) in
             self.abouMeTextView.text = user.aboutMe
             self.articlesArray.sort {$0.date! > $1.date!}
             self.articleNumberLabel.text = String(self.articlesArray.count)
         }
-        fetchFollowers_2 {
+        fetchFollowers {
             self.follwerNumberLabel.text = String(self.followersArray.count)
         }
-//        fetchFollowers()
-        addKeyBoardObserver()
     }
     func setUpNavBar(){
         self.navigationItem.title = "個人資料"
@@ -316,63 +312,50 @@ class UserInfoController: UIViewController {
             }
         }
     }
-    @objc func handleReload(){
-        self.articlesArray.sort {$0.date! > $1.date!}
-        self.articleNumberLabel.text = String(articlesArray.count)
-        self.follwerNumberLabel.text = String(followersArray.count)
-    }
     //MARK: - Fetch資料
     //不能放ViewWillAppear,陣列會重複.append
     func fetchArticles(completion: @escaping (User) -> Void){
+        //由於結構上的失誤
+        //當使用者沒有文章時無法觀察"使用者-文章",導致articlesArray為0
+        
         //防止疊加
         if self.articlesArray.isEmpty == false{
             self.articlesArray.removeAll()
-//            self.attemptReload()
+        }else{
+            ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
+                let dictionary = snapshot.value as! [String : Any]
+                let user = User(value: dictionary)
+                completion(user)
+                return
+            })
         }
+
         ref.child("使用者-文章").child(authorUID).observe(.childAdded) { (snapshot) in
             let articleUID = snapshot.key
             //用Key找文章
             self.ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
-                let dictionary = snapshot.value as! [String : Any]
-                guard let authorUID = dictionary["authorUID"] as? String else{return}
-                var article = Article(value: dictionary)
-                self.ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
-                    let dictionary = snapshot.value as! [String : Any]
-                    let user = User(value: dictionary)
-                    article.author = user
-                    self.articlesArray.append(article)
-                    completion(user)
-                })
-            })
-        }
-    }
-    func fetchFollowers(){
-        ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
-            //防止疊加
-            if self.followersArray.isEmpty == false{
-                self.followersArray.removeAll()
-                self.attemptReload()
-            }
-            let dictionary = snapshot.value as! [String : Any]
-            //如果能轉型就至少有一位追蹤者
-            if let followers = dictionary["followers"] as? [String]{
-                for followerUID in followers{
-                    self.ref.child("使用者").child(followerUID).observeSingleEvent(of: .value, with: { (snapshot) in
+                if let dictionary = snapshot.value as? [String : Any]{
+                    guard let authorUID = dictionary["authorUID"] as? String else{return}
+                    var article = Article(value: dictionary)
+                    self.ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
                         let dictionary = snapshot.value as! [String : Any]
                         let user = User(value: dictionary)
-                        self.followersArray.append(user)
-                        self.attemptReload()
+                        article.author = user
+                        self.articlesArray.append(article)
+                        completion(user)
                     })
                 }
-            }
-        })
+
+            })
+           
+        }
     }
-    func fetchFollowers_2(completion: @escaping () -> Void){
+
+    func fetchFollowers(completion: @escaping () -> Void){
         ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
             //防止疊加
             if self.followersArray.isEmpty == false{
                 self.followersArray.removeAll()
-                completion()
             }
             let dictionary = snapshot.value as! [String : Any]
             //如果能轉型就至少有一位追蹤者
@@ -383,16 +366,15 @@ class UserInfoController: UIViewController {
                         let user = User(value: dictionary)
                         self.followersArray.append(user)
                         completion()
-                        return
                     })
                 }
+            }else{
+                completion()
+                return
             }
         })
     }
-    private func attemptReload(){
-        self.timer?.invalidate()
-        self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false)
-    }
+    
     
     func setUpTopView(){
         

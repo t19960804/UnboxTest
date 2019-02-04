@@ -17,27 +17,18 @@ class PostArticleController: UIViewController {
     var kindOfCategory: String?
     let hud = JGProgressHUD(style: .light)
     
-    let viewBackGround: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = specialGray
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
+    lazy var uploadImageButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 8
+        button.clipsToBounds = true
+        button.setTitle("選擇相片", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
+        button.addTarget(self, action: #selector(handleUploadImage), for: .touchUpInside)
+        return button
     }()
-    lazy var uploadImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.isUserInteractionEnabled = true
-        imageView.backgroundColor = UIColor.white
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 8
-        imageView.layer.masksToBounds = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleChooseImage))
-        imageView.addGestureRecognizer(tapGesture)
-        return imageView
-    }()
+
     let titleBackGround: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -98,14 +89,18 @@ class PostArticleController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         reviewTextView.delegate = self
+        setUpGradient()
+        
+        
         self.view.backgroundColor = specialWhite
-        self.view.addSubview(viewBackGround)
-        self.view.addSubview(uploadImageView)
+        self.view.addSubview(uploadImageButton)
         self.view.addSubview(titleBackGround)
         self.view.addSubview(titleTextField)
         self.view.addSubview(reviewBackGround)
         self.view.addSubview(reviewTextView)
         self.view.addSubview(heartStackView)
+        
+        
         setUpNavBar()
         setUpConstraints()
         addTapGesture()
@@ -114,6 +109,21 @@ class PostArticleController: UIViewController {
 //        reviewTextView.text = "「VARIANT PLAY ARTS改 X-23」高約25.4 公分\n戰衣的風格不像狼叔擁有極重的裝甲感，呈現出在緊身衣外再覆蓋鎧甲的輕裝風格\n符合她在漫畫中十分敏捷的形象，腰部還做出了鏤空的設計更凸顯X-23 的身形曲線\n鎧甲有著漂亮的光澤感並刻劃出豐富的細節與紋路，頭雕有戴上頭盔、脫盔兩種樣貌\n除了多個出爪的替換手型外，在腳尖也能裝上鋼爪\n可以變化出多種帥氣的戰鬥姿態！"
         titleTextField.text = "Marvel Universe 變體版【獨眼龍】"
         reviewTextView.text = "Play Arts 改 變體版 獨眼龍」高約27 公分，全身裝備擁有複雜的刻線和鮮豔的配色\n金黃色的盔甲呈現出打磨過的光澤和金屬的厚重質感\n上半身的不對稱造型讓本作更添玩味之處，配件部分包含普通、咬牙兩種版本的頭雕\n還附屬了紅色光束的特效零件以及多個替換手型，可再現獨眼龍發動攻擊的霸氣姿態\n而護目鏡的漸層塗裝也營造出彷彿發光的效果\n獨眼龍帥氣的造型和豐富的細節更是讓人大呼過癮～！"
+    }
+    func setUpGradient(){
+        let gradient = CAGradientLayer()
+        let color1 = UIColor(red: 237/255, green: 110/255, blue: 160/255, alpha: 1)
+        let color2 = UIColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
+        gradient.colors = [color2.cgColor,color1.cgColor]
+        gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        self.view.layer.addSublayer(gradient)
+    }
+    @objc func handleUploadImage(){
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
     }
     func addTapGesture(){
         
@@ -155,7 +165,7 @@ class PostArticleController: UIViewController {
     //點擊愛心變色
     func pressHeart(number: Int){
         for i in 0...loveImageViews.count - 1{
-            loveImageViews[i].tintColor = (i <= number - 1) ? themeColor : specialWhite
+            loveImageViews[i].tintColor = (i <= number - 1) ? darkHeartColor : specialWhite
         }
     }
     //判斷幾顆愛心
@@ -163,7 +173,7 @@ class PostArticleController: UIViewController {
         
         var count = 0
         for love in loveImageViews{
-            if love.tintColor == themeColor{
+            if love.tintColor == darkHeartColor{
                 count += 1
             }
         }
@@ -178,21 +188,15 @@ class PostArticleController: UIViewController {
         self.navigationItem.rightBarButtonItem = uploadButtonItem
     }
     func setUpConstraints(){
+     
+        uploadImageButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 18).isActive = true
+        uploadImageButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 18).isActive = true
+        uploadImageButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -18).isActive = true
+        uploadImageButton.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.2).isActive = true
         
-        viewBackGround.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 10).isActive = true
-        viewBackGround.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10).isActive = true
-        viewBackGround.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
-        viewBackGround.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -(safeAreaHeight_Bottom)).isActive = true
-        
-        
-        uploadImageView.topAnchor.constraint(equalTo: viewBackGround.topAnchor, constant: 8).isActive = true
-        uploadImageView.leftAnchor.constraint(equalTo: viewBackGround.leftAnchor, constant: 8).isActive = true
-        uploadImageView.rightAnchor.constraint(equalTo: viewBackGround.rightAnchor, constant: -8).isActive = true
-        uploadImageView.heightAnchor.constraint(equalTo: viewBackGround.heightAnchor, multiplier: 0.25).isActive = true
-        
-        titleBackGround.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 18).isActive = true
-        titleBackGround.leftAnchor.constraint(equalTo: uploadImageView.leftAnchor).isActive = true
-        titleBackGround.rightAnchor.constraint(equalTo: uploadImageView.rightAnchor).isActive = true
+        titleBackGround.topAnchor.constraint(equalTo: uploadImageButton.bottomAnchor, constant: 18).isActive = true
+        titleBackGround.leftAnchor.constraint(equalTo: uploadImageButton.leftAnchor).isActive = true
+        titleBackGround.rightAnchor.constraint(equalTo: uploadImageButton.rightAnchor).isActive = true
         titleBackGround.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
         titleTextField.centerYAnchor.constraint(equalTo: titleBackGround.centerYAnchor).isActive = true
@@ -201,8 +205,8 @@ class PostArticleController: UIViewController {
         titleTextField.rightAnchor.constraint(equalTo: titleBackGround.rightAnchor, constant: -5).isActive = true
 
         reviewBackGround.topAnchor.constraint(equalTo: titleBackGround.bottomAnchor, constant: 10).isActive = true
-        reviewBackGround.leftAnchor.constraint(equalTo: uploadImageView.leftAnchor).isActive = true
-        reviewBackGround.rightAnchor.constraint(equalTo: uploadImageView.rightAnchor).isActive = true
+        reviewBackGround.leftAnchor.constraint(equalTo: uploadImageButton.leftAnchor).isActive = true
+        reviewBackGround.rightAnchor.constraint(equalTo: uploadImageButton.rightAnchor).isActive = true
         reviewBackGround.heightAnchor.constraint(equalToConstant: 400).isActive = true
         
         reviewTextView.topAnchor.constraint(equalTo: reviewBackGround.topAnchor, constant: 5).isActive = true
@@ -212,8 +216,8 @@ class PostArticleController: UIViewController {
 
         heartStackView.topAnchor.constraint(equalTo: reviewTextView.bottomAnchor, constant: 8).isActive = true
         heartStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        heartStackView.widthAnchor.constraint(equalTo: viewBackGround.widthAnchor, multiplier: 0.7).isActive = true
-        heartStackView.bottomAnchor.constraint(equalTo: viewBackGround.bottomAnchor, constant: -8).isActive = true
+        heartStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
+        heartStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -8).isActive = true
     }
     
     @objc func alertWhenPostArticle(){
@@ -231,7 +235,7 @@ class PostArticleController: UIViewController {
         if let title = titleTextField.text,let review = reviewTextView.text{
             if title.isEmpty || review.isEmpty || review == "輸入評論..."{
                 return UploadError.NotFillYet.rawValue
-            }else if uploadImageView.image == nil{
+            }else if uploadImageButton.currentImage == nil{
                 return UploadError.NoImage.rawValue
             }else if numberOfHeart() == 0{
                 return UploadError.NoEvaluate.rawValue
@@ -256,7 +260,7 @@ class PostArticleController: UIViewController {
             //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
             let imageUID = NSUUID().uuidString
             let imageRef = Storage.storage().reference().child("ArticleImages").child(imageUID)
-            guard let jpgImage = uploadImageView.image?.jpegData(compressionQuality: 1) else{return}
+            guard let jpgImage = uploadImageButton.currentImage?.jpegData(compressionQuality: 1) else{return}
             imageRef.putData(jpgImage, metadata: nil) { (metadata, error) in
                 if let error = error{
                     print("error:",error)
@@ -274,9 +278,6 @@ class PostArticleController: UIViewController {
             }
         }
 
-        
-       
-        
     }
     func addArticleDataToDataBase(downloadURL: String){
         let articleUID = NSUUID().uuidString
@@ -315,13 +316,7 @@ class PostArticleController: UIViewController {
             }
         }
     }
-    @objc func handleChooseImage(){
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.allowsEditing = true
-        picker.delegate = self
-        self.present(picker, animated: true, completion: nil)
-    }
+    
     //取得時間
     func getTimeStamp() -> String{
         let date = Date()
@@ -338,7 +333,7 @@ extension PostArticleController: UIImagePickerControllerDelegate,UINavigationCon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
         picker.dismiss(animated: true, completion: nil)
-        uploadImageView.image = getImage
+        uploadImageButton.setImage(getImage, for: .normal)
     }
     //按下取消
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

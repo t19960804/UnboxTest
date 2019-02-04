@@ -15,6 +15,17 @@ import FirebaseDatabase
 class ArticlesController: UICollectionViewController {
     let cellID = "Cell"
     var articlesArray = [Article]()
+    
+    
+    let messageLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "尚無文章!"
+        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.textColor = specialGray2
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.collectionView.backgroundColor = specialWhite
@@ -26,9 +37,14 @@ class ArticlesController: UICollectionViewController {
             layout.itemSize = CGSize(width: self.view.frame.width - 20, height: self.view.frame.height * 0.2)
             layout.scrollDirection = .vertical
         }
-
+        self.view.addSubview(messageLabel)
+        setUpConstraints()
+        messageLabel.isHidden = articlesArray.isEmpty ? false : true
     }
-
+    func setUpConstraints(){
+        messageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        messageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+    }
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1

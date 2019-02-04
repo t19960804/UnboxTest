@@ -14,6 +14,7 @@ import JGProgressHUD
 
 
 let themeColor = UIColor(red: 252/255, green: 81/255, blue: 133/255, alpha: 1)
+let darkHeartColor = UIColor(red: 233/255, green: 47/255, blue: 96/255, alpha: 1)
 let specialWhite = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
 let specialCyan = UIColor(red: 63/255, green: 193/255, blue: 201/255, alpha: 1)
 let specialGray = UIColor(red: 228/255, green: 231/255, blue: 233/255, alpha: 1)
@@ -93,6 +94,9 @@ class LoginController: UIViewController {
        let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("登入", for: UIControl.State.normal)
         button.backgroundColor = themeColor
+
+       
+        
         button.setTitleColor(specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
