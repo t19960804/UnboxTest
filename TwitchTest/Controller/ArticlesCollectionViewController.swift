@@ -64,6 +64,10 @@ class ArticlesCollectionViewController: UICollectionViewController {
         searchBar.delegate = self
         setUpCollectionView()
         setUpMessageLabel()
+        observeArticlesRemove {
+            self.collectionView.reloadData()
+            self.messageLabel.isHidden = false
+        }
 
     }
     func setUpCollectionView(){
@@ -105,6 +109,17 @@ class ArticlesCollectionViewController: UICollectionViewController {
     private func attemptReloadTableView(){
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+    }
+    //觀察文章被移除
+    func observeArticlesRemove(completion: @escaping () -> Void){
+        let ref = Database.database().reference()
+        guard let userUID = Auth.auth().currentUser?.uid else{return}
+        ref.child("使用者-文章").child(userUID).observe(.childRemoved) { (snapshot) in
+            self.filterdArticles = self.filterdArticles.filter({ (article) -> Bool in
+                return article.articleUID != snapshot.key
+            })
+            completion()
+        }
     }
     //MARK: - Selector方法
     @objc func handleReloadTable(){

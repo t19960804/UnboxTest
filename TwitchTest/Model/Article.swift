@@ -14,6 +14,9 @@ import FirebaseAuth
 struct Article {
     var author: User?
     var authorUID: String?
+    
+    var category: String?
+    var articleUID: String?
     var imageURL: String?
     var title: String?
     var review: String?
@@ -27,6 +30,8 @@ struct Article {
         self.numberOfHeart = value["numberOfHeart"] as? String
         self.date = value["date"] as? String
         self.authorUID = value["authorUID"] as? String
+        self.articleUID = value["articleUID"] as? String
+        self.category = value["category"] as? String
     }
     
     

@@ -8,15 +8,24 @@
 
 import Foundation
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
+
+protocol UserInfoCell_Delegate {
+    func showDeleteAlert(article: Article)
+}
 
 class UserInfoCell: UICollectionViewCell {
+    var delegate: UserInfoCell_Delegate?
     var loveImageViewArray = [UIImageView]()
+    let currentUser = Auth.auth().currentUser?.uid
     var article: Article?{
         didSet{
-            if let imageURL = article?.imageURL,let title = article?.title,let numbersOfHeart = article?.numberOfHeart{
+            if let imageURL = article?.imageURL,let title = article?.title,let numbersOfHeart = article?.numberOfHeart,let authorUID = article?.authorUID{
                 self.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURL)!)
                 commodityNameLabel.text = title
                 lightUpTheHearts(number: Int(numbersOfHeart) ?? 1)
+                deleteButton.isHidden = authorUID == currentUser ? false : true
             }
         }
     }
@@ -44,6 +53,14 @@ class UserInfoCell: UICollectionViewCell {
         label.text = "這只是測試這只是測試這只是測試這只是測試這只是測試"
         label.textColor = specialWhite
         return label
+    }()
+    lazy var deleteButton: UIButton = {
+        let button = UIButton(type: UIButton.ButtonType.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "rubbish-bin2")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(handleDeleteArticle), for: .touchUpInside)
+        return button
     }()
     let loveImageView_1 = LoveImageView(tintColor: themeColor)
     let loveImageView_2 = LoveImageView(tintColor: themeColor)
@@ -73,6 +90,7 @@ class UserInfoCell: UICollectionViewCell {
         background_commodityImageView.addSubview(commodityImageView)
         self.addSubview(commodityNameLabel)
         self.addSubview(loveImageStackView)
+        self.addSubview(deleteButton)
         
         loveImageViewArray.append(loveImageView_1)
         loveImageViewArray.append(loveImageView_2)
@@ -102,11 +120,15 @@ class UserInfoCell: UICollectionViewCell {
         commodityNameLabel.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 8).isActive = true
         commodityNameLabel.widthAnchor.constraint(equalTo: commodityImageView.widthAnchor, multiplier: 0.7).isActive = true
         
-        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
+        loveImageStackView.leftAnchor.constraint(equalTo: commodityNameLabel.leftAnchor).isActive = true
         loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
         loveImageStackView.heightAnchor.constraint(equalTo: commodityImageView.heightAnchor, multiplier: 0.1).isActive = true
         loveImageStackView.widthAnchor.constraint(equalTo: commodityImageView.widthAnchor, multiplier: 0.25).isActive = true
         
+        deleteButton.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
+        deleteButton.bottomAnchor.constraint(equalTo: loveImageStackView.bottomAnchor).isActive = true
+        deleteButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        deleteButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     func lightUpTheHearts(number: Int){
         for i in 0...loveImageViewArray.count - 1{
@@ -115,6 +137,13 @@ class UserInfoCell: UICollectionViewCell {
             }
         }
     }
+    
+    @objc func handleDeleteArticle(){
+        if let article = article{
+            delegate?.showDeleteAlert(article: article)
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

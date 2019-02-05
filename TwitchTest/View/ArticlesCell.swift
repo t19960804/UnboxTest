@@ -155,6 +155,7 @@ class ArticlesCell: UICollectionViewCell {
         
         
     }
+    
     @objc func handleCheckCommodity(){
         if let article = article{
             self.delegate?.pushToArticleDetail(article: article)

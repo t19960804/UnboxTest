@@ -284,13 +284,16 @@ class PostArticleController: UIViewController {
         guard let userUID = Auth.auth().currentUser?.uid else {return}
         guard let title = self.titleTextField.text else{return}
         guard let review = self.reviewTextView.text else{return}
-        let values: [String : Any] = [  "authorUID" : userUID,
+        guard let category = self.kindOfCategory else{return}
+
+        let values: [String : Any] = [  "category" : category,
+                                        "authorUID" : userUID,
+                                        "articleUID" : articleUID,
                                         "title" : title,
                                         "imageURL" : downloadURL as Any,
                                         "review" : review,
                                         "numberOfHeart" : "\(numberOfHeart())",
                                         "date" : getTimeStamp()]
-        guard let category = self.kindOfCategory else{return}
         let ref = Database.database().reference()
         //插入"文章"
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in

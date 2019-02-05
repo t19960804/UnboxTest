@@ -142,19 +142,6 @@ class UserInfoController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    override func viewWillAppear(_ animated: Bool) {
-        isSubscribing { (bool) in
-            if bool == true{
-                self.followerButton.backgroundColor = specialCyan
-                self.followerButton.setTitleColor(specialWhite, for: .normal)
-                self.followerButton.setTitle("已追蹤", for: .normal)
-            }else{
-                self.followerButton.backgroundColor = specialWhite
-                self.followerButton.setTitleColor(specialCyan, for: .normal)
-                self.followerButton.setTitle("追蹤", for: .normal)
-            }
-        }
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = specialWhite
@@ -172,7 +159,6 @@ class UserInfoController: UIViewController {
         setUpTopView()
         setUpBottomView()
         addKeyBoardObserver()
-
         fetchArticles { (user) in
             self.abouMeTextView.text = user.aboutMe
             self.articlesArray.sort {$0.date! > $1.date!}
@@ -181,7 +167,18 @@ class UserInfoController: UIViewController {
         fetchFollowers {
             self.follwerNumberLabel.text = String(self.followersArray.count)
         }
+        observeArticlesRemove {
+            self.articleNumberLabel.text = String(self.articlesArray.count)
+        }
+        isSubscribing { (result) in
+            let titleColor = result ? specialWhite : specialCyan
+            let title = result ? "已追蹤" : "追蹤"
+            self.followerButton.backgroundColor = result ? specialCyan : specialWhite
+            self.followerButton.setTitle(title, for: .normal)
+            self.followerButton.setTitleColor(titleColor, for: .normal)
+        }
     }
+
     func setUpNavBar(){
         self.navigationItem.title = "個人資料"
         let isCurrentUser = authorUID == Auth.auth().currentUser?.uid
@@ -211,7 +208,7 @@ class UserInfoController: UIViewController {
     }
     //MARK: - 追蹤處理
     private func isSubscribing(completion:@escaping (Bool)->Void){
-        ref.child("使用者").child(userUID!).observeSingleEvent(of: .value) { (snapshot) in
+        ref.child("使用者").child(userUID!).observe(.value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
             if let followersArray = dictionary["followers"] as? [String]{
                 for items in followersArray{
@@ -222,8 +219,8 @@ class UserInfoController: UIViewController {
                 }
                 completion(false)
             }
-            
         }
+        
     }
     func addFollowers(uid: String){
         let userRef = ref.child("使用者").child(userUID!)
@@ -347,10 +344,19 @@ class UserInfoController: UIViewController {
                 }
 
             })
-           
+        }
+    
+    }
+    //觀察文章被移除
+    func observeArticlesRemove(completion: @escaping () -> Void){
+        let ref = Database.database().reference()
+        ref.child("使用者-文章").child(userUID!).observe(.childRemoved) { (snapshot) in
+            self.articlesArray = self.articlesArray.filter({ (article) -> Bool in
+                return article.articleUID != snapshot.key
+            })
+            completion()
         }
     }
-
     func fetchFollowers(completion: @escaping () -> Void){
         ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
             //防止疊加
@@ -374,8 +380,6 @@ class UserInfoController: UIViewController {
             }
         })
     }
-    
-    
     func setUpTopView(){
         
         backImageView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: 0).isActive = true
@@ -407,7 +411,6 @@ class UserInfoController: UIViewController {
         stackView_Number.heightAnchor.constraint(equalToConstant: 40).isActive = true
         stackView_Number.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 1).isActive = true
 
-        
         followerButton.centerYAnchor.constraint(equalTo: backView.bottomAnchor).isActive = true
         followerButton.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
         followerButton.heightAnchor.constraint(equalTo: backView.heightAnchor, multiplier: 0.1).isActive = true
@@ -418,8 +421,7 @@ class UserInfoController: UIViewController {
         bottomView.leftAnchor.constraint(equalTo: backView.leftAnchor).isActive = true
         bottomView.rightAnchor.constraint(equalTo: backView.rightAnchor).isActive = true
         bottomView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
-        
-
+    
         aboutMeLabel.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor).isActive = true
         aboutMeLabel.topAnchor.constraint(equalTo: followerButton.bottomAnchor, constant: 30).isActive = true
         
