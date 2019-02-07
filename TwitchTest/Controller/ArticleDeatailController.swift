@@ -10,19 +10,39 @@ import UIKit
 
 
 class ArticleDeatailController: UIViewController {
+    let cellID = "Cell"
     var reviewTextViewHeightAnchor: NSLayoutConstraint?
     var article: Article?{
         didSet{
             if let imageURl = article?.imageURL,let title = article?.title,let userImageURL = article?.author?.imageURL,
                 let userName = article?.author?.userName,let review = article?.review{
-                commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURl)!)
+                imageURLArray = imageURl
+//                imageURl.forEach { (url) in
+//                    commodityImageView.downLoadImageInCache(downLoadURL: URL(string: url)!)
+//                }
+                commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURl[0])!)
                 userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
-//                titleLabel.text = title
+                titleLabel.text = title
                 userNameLabel.text = userName
                 reviewTextView.text = review
             }
         }
     }
+    var imageURLArray = [String]()
+    lazy var detailCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: self.view.frame.width, height: self.view.frame.height * 0.45)
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isPagingEnabled = true
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(ArticleDetailCell.self, forCellWithReuseIdentifier: cellID)
+        return collectionView
+        
+    }()
     lazy var halfViewHeight = self.view.frame.height / 2
     lazy var myScrollView: UIScrollView = {
         let scrollView = UIScrollView(frame:self.view.frame)
@@ -61,7 +81,8 @@ class ArticleDeatailController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = specialWhite
+        label.textColor = .gray
+        label.textAlignment = .center
         return label
     }()
     lazy var userImageView: UIImageView = {
@@ -82,12 +103,6 @@ class ArticleDeatailController: UIViewController {
         label.textColor = specialWhite
         return label
     }()
-    let loveImageView_1 = LoveImageView(tintColor: themeColor)
-    let loveImageView_2 = LoveImageView(tintColor: themeColor)
-    let loveImageView_3 = LoveImageView(tintColor: themeColor)
-    let loveImageView_4 = LoveImageView(tintColor: themeColor)
-    let loveImageView_5 = LoveImageView(tintColor: themeColor)
-    
     
     lazy var loveImageStackView: UIStackView = {
         let stackView = UIStackView()
@@ -110,7 +125,6 @@ class ArticleDeatailController: UIViewController {
         textView.isEditable = false
         return textView
     }()
-
     let commentButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -126,16 +140,25 @@ class ArticleDeatailController: UIViewController {
 
         return button
     }()
+    
+    let loveImageView_1 = LoveImageView(tintColor: themeColor)
+    let loveImageView_2 = LoveImageView(tintColor: themeColor)
+    let loveImageView_3 = LoveImageView(tintColor: themeColor)
+    let loveImageView_4 = LoveImageView(tintColor: themeColor)
+    let loveImageView_5 = LoveImageView(tintColor: themeColor)
+    
     override func viewWillAppear(_ animated: Bool) {
         lightUpTheHearts(number: Int((article?.numberOfHeart)!)!)
         reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 20
-
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = specialWhite
         self.view.addSubview(myScrollView)
         self.navigationItem.title = "商品詳情"
+        detailCollectionView.delegate = self
+        detailCollectionView.dataSource = self
+        
         myScrollView.addSubview(backGroundView)
         
         backGroundView.addSubview(background_commodityImageView)
@@ -148,9 +171,8 @@ class ArticleDeatailController: UIViewController {
         backGroundView.addSubview(userNameLabel)
 //        backGroundView.addSubview(loveImageStackView)
         backGroundView.addSubview(reviewTextView)
-        
-        
-        
+        backGroundView.addSubview(detailCollectionView)
+
         loveImageViewArray.append(loveImageView_1)
         loveImageViewArray.append(loveImageView_2)
         loveImageViewArray.append(loveImageView_3)
@@ -182,11 +204,15 @@ class ArticleDeatailController: UIViewController {
         }
     }
     func setUpConstraints(){
-        
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 40)
         gradientLayer.colors = [UIColor.black.cgColor,UIColor.clear.cgColor]
         commodityImageView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        detailCollectionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        detailCollectionView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        detailCollectionView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 1).isActive = true
+        detailCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45).isActive = true
         
         myScrollView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
         myScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
@@ -207,30 +233,28 @@ class ArticleDeatailController: UIViewController {
         commodityImageView.leftAnchor.constraint(equalTo: background_commodityImageView.leftAnchor).isActive = true
         commodityImageView.bottomAnchor.constraint(equalTo: background_commodityImageView.bottomAnchor).isActive = true
         commodityImageView.rightAnchor.constraint(equalTo: background_commodityImageView.rightAnchor).isActive = true
-
         
-
-        titleLabel.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 8).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 8).isActive = true
-        titleLabel.widthAnchor.constraint(equalTo: commodityImageView.widthAnchor, multiplier: 0.8).isActive = true
-
+        
+        
+        titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: 40).isActive = true
+        
         userImageView.topAnchor.constraint(equalTo: commodityImageView.topAnchor, constant: 5).isActive = true
         userImageView.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor, constant: 5).isActive = true
         userImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         userImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-
+        
         userNameLabel.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor).isActive = true
         userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 8).isActive = true
-
-//        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
-//        loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
-//        loveImageStackView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-//        loveImageStackView.heightAnchor.constraint(equalToConstant: 35).isActive = true
-
         
-        reviewTextView.topAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: 40).isActive = true
+        //        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
+        //        loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
+        //        loveImageStackView.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        //        loveImageStackView.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
+        reviewTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         reviewTextView.leftAnchor.constraint(equalTo: commodityImageView.leftAnchor).isActive = true
-        reviewTextView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.85).isActive = true
+        reviewTextView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.8).isActive = true
         reviewTextViewHeightAnchor = reviewTextView.heightAnchor.constraint(equalToConstant: 200)
         reviewTextViewHeightAnchor?.isActive = true
         
@@ -238,11 +262,19 @@ class ArticleDeatailController: UIViewController {
         commentButton.centerYAnchor.constraint(equalTo: commodityImageView.bottomAnchor).isActive = true
         commentButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         commentButton.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.5).isActive = true
-        
-        
-
-        
     }
 
-
+}
+extension ArticleDeatailController: UICollectionViewDelegate,UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = self.detailCollectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ArticleDetailCell
+        cell.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURLArray[indexPath.row])!)
+        return cell
+    }
+    
+    
 }

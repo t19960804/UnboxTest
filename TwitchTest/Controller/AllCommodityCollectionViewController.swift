@@ -9,19 +9,22 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
 
 private let reuseIdentifier = "Cell"
 
 class AllCommodityCollectionViewController: UICollectionViewController{
     
     let category = ["3C產品","美妝","家電","動漫模型","運動用品","零食","精品","嬰幼兒用品"]
-    
+    var currentUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpNavBar()
         setUpCollectionView()
-        
+        observeCurrentUser { (user) in
+            self.currentUser = user
+        }
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
             layout.itemSize = CGSize(width: (self.view.frame.width - 30) / 2, height: 250)
@@ -37,6 +40,15 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         
         
     }
+    func observeCurrentUser(completion: @escaping (User) -> Void){
+        guard let currentUser = Auth.auth().currentUser?.uid else{return}
+        let ref = Database.database().reference()
+        ref.child("使用者").child(currentUser).observe(.value) { (snapshot) in
+            let dictionary = snapshot.value as! [String : Any]
+            let user = User(value: dictionary)
+            completion(user)
+        }
+    }
     func setUpCollectionView(){
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView.backgroundColor = specialWhite
@@ -51,11 +63,18 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         self.navigationController?.navigationBar.tintColor = UIColor.black
         //NavBar的Title顏色
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
         
+        let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
+        let checkProfileButton = UIBarButtonItem(image: UIImage(named: "avatar"), style: .plain, target: self, action: #selector(handleCheckProfile))
         self.navigationItem.leftBarButtonItem = logoutButton
+        self.navigationItem.rightBarButtonItem = checkProfileButton
     }
     
+    @objc func handleCheckProfile(){
+        let userInfoController = UserInfoController()
+        userInfoController.user = currentUser
+        self.navigationController?.pushViewController(userInfoController, animated: true)
+    }
     @objc func handleLogout(){
         try? Auth.auth().signOut()
         UserDefaults.standard.setIsLogIn(value: false)

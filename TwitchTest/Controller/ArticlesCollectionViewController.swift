@@ -9,7 +9,6 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
-import SwiftyJSON
 import JGProgressHUD
 
 private let reuseIdentifier = "Cell"

@@ -6,8 +6,6 @@ target 'TwitchTest' do
   use_frameworks!
 
   # Pods for TwitchTest
-	pod 'SwiftyJSON', '~> 4.0'
-	pod 'Alamofire', '~> 4.7'
 	pod 'SDWebImage', '~> 4.0'
 	pod 'Firebase/Core'
 	pod 'Firebase/Database'

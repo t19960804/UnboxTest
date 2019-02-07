@@ -23,7 +23,7 @@ class ArticlesCell: UICollectionViewCell {
         didSet{
             if let title = article?.title,let imageURL = article?.imageURL,let numberOfHearts = article?.numberOfHeart,let userImageURL = article?.author?.imageURL,let review = article?.review,let userName = article?.author?.userName{
                 self.commodityNameLabel.text = title
-                self.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURL)!)
+                self.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURL[0])!)
                 self.userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
                 self.reviewTextView.text = review
                 self.userNameLabel.text = userName

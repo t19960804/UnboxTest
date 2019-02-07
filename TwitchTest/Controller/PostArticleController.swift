@@ -16,19 +16,23 @@ class PostArticleController: UIViewController {
     var loveImageViews = [UIImageView]()
     var kindOfCategory: String?
     let hud = JGProgressHUD(style: .light)
-    
-    lazy var uploadImageButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 8
-        button.clipsToBounds = true
-        button.setTitle("選擇相片", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
-        button.addTarget(self, action: #selector(handleUploadImage), for: .touchUpInside)
-        return button
+    let cellID = "Cell"
+    lazy var uploadImagesColletionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: self.view.frame.width, height: self.view.frame.height * 0.2)
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.register(PostArticleCell.self, forCellWithReuseIdentifier: cellID)
+        return collectionView
     }()
-
+    var imageButtonsArray = [UIButton]()
+    var downloadURLArray = [String]()
+    
     let titleBackGround: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -71,7 +75,6 @@ class PostArticleController: UIViewController {
     let loveImageView_3 = LoveImageView(tintColor: specialWhite)
     let loveImageView_4 = LoveImageView(tintColor: specialWhite)
     let loveImageView_5 = LoveImageView(tintColor: specialWhite)
-    
     lazy var heartStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -90,16 +93,18 @@ class PostArticleController: UIViewController {
         super.viewDidLoad()
         reviewTextView.delegate = self
         setUpGradient()
-        
+        uploadImagesColletionView.delegate = self
+        uploadImagesColletionView.dataSource = self
         
         self.view.backgroundColor = specialWhite
-        self.view.addSubview(uploadImageButton)
+        
+        
         self.view.addSubview(titleBackGround)
         self.view.addSubview(titleTextField)
         self.view.addSubview(reviewBackGround)
         self.view.addSubview(reviewTextView)
         self.view.addSubview(heartStackView)
-        
+        self.view.addSubview(uploadImagesColletionView)
         
         setUpNavBar()
         setUpConstraints()
@@ -118,15 +123,7 @@ class PostArticleController: UIViewController {
         gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         self.view.layer.addSublayer(gradient)
     }
-    @objc func handleUploadImage(){
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.allowsEditing = true
-        picker.delegate = self
-        self.present(picker, animated: true, completion: nil)
-    }
     func addTapGesture(){
-        
         loveImageViews.append(loveImageView_1)
         loveImageViews.append(loveImageView_2)
         loveImageViews.append(loveImageView_3)
@@ -146,22 +143,11 @@ class PostArticleController: UIViewController {
         loveImageView_5.addGestureRecognizer(tap_5)
         
     }
-    //
-    @objc func handleHeartPressed_1(){
-        pressHeart(number: 1)
-    }
-    @objc func handleHeartPressed_2(){
-        pressHeart(number: 2)
-    }
-    @objc func handleHeartPressed_3(){
-        pressHeart(number: 3)
-    }
-    @objc func handleHeartPressed_4(){
-        pressHeart(number: 4)
-    }
-    @objc func handleHeartPressed_5(){
-        pressHeart(number: 5)
-    }
+    @objc func handleHeartPressed_1(){pressHeart(number: 1)}
+    @objc func handleHeartPressed_2(){pressHeart(number: 2)}
+    @objc func handleHeartPressed_3(){pressHeart(number: 3)}
+    @objc func handleHeartPressed_4(){pressHeart(number: 4)}
+    @objc func handleHeartPressed_5(){pressHeart(number: 5)}
     //點擊愛心變色
     func pressHeart(number: Int){
         for i in 0...loveImageViews.count - 1{
@@ -170,7 +156,6 @@ class PostArticleController: UIViewController {
     }
     //判斷幾顆愛心
     func numberOfHeart() -> Int{
-        
         var count = 0
         for love in loveImageViews{
             if love.tintColor == darkHeartColor{
@@ -179,24 +164,24 @@ class PostArticleController: UIViewController {
         }
         return count
     }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     func setUpNavBar(){
         self.navigationItem.title = "發表文章"
         let uploadButtonItem = UIBarButtonItem(title: "上傳", style: .plain, target: self, action: #selector(alertWhenPostArticle))
         self.navigationItem.rightBarButtonItem = uploadButtonItem
     }
     func setUpConstraints(){
-     
-        uploadImageButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 18).isActive = true
-        uploadImageButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 18).isActive = true
-        uploadImageButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -18).isActive = true
-        uploadImageButton.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.2).isActive = true
+
+        uploadImagesColletionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 18).isActive = true
+        uploadImagesColletionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        uploadImagesColletionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
+        uploadImagesColletionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.25).isActive = true
         
-        titleBackGround.topAnchor.constraint(equalTo: uploadImageButton.bottomAnchor, constant: 18).isActive = true
-        titleBackGround.leftAnchor.constraint(equalTo: uploadImageButton.leftAnchor).isActive = true
-        titleBackGround.rightAnchor.constraint(equalTo: uploadImageButton.rightAnchor).isActive = true
+
+
+        titleBackGround.topAnchor.constraint(equalTo: uploadImagesColletionView.bottomAnchor, constant: 18).isActive = true
+        titleBackGround.leftAnchor.constraint(equalTo: uploadImagesColletionView.leftAnchor,constant: 18).isActive = true
+        titleBackGround.rightAnchor.constraint(equalTo: uploadImagesColletionView.rightAnchor,constant: -18).isActive = true
         titleBackGround.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
         titleTextField.centerYAnchor.constraint(equalTo: titleBackGround.centerYAnchor).isActive = true
@@ -205,10 +190,10 @@ class PostArticleController: UIViewController {
         titleTextField.rightAnchor.constraint(equalTo: titleBackGround.rightAnchor, constant: -5).isActive = true
 
         reviewBackGround.topAnchor.constraint(equalTo: titleBackGround.bottomAnchor, constant: 10).isActive = true
-        reviewBackGround.leftAnchor.constraint(equalTo: uploadImageButton.leftAnchor).isActive = true
-        reviewBackGround.rightAnchor.constraint(equalTo: uploadImageButton.rightAnchor).isActive = true
+        reviewBackGround.leftAnchor.constraint(equalTo: titleBackGround.leftAnchor).isActive = true
+        reviewBackGround.rightAnchor.constraint(equalTo: titleBackGround.rightAnchor).isActive = true
         reviewBackGround.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        
+
         reviewTextView.topAnchor.constraint(equalTo: reviewBackGround.topAnchor, constant: 5).isActive = true
         reviewTextView.leftAnchor.constraint(equalTo: reviewBackGround.leftAnchor, constant: 5).isActive = true
         reviewTextView.rightAnchor.constraint(equalTo: reviewBackGround.rightAnchor, constant: -5).isActive = true
@@ -235,7 +220,7 @@ class PostArticleController: UIViewController {
         if let title = titleTextField.text,let review = reviewTextView.text{
             if title.isEmpty || review.isEmpty || review == "輸入評論..."{
                 return UploadError.NotFillYet.rawValue
-            }else if uploadImageButton.currentImage == nil{
+            }else if imageViewsIsEmpty(array: imageButtonsArray){
                 return UploadError.NoImage.rawValue
             }else if numberOfHeart() == 0{
                 return UploadError.NoEvaluate.rawValue
@@ -245,6 +230,20 @@ class PostArticleController: UIViewController {
         }
         return nil
     }
+    func imageViewsIsEmpty(array: [UIButton]) -> Bool{
+        if array.count != 3{
+            return true
+        }else{
+            for button in array{
+                if button.currentImage == nil{
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
+    
     func handleUploadArticle(){
         let error = whatKindOfError()
         switch error {
@@ -258,28 +257,49 @@ class PostArticleController: UIViewController {
             hud.textLabel.text = "上傳中"
             hud.show(in: self.view, animated: true)
             //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
-            let imageUID = NSUUID().uuidString
-            let imageRef = Storage.storage().reference().child("ArticleImages").child(imageUID)
-            guard let jpgImage = uploadImageButton.currentImage?.jpegData(compressionQuality: 1) else{return}
-            imageRef.putData(jpgImage, metadata: nil) { (metadata, error) in
+            let imagesDataArray = compressImageToData(array: imageButtonsArray)
+            
+            for image in imagesDataArray{
+                putDataToStorage(data: image) { (urlArray) in
+                    if urlArray.count == 3{
+                        self.addArticleDataToDataBase(array: urlArray)
+                    }
+                }
+            }
+ 
+        }
+
+    }
+    func compressImageToData(array: [UIButton]) -> [Data]{
+        var imagesDataArray = [Data]()
+        for button in array{
+            if let jpgImage = button.currentImage?.jpegData(compressionQuality: 1){
+                imagesDataArray.append(jpgImage)
+            }
+        }
+        return imagesDataArray
+    }
+    func putDataToStorage(data: Data,completion: @escaping ([String]) -> Void){
+        let imageUID = NSUUID().uuidString
+        let imageRef = Storage.storage().reference().child("ArticleImages").child(imageUID)
+        imageRef.putData(data, metadata: nil) { (metadata, error) in
+            if let error = error{
+                print("error:",error)
+                return
+            }
+            imageRef.downloadURL(completion: { (url, error) in
                 if let error = error{
                     print("error:",error)
                     return
                 }
-                imageRef.downloadURL(completion: { (url, error) in
-                    if let error = error{
-                        print("error:",error)
-                        return
-                    }
-                    guard let downloadURL = url?.absoluteString else{return}
-                    self.addArticleDataToDataBase(downloadURL: downloadURL)
-                    
-                })
-            }
+                guard let downloadURL = url?.absoluteString else{return}
+                self.downloadURLArray.append(downloadURL)
+                completion(self.downloadURLArray)
+            })
+            
         }
-
     }
-    func addArticleDataToDataBase(downloadURL: String){
+    func addArticleDataToDataBase(array: [String]){
         let articleUID = NSUUID().uuidString
         guard let userUID = Auth.auth().currentUser?.uid else {return}
         guard let title = self.titleTextField.text else{return}
@@ -290,7 +310,7 @@ class PostArticleController: UIViewController {
                                         "authorUID" : userUID,
                                         "articleUID" : articleUID,
                                         "title" : title,
-                                        "imageURL" : downloadURL as Any,
+                                        "imageURL" : array,
                                         "review" : review,
                                         "numberOfHeart" : "\(numberOfHeart())",
                                         "date" : getTimeStamp()]
@@ -330,18 +350,9 @@ class PostArticleController: UIViewController {
     }
 }
 
-//相簿存取 + TextView的PlaceHolder處理
-extension PostArticleController: UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextViewDelegate{
-    //完成選取
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
-        picker.dismiss(animated: true, completion: nil)
-        uploadImageButton.setImage(getImage, for: .normal)
-    }
-    //按下取消
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
+//MARK: - 相簿存取 + TextView的PlaceHolder處理
+extension PostArticleController: UITextViewDelegate{
+ 
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if reviewTextView.textColor == specialGray{
@@ -358,7 +369,33 @@ extension PostArticleController: UIImagePickerControllerDelegate,UINavigationCon
         
     }
 }
-
+//MARK: - ColltionView處理
+extension PostArticleController: UICollectionViewDelegate,UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = self.uploadImagesColletionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! PostArticleCell
+        if imageButtonsArray.count >= 3{
+            imageButtonsArray.remove(at: indexPath.row)
+        }
+        imageButtonsArray.append(cell.uploadImageButton)
+        cell.delegate = self
+        return cell
+    }
+    
+    
+}
+extension PostArticleController: PostArticleCell_Delegate{
+    func openAlbum(cell: UICollectionViewCell) {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        picker.delegate = cell as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        self.present(picker, animated: true, completion: nil)
+    }
+}
 enum UploadError: String{
     case NotFillYet
     case NoImage

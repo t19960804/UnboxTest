@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 import FirebaseDatabase
 import FirebaseAuth
 
@@ -17,14 +16,14 @@ struct Article {
     
     var category: String?
     var articleUID: String?
-    var imageURL: String?
+    var imageURL: [String]?
     var title: String?
     var review: String?
     var numberOfHeart: String?
     var date: String?
     
     init(value: [String : Any]) {
-        self.imageURL = value["imageURL"] as? String
+        self.imageURL = value["imageURL"] as? [String]
         self.title = value["title"] as? String
         self.review = value["review"] as? String
         self.numberOfHeart = value["numberOfHeart"] as? String

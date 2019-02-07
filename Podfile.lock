@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (4.7.3)
   - Firebase/Auth (5.10.0):
     - Firebase/CoreOnly
     - FirebaseAuth (= 5.0.4)
@@ -77,21 +76,17 @@ PODS:
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
-  - SwiftyJSON (4.2.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.7)
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
   - JGProgressHUD
   - SDWebImage (~> 4.0)
-  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Alamofire
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -107,10 +102,8 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - SDWebImage
-    - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Firebase: 6691d47562a780c26281ce8464518faafc90c610
   FirebaseAnalytics: 831f1f127f4a75698e9875a87bf7e2668730d953
   FirebaseAuth: 504b198ceb3472dca5c65bb95544ea44cfc9439e
@@ -126,8 +119,7 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
-  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 19dd8848a9f93776dd3ca0aed028b98de32362b7
+PODFILE CHECKSUM: 0dafbbd393b3c6b87a4aeac051cebbd62e7c1571
 
 COCOAPODS: 1.6.0.beta.2

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1010"
+   LastUpgradeVersion = "0930"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92352B26ECD13F5DC3E69886C61EBCE3"
+               BlueprintIdentifier = "020E18F8526949F6DB3DBE80ABF76682"
                BuildableName = "Pods_TwitchTest.framework"
                BlueprintName = "Pods-TwitchTest"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92352B26ECD13F5DC3E69886C61EBCE3"
+            BlueprintIdentifier = "020E18F8526949F6DB3DBE80ABF76682"
             BuildableName = "Pods_TwitchTest.framework"
             BlueprintName = "Pods-TwitchTest"
             ReferencedContainer = "container:Pods.xcodeproj">

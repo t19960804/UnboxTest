@@ -33,8 +33,9 @@
 		0BC3414721E59E8C00BD3886 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BC3414521E59E8C00BD3886 /* LaunchScreen.storyboard */; };
 		0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */; };
 		0BC3415321E5A6F900BD3886 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3415221E5A6F900BD3886 /* CategoryCell.swift */; };
-		0BC3415621E5A93900BD3886 /* InternetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3415521E5A93900BD3886 /* InternetService.swift */; };
 		0BE3DF9B2203FE9500D53734 /* FollowersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */; };
+		0BE3DF9D220AD98500D53734 /* PostArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */; };
+		0BE3DF9F220C3BCF00D53734 /* ArticleDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */; };
 		DC86726B53D73FC2DECA9729 /* Pods_TwitchTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A8720CE5B1B0818AA928023 /* Pods_TwitchTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -68,8 +69,9 @@
 		0BC3414821E59E8C00BD3886 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0BC3414E21E59EF300BD3886 /* AllCommodityCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommodityCollectionViewController.swift; sourceTree = "<group>"; };
 		0BC3415221E5A6F900BD3886 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
-		0BC3415521E5A93900BD3886 /* InternetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetService.swift; sourceTree = "<group>"; };
 		0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersTableViewCell.swift; sourceTree = "<group>"; };
+		0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostArticleCell.swift; sourceTree = "<group>"; };
+		0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailCell.swift; sourceTree = "<group>"; };
 		42B0C38300061E065A1D7C5B /* Pods-TwitchTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.release.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.release.xcconfig"; sourceTree = "<group>"; };
 		F5AA30C4EABCBB51605B34AA /* Pods-TwitchTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.debug.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -186,6 +188,8 @@
 				0B10847E21EC8B5E006F890E /* LoveImageView.swift */,
 				0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */,
 				0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */,
+				0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */,
+				0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -207,7 +211,6 @@
 		0BC3415421E5A84300BD3886 /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				0BC3415521E5A93900BD3886 /* InternetService.swift */,
 				0B10847721EAE670006F890E /* Alert.swift */,
 			);
 			path = Service;
@@ -322,12 +325,10 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TwitchTest/Pods-TwitchTest-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -335,12 +336,10 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -359,14 +358,15 @@
 				0B10847F21EC8B5E006F890E /* LoveImageView.swift in Sources */,
 				0B10847D21EC3FEE006F890E /* Article.swift in Sources */,
 				0B10847421E9DEC8006F890E /* ArticlesCollectionViewController.swift in Sources */,
+				0BE3DF9F220C3BCF00D53734 /* ArticleDetailCell.swift in Sources */,
 				0B10847821EAE670006F890E /* Alert.swift in Sources */,
 				0B10848421EF19E4006F890E /* User.swift in Sources */,
-				0BC3415621E5A93900BD3886 /* InternetService.swift in Sources */,
 				0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */,
 				0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */,
 				0B10847A21EB269B006F890E /* PostArticleController.swift in Sources */,
 				0B8EC3AB21FAFE9F0056C617 /* UserInfoCell.swift in Sources */,
 				0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */,
+				0BE3DF9D220AD98500D53734 /* PostArticleCell.swift in Sources */,
 				0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */,
 				0B10847621E9EC4A006F890E /* ArticlesCell.swift in Sources */,
 				0B8EC3A721F979BE0056C617 /* UserInfoLabel.swift in Sources */,

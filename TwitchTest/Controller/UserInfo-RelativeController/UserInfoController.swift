@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import JGProgressHUD
 
 class UserInfoController: UIViewController {
     var user: User?{
@@ -292,6 +293,10 @@ class UserInfoController: UIViewController {
         abouMeTextView.becomeFirstResponder()
     }
     @objc func handleSaveUserInfo(){
+        let hud = JGProgressHUD(style: .light)
+        hud.textLabel.text = "編輯成功"
+        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+        hud.show(in: self.view, animated: true)
         //First Responder 代表的是目前畫面中，處於焦點狀態的元件
         //而當輸入文字時，這個輸入框就是 First Responder
         //所以如果要隱藏鍵盤，當然就是將 First Responder 取消，也就是使用resignFirstResponder()方法。
@@ -299,6 +304,7 @@ class UserInfoController: UIViewController {
         abouMeTextView.isEditable = false
         abouMeTextView.resignFirstResponder()
         saveUserInfo(with: abouMeTextView.text)
+        hud.dismiss(afterDelay: 0.6, animated: true)
     }
     func saveUserInfo(with userInfo: String){
         guard let userUID = userUID else{return}
@@ -307,6 +313,7 @@ class UserInfoController: UIViewController {
                 print("error:",error)
                 return
             }
+            
         }
     }
     //MARK: - Fetch資料

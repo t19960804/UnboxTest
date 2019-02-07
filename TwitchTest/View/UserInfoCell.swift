@@ -22,7 +22,8 @@ class UserInfoCell: UICollectionViewCell {
     var article: Article?{
         didSet{
             if let imageURL = article?.imageURL,let title = article?.title,let numbersOfHeart = article?.numberOfHeart,let authorUID = article?.authorUID{
-                self.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURL)!)
+                
+                self.commodityImageView.downLoadImageInCache(downLoadURL: URL(string: imageURL[0])!)
                 commodityNameLabel.text = title
                 lightUpTheHearts(number: Int(numbersOfHeart) ?? 1)
                 deleteButton.isHidden = authorUID == currentUser ? false : true
