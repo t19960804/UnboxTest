@@ -14,9 +14,9 @@ class ArticleDeatailController: UIViewController {
     var reviewTextViewHeightAnchor: NSLayoutConstraint?
     var article: Article?{
         didSet{
-            if let imageURl = article?.imageURL,let title = article?.title,let userImageURL = article?.author?.imageURL,
+            if let imagesURl = article?.imageURL,let title = article?.title,let userImageURL = article?.author?.imageURL,
                 let userName = article?.author?.userName,let review = article?.review{
-                imageURLArray = imageURl
+                imageURLArray = imagesURl
                 userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
                 titleLabel.text = title
                 userNameLabel.text = userName

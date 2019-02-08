@@ -16,7 +16,8 @@ private let reuseIdentifier = "Cell"
 class ArticlesCollectionViewController: UICollectionViewController {
     var articlesArray = [Article]()
     var filterdArticles = [Article]()
-    
+    let ref = Database.database().reference()
+
     var timer: Timer?
     let hud = JGProgressHUD(style: .light)
     var category: String?{
@@ -82,17 +83,16 @@ class ArticlesCollectionViewController: UICollectionViewController {
     //MARK: - Fetch資料
     func fetchArticlesFromdDataBase(){
         guard let category = self.navigationItem.title else{return}
-        let ref = Database.database().reference()
-        
+
         ref.child("類別").child(category).observe(.childAdded, with: { (snapshot) in
             //取得文章的UID,透過UID尋找文章
             let articleUID = snapshot.key
-            ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
+            self.ref.child("文章").child(articleUID).observeSingleEvent(of: .value, with: { (snapshot) in
                 let dictionary = snapshot.value as! [String : Any]
                 var article = Article(value: dictionary)
                 let author = dictionary["authorUID"] as! String
                 //透過文章中的author找尋作者資料
-                ref.child("使用者").child(author).observeSingleEvent(of: .value, with: { (snapshot) in
+                self.ref.child("使用者").child(author).observeSingleEvent(of: .value, with: { (snapshot) in
                     let dictionary = snapshot.value as! [String : Any]
                     let user = User(value: dictionary)
                     article.author = user
@@ -104,14 +104,13 @@ class ArticlesCollectionViewController: UICollectionViewController {
             
         }, withCancel: nil)
     }
-    
+
     private func attemptReloadTableView(){
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
     }
     //觀察文章被移除
     func observeArticlesRemove(completion: @escaping () -> Void){
-        let ref = Database.database().reference()
         guard let userUID = Auth.auth().currentUser?.uid else{return}
         ref.child("使用者-文章").child(userUID).observe(.childRemoved) { (snapshot) in
             self.filterdArticles = self.filterdArticles.filter({ (article) -> Bool in

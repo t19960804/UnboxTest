@@ -9,6 +9,8 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import FirebaseStorage
+
 import JGProgressHUD
 
 class UserInfoController: UIViewController {
@@ -68,6 +70,18 @@ class UserInfoController: UIViewController {
     let aboutMeLabel = UserInfoLabel(content: "關於我", fontSize: .boldSystemFont(ofSize: 25), textColor: UIColor.black)
     lazy var editBarButton = UIBarButtonItem(title: "編輯", style: .plain, target: self, action: #selector(handleEditing))
 
+    lazy var chooseImageButton: UIButton = {
+        let button = UIButton(type: UIButton.ButtonType.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "camera24")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = specialWhite
+        button.backgroundColor = specialCyan
+        button.layer.cornerRadius = 20
+        button.isHidden = true
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(handleChooseImage), for: .touchUpInside)
+        return button
+    }()
     lazy var follwerNumberLabel: UILabel = {
         let label = UILabel()
         label.isUserInteractionEnabled = true
@@ -140,9 +154,7 @@ class UserInfoController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = specialWhite
@@ -156,6 +168,8 @@ class UserInfoController: UIViewController {
         self.view.addSubview(bottomView)
         self.view.addSubview(aboutMeLabel)
         self.view.addSubview(abouMeTextView)
+        self.view.addSubview(chooseImageButton)
+
         setUpNavBar()
         setUpTopView()
         setUpBottomView()
@@ -191,13 +205,20 @@ class UserInfoController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    @objc func handleChooseImage(){
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
+    }
     @objc func handleKeyBoardShow(_ notification: Notification){
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.view.frame = CGRect(x: 0, y: -keyboardHeight, width: self.view.frame.width, height: self.view.frame.height)
+                self.view.frame = CGRect(x: 0, y: -(keyboardHeight / 2), width: self.view.frame.width, height: self.view.frame.height)
             }, completion: nil)
             
         }
@@ -288,6 +309,7 @@ class UserInfoController: UIViewController {
         self.navigationController?.pushViewController(articlesController, animated: true)
     }
     @objc func handleEditing(){
+        chooseImageButton.isHidden = false
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "儲存", style: .plain, target: self, action: #selector(handleSaveUserInfo))
         abouMeTextView.isEditable = true
         abouMeTextView.becomeFirstResponder()
@@ -303,12 +325,36 @@ class UserInfoController: UIViewController {
         self.navigationItem.rightBarButtonItem = editBarButton
         abouMeTextView.isEditable = false
         abouMeTextView.resignFirstResponder()
+        chooseImageButton.isHidden = true
         saveUserInfo(with: abouMeTextView.text)
         hud.dismiss(afterDelay: 0.6, animated: true)
     }
     func saveUserInfo(with userInfo: String){
+        
+        let imageUID = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child("userImages").child(imageUID)
+        guard let userImage = self.userImageView.image?.jpegData(compressionQuality: 0.2) else{return}
+        storageRef.putData(userImage, metadata: nil) { (metaData, error) in
+            if let error = error{
+                print("error:",error)
+                return
+            }
+            storageRef.downloadURL(completion: { (url, error) in
+                if let error = error{
+                    print("error:",error)
+                    return
+                }
+                let values: [String : Any] = ["aboutMe" : userInfo,
+                                              "imageURL" : url!.absoluteString]
+                self.updateToDataBase(values: values)
+            })
+        }
+
+        
+    }
+    func updateToDataBase(values: [String : Any]){
         guard let userUID = userUID else{return}
-        ref.child("使用者").child(userUID).updateChildValues(["aboutMe" : userInfo]) { (error, ref) in
+        self.ref.child("使用者").child(userUID).updateChildValues(values) { (error, ref) in
             if let error = error{
                 print("error:",error)
                 return
@@ -400,6 +446,13 @@ class UserInfoController: UIViewController {
         backView.rightAnchor.constraint(equalTo: backImageView.rightAnchor).isActive = true
         backView.heightAnchor.constraint(equalTo: backImageView.heightAnchor).isActive = true
         
+        
+        chooseImageButton.centerYAnchor.constraint(equalTo: userImageView.topAnchor).isActive = true
+        chooseImageButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        chooseImageButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        chooseImageButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        
         userImageView.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
         userImageView.topAnchor.constraint(equalTo: backView.topAnchor, constant: safeAreaHeight_Top + 44 + 40).isActive = true
         userImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -440,3 +493,12 @@ class UserInfoController: UIViewController {
     }
 }
 
+extension UserInfoController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        userImageView.image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}

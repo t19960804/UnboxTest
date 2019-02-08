@@ -22,8 +22,10 @@ class AllCommodityCollectionViewController: UICollectionViewController{
             self.currentUser = user
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         setUpNavBar()
         setUpCollectionView()
         
@@ -39,12 +41,10 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         }else{
             self.present(LoginController(), animated: true, completion: nil)
         }
-        
-        
+
     }
     func observeCurrentUser(completion: @escaping (User) -> Void){
         guard let currentUser = Auth.auth().currentUser?.uid else{return}
-        print(currentUser)
         let ref = Database.database().reference()
         ref.child("使用者").child(currentUser).observe(.value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
