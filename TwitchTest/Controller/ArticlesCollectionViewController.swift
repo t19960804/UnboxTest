@@ -46,6 +46,8 @@ class ArticlesCollectionViewController: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         hud.textLabel.text = "載入中"
         hud.show(in: self.view, animated: true)
+        //強制重抓資料刷新頭像
+        fetchArticlesFromdDataBase()
     }
     override func viewDidAppear(_ animated: Bool) {
         hud.dismiss(afterDelay: 1, animated: true)
@@ -68,7 +70,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
             self.collectionView.reloadData()
             self.messageLabel.isHidden = false
         }
-        fetchArticlesFromdDataBase()
+        
     }
     func setUpCollectionView(){
         self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -83,7 +85,10 @@ class ArticlesCollectionViewController: UICollectionViewController {
     //MARK: - Fetch資料
     func fetchArticlesFromdDataBase(){
         guard let category = self.navigationItem.title else{return}
-
+        //防止疊加
+        if self.articlesArray.isEmpty == false{
+            self.articlesArray.removeAll()
+        }
         ref.child("類別").child(category).observe(.childAdded, with: { (snapshot) in
             //取得文章的UID,透過UID尋找文章
             let articleUID = snapshot.key
@@ -193,9 +198,6 @@ extension ArticlesCollectionViewController: UISearchBarDelegate{
         self.navigationItem.rightBarButtonItems = [postArticleButton,searchButton]
         self.navigationItem.titleView = nil
     }
-    
-    
-    
 }
 extension ArticlesCollectionViewController:ArticleCellDelegate{
     func pushToArticleDetail(article: Article) {

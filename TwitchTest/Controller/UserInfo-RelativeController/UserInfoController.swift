@@ -193,7 +193,9 @@ class UserInfoController: UIViewController {
             self.followerButton.setTitleColor(titleColor, for: .normal)
         }
     }
-
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
     func setUpNavBar(){
         self.navigationItem.title = "個人資料"
         let isCurrentUser = authorUID == Auth.auth().currentUser?.uid

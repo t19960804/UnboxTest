@@ -232,9 +232,32 @@ extension ArticleDeatailController: UICollectionViewDelegate,UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.detailCollectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ArticleDetailCell
+        cell.delegate = self
         cell.imageURL = imageURLArray[indexPath.row]
         return cell
     }
+    
+    
+}
+extension ArticleDeatailController: ArticleDetailCell_Delagate{
+    func imageZoomInForStartingImageView(imageView: UIImageView) {
+        //找出imageView在當前畫面的frame
+        let startingFrame = imageView.superview?.convert(imageView.frame, to: nil)
+        let zoomingImageView = UIImageView(frame: startingFrame!)
+        zoomingImageView.backgroundColor = .black
+        
+        if let keyWindow = UIApplication.shared.keyWindow{
+            keyWindow.addSubview(zoomingImageView)
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: zoomingImageView.frame.height)
+                zoomingImageView.center = keyWindow.center
+            }, completion: nil)
+        }
+        
+        
+    }
+    
+    
     
     
 }
