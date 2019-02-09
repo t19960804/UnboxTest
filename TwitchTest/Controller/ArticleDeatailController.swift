@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import FirebaseAuth
+import FirebaseDatabase
 
 class ArticleDeatailController: UIViewController {
     let cellID = "Cell"
@@ -142,6 +143,9 @@ class ArticleDeatailController: UIViewController {
         loveImageViewArray.append(loveImageView_4)
         loveImageViewArray.append(loveImageView_5)
         setUpConstraints()
+        observeUserImageChanged { (url) in
+            self.userImageView.downLoadImageInCache(downLoadURL: URL(string: url)!)
+        }
        
     }
     @objc func handleToUserInfo(){
@@ -208,6 +212,16 @@ class ArticleDeatailController: UIViewController {
         reviewTextViewHeightAnchor?.isActive = true
         
         
+    }
+    //觀察使用者更換頭像
+    func observeUserImageChanged(completion: @escaping (String) -> Void){
+        let ref = Database.database().reference()
+        guard let userUID = Auth.auth().currentUser?.uid else{return}
+        ref.child("使用者").child(userUID).observe(.childChanged) { (snapshot) in
+            if let url = snapshot.value as? String{
+                completion(url)
+            }
+        }
     }
 
 }

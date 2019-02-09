@@ -23,7 +23,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
     var category: String?{
         didSet{
             self.navigationItem.title = category!
-            fetchArticlesFromdDataBase()
+            
         }
     }
     lazy var searchBar: UISearchBar = {
@@ -68,7 +68,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
             self.collectionView.reloadData()
             self.messageLabel.isHidden = false
         }
-
+        fetchArticlesFromdDataBase()
     }
     func setUpCollectionView(){
         self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -119,6 +119,15 @@ class ArticlesCollectionViewController: UICollectionViewController {
             completion()
         }
     }
+    //觀察使用者更換頭像
+    func observeUserImageChanged(completion: @escaping (String) -> Void){
+        guard let userUID = Auth.auth().currentUser?.uid else{return}
+        ref.child("使用者").child(userUID).observe(.childChanged) { (snapshot) in
+            if let url = snapshot.value as? String{
+                completion(url)
+            }
+        }
+    }
     //MARK: - Selector方法
     @objc func handleReloadTable(){
         self.articlesArray.sort {$0.date! > $1.date!}
@@ -150,20 +159,15 @@ class ArticlesCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         messageLabel.isHidden = true
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ArticlesCell
-        cell.article = filterdArticles[indexPath.row]
         cell.delegate = self
+        cell.article = filterdArticles[indexPath.row]
         return cell
     }
     
    
 
 }
-extension ArticlesCollectionViewController: ArticleCellDelegate,UISearchBarDelegate{
-    func pushToArticleDetail(article: Article) {
-        let articleDetailController = ArticleDeatailController()
-        articleDetailController.article = article
-        self.navigationController?.pushViewController(articleDetailController, animated: true)
-    }
+extension ArticlesCollectionViewController: UISearchBarDelegate{
     //監聽輸入
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let input = searchBar.text else{return}
@@ -192,4 +196,11 @@ extension ArticlesCollectionViewController: ArticleCellDelegate,UISearchBarDeleg
     
     
     
+}
+extension ArticlesCollectionViewController:ArticleCellDelegate{
+    func pushToArticleDetail(article: Article) {
+        let articleDetailController = ArticleDeatailController()
+        articleDetailController.article = article
+        self.navigationController?.pushViewController(articleDetailController, animated: true)
+    }
 }

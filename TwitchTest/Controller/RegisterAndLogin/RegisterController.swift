@@ -21,10 +21,10 @@ class RegisterController: UIViewController {
         imageView.image = UIImage(named: "user256")?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = themeColor
         imageView.backgroundColor = UIColor.clear
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         
         imageView.layer.cornerRadius = 100
-        imageView.layer.masksToBounds = true
         imageView.layer.borderColor = themeColor.cgColor
         imageView.layer.borderWidth = 3
         imageView.isUserInteractionEnabled = true
@@ -299,6 +299,8 @@ class RegisterController: UIViewController {
             Alert.alert_BugReport(message: "帳號已被使用", title: "錯誤", with: self)
         case 17008:
             Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
+        case 17020:
+            Alert.alert_BugReport(message: "請檢查網路", title: "錯誤", with: self)
         case 17026:
             Alert.alert_BugReport(message: "密碼不足6位數", title: "錯誤", with: self)
         default:

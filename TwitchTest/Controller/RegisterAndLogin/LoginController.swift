@@ -210,6 +210,8 @@ class LoginController: UIViewController {
             Alert.alert_BugReport(message: "密碼錯誤", title: "錯誤", with: self)
         case 17011:
             Alert.alert_BugReport(message: "帳號尚未註冊", title: "錯誤", with: self)
+        case 17020:
+            Alert.alert_BugReport(message: "請檢查網路連線", title: "錯誤", with: self)
         default:
             return
         }
@@ -234,6 +236,7 @@ class LoginController: UIViewController {
                         hud.dismiss(afterDelay: 1)
                         
                         let errorCode = (error as NSError).code
+                        print(errorCode)
                         self.detectErrorCode(code: errorCode)
                     }else{
                         hud.dismiss(animated: true)
