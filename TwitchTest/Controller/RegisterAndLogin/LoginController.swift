@@ -147,12 +147,8 @@ class LoginController: UIViewController {
         setUpConstraints()
         addKeyboardObserver()
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self)
-    }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+    override func viewWillDisappear(_ animated: Bool) {NotificationCenter.default.removeObserver(self)}
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     func setUpConstraints(){
         logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 80).isActive = true
@@ -229,14 +225,11 @@ class LoginController: UIViewController {
             if account.isEmpty || password.isEmpty{
                 hud.dismiss(afterDelay: 1)
                 Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
-                
             }else{
                 Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
                     if let error = error{
                         hud.dismiss(afterDelay: 1)
-                        
                         let errorCode = (error as NSError).code
-                        print(errorCode)
                         self.detectErrorCode(code: errorCode)
                     }else{
                         hud.dismiss(animated: true)

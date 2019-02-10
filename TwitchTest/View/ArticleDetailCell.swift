@@ -11,7 +11,7 @@ import UIKit
 
 
 protocol ArticleDetailCell_Delagate {
-    func imageZoomInForStartingImageView(imageView: UIImageView)
+    func imageZoomInForStartingImageView(startingImageView: UIImageView)
 }
 class ArticleDetailCell: UICollectionViewCell {
     
@@ -67,7 +67,7 @@ class ArticleDetailCell: UICollectionViewCell {
     }
     @objc func handleImageZoom(tapGesture: UITapGestureRecognizer){
         if let imageView = tapGesture.view as? UIImageView{
-            delegate?.imageZoomInForStartingImageView(imageView: imageView)
+            delegate?.imageZoomInForStartingImageView(startingImageView: imageView)
 
         }
     }

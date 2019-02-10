@@ -109,10 +109,9 @@ class PostArticleController: UIViewController {
         setUpNavBar()
         setUpConstraints()
         addTapGesture()
-        
-//        titleTextField.text = "PLAY ARTS改 Marvel Universe 變體版【X-23】"
-//        reviewTextView.text = "「VARIANT PLAY ARTS改 X-23」高約25.4 公分\n戰衣的風格不像狼叔擁有極重的裝甲感，呈現出在緊身衣外再覆蓋鎧甲的輕裝風格\n符合她在漫畫中十分敏捷的形象，腰部還做出了鏤空的設計更凸顯X-23 的身形曲線\n鎧甲有著漂亮的光澤感並刻劃出豐富的細節與紋路，頭雕有戴上頭盔、脫盔兩種樣貌\n除了多個出爪的替換手型外，在腳尖也能裝上鋼爪\n可以變化出多種帥氣的戰鬥姿態！"
-        titleTextField.text = "Marvel Universe 變體版【獨眼龍】"
+//        Play Arts 改 變體版 獨眼龍」高約27 公分，全身裝備擁有複雜的刻線和鮮豔的配色\n金黃色的盔甲呈現出打磨過的光澤和金屬的厚重質感\n上半身的不對稱造型讓本作更添玩味之處，配件部分包含普通、咬牙兩種版本的頭雕\n還附屬了紅色光束的特效零件以及多個替換手型，可再現獨眼龍發動攻擊的霸氣姿態\n而護目鏡的漸層塗裝也營造出彷彿發光的效果\n獨眼龍帥氣的造型和豐富的細節更是讓人大呼過癮～！
+
+        titleTextField.text = "《地獄犬的輓歌》文森特·瓦倫汀"
         reviewTextView.text = "Play Arts 改 變體版 獨眼龍」高約27 公分，全身裝備擁有複雜的刻線和鮮豔的配色\n金黃色的盔甲呈現出打磨過的光澤和金屬的厚重質感\n上半身的不對稱造型讓本作更添玩味之處，配件部分包含普通、咬牙兩種版本的頭雕\n還附屬了紅色光束的特效零件以及多個替換手型，可再現獨眼龍發動攻擊的霸氣姿態\n而護目鏡的漸層塗裝也營造出彷彿發光的效果\n獨眼龍帥氣的造型和豐富的細節更是讓人大呼過癮～！"
     }
     func setUpGradient(){
@@ -256,9 +255,7 @@ class PostArticleController: UIViewController {
         default:
             hud.textLabel.text = "上傳中"
             hud.show(in: self.view, animated: true)
-            //先將圖片存進Storage,拿到URL之後,再與其他輸入值一起存進DataBase
             let imagesDataArray = compressImageToData(array: imageButtonsArray)
-            
             for image in imagesDataArray{
                 putDataToStorage(data: image) { (urlArray) in
                     if urlArray.count == 3{
@@ -305,7 +302,7 @@ class PostArticleController: UIViewController {
         guard let title = self.titleTextField.text else{return}
         guard let review = self.reviewTextView.text else{return}
         guard let category = self.kindOfCategory else{return}
-
+        print(numberOfHeart())
         let values: [String : Any] = [  "category" : category,
                                         "authorUID" : userUID,
                                         "articleUID" : articleUID,

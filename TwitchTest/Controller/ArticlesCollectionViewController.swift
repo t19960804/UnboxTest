@@ -124,21 +124,14 @@ class ArticlesCollectionViewController: UICollectionViewController {
             completion()
         }
     }
-    //觀察使用者更換頭像
-    func observeUserImageChanged(completion: @escaping (String) -> Void){
-        guard let userUID = Auth.auth().currentUser?.uid else{return}
-        ref.child("使用者").child(userUID).observe(.childChanged) { (snapshot) in
-            if let url = snapshot.value as? String{
-                completion(url)
-            }
-        }
-    }
+    
     //MARK: - Selector方法
     @objc func handleReloadTable(){
         self.articlesArray.sort {$0.date! > $1.date!}
         self.filterdArticles = self.articlesArray
         
         DispatchQueue.main.async {
+            
             self.collectionView.reloadData()
             let firstIndexPath = IndexPath(item: 0, section: 0)
             self.collectionView.scrollToItem(at: firstIndexPath, at: .top, animated: true)

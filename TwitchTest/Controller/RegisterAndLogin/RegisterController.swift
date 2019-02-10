@@ -290,6 +290,7 @@ class RegisterController: UIViewController {
         ref.setValue(values) { (error, metaData) in
             if let error = error{
                 print("error:",error)
+                return
             }
         }
     }

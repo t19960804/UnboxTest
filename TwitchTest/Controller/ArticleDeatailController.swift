@@ -13,6 +13,9 @@ import FirebaseDatabase
 class ArticleDeatailController: UIViewController {
     let cellID = "Cell"
     var reviewTextViewHeightAnchor: NSLayoutConstraint?
+    var startingFrame: CGRect?
+    var background: UIView?
+    var startingImageView: UIImageView?
     var article: Article?{
         didSet{
             if let imagesURl = article?.imageURL,let title = article?.title,let userImageURL = article?.author?.imageURL,
@@ -87,37 +90,20 @@ class ArticleDeatailController: UIViewController {
         return label
     }()
     
-    lazy var loveImageStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(loveImageView_1)
-        stackView.addArrangedSubview(loveImageView_2)
-        stackView.addArrangedSubview(loveImageView_3)
-        stackView.addArrangedSubview(loveImageView_4)
-        stackView.addArrangedSubview(loveImageView_5)
-        stackView.distribution = .fillEqually
-        stackView.axis = .horizontal
-        stackView.spacing = 4
-        return stackView
-    }()
+
     let reviewTextView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = specialWhite
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.font = UIFont.systemFont(ofSize: 20)
+        textView.showsVerticalScrollIndicator = false
         textView.isEditable = false
         return textView
     }()
 
     
-    let loveImageView_1 = LoveImageView(tintColor: themeColor)
-    let loveImageView_2 = LoveImageView(tintColor: themeColor)
-    let loveImageView_3 = LoveImageView(tintColor: themeColor)
-    let loveImageView_4 = LoveImageView(tintColor: themeColor)
-    let loveImageView_5 = LoveImageView(tintColor: themeColor)
     
     override func viewWillAppear(_ animated: Bool) {
-        lightUpTheHearts(number: Int((article?.numberOfHeart)!)!)
         reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 20
     }
     override func viewDidLoad() {
@@ -131,23 +117,23 @@ class ArticleDeatailController: UIViewController {
         myScrollView.addSubview(backGroundView)
         backGroundView.addSubview(titleLabel)
         
-//        backGroundView.addSubview(loveImageStackView)
         backGroundView.addSubview(reviewTextView)
         backGroundView.addSubview(detailCollectionView)
         backGroundView.addSubview(userImageView)
         backGroundView.addSubview(userNameLabel)
 
-        loveImageViewArray.append(loveImageView_1)
-        loveImageViewArray.append(loveImageView_2)
-        loveImageViewArray.append(loveImageView_3)
-        loveImageViewArray.append(loveImageView_4)
-        loveImageViewArray.append(loveImageView_5)
         setUpConstraints()
-        observeUserImageChanged { (url) in
-            self.userImageView.downLoadImageInCache(downLoadURL: URL(string: url)!)
+        
+        if article?.authorUID == Auth.auth().currentUser?.uid{
+            observeUserImageChanged { (url) in
+                self.userImageView.downLoadImageInCache(downLoadURL: URL(string: url)!)
+            }
         }
+        
        
     }
+
+    
     @objc func handleToUserInfo(){
         let userInfoController = UserInfoController()
         userInfoController.user = article?.author
@@ -163,13 +149,7 @@ class ArticleDeatailController: UIViewController {
         let estimateFrame = NSString(string: string).boundingRect(with: constraintSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font : fontSize], context: nil)
         return estimateFrame
     }
-    func lightUpTheHearts(number: Int){
-        for i in 0...loveImageViewArray.count - 1{
-            if i >= number{
-                loveImageViewArray[i].tintColor = specialGray
-            }
-        }
-    }
+   
     func setUpConstraints(){
         myScrollView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
         myScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
@@ -217,7 +197,7 @@ class ArticleDeatailController: UIViewController {
     func observeUserImageChanged(completion: @escaping (String) -> Void){
         let ref = Database.database().reference()
         guard let userUID = Auth.auth().currentUser?.uid else{return}
-        ref.child("使用者").child(userUID).observe(.childChanged) { (snapshot) in
+        ref.child("使用者").child(userUID).child("imageURL").observe(.value) { (snapshot) in
             if let url = snapshot.value as? String{
                 completion(url)
             }
@@ -240,23 +220,60 @@ extension ArticleDeatailController: UICollectionViewDelegate,UICollectionViewDat
     
 }
 extension ArticleDeatailController: ArticleDetailCell_Delagate{
-    func imageZoomInForStartingImageView(imageView: UIImageView) {
+    func imageZoomInForStartingImageView(startingImageView: UIImageView) {
+        self.startingImageView = startingImageView
+        self.startingImageView?.isHidden = true
+        
         //找出imageView在當前畫面的frame
-        let startingFrame = imageView.superview?.convert(imageView.frame, to: nil)
+        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
         let zoomingImageView = UIImageView(frame: startingFrame!)
         zoomingImageView.backgroundColor = .black
-        
+        zoomingImageView.image = startingImageView.image
+        //加入縮回去的動作
+        zoomingImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleZoomOut))
+        zoomingImageView.addGestureRecognizer(tap)
+        //加入畫面中
+        //keyWindow.frame 相等 self.view.frame
         if let keyWindow = UIApplication.shared.keyWindow{
+            background = UIView(frame: keyWindow.frame)
+            background?.backgroundColor = .black
+            background?.alpha = 0
+            keyWindow.addSubview(background!)
             keyWindow.addSubview(zoomingImageView)
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: zoomingImageView.frame.height)
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.background?.alpha = 1
+                //等比例放大
+                // h2 / w2 = h1 / w1
+                //h2 = (h1 / w1)*w2
+                let endingHeight = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
+                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: endingHeight)
                 zoomingImageView.center = keyWindow.center
             }, completion: nil)
         }
+       
         
-        
+
     }
-    
+    @objc func handleZoomOut(tapGesture: UITapGestureRecognizer){
+        if let imageView = tapGesture.view as? UIImageView{
+            imageView.layer.cornerRadius = 8
+            imageView.clipsToBounds = true
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                guard let startingFrame = self.startingFrame else{return}
+                
+                self.background?.alpha = 0
+                imageView.frame = startingFrame
+            }) { (complete) in
+                if complete{
+                    imageView.removeFromSuperview()
+                    self.startingImageView?.isHidden = false
+                }
+            }
+
+            
+        }
+    }
     
     
     

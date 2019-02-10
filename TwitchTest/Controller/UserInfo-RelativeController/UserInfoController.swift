@@ -192,6 +192,7 @@ class UserInfoController: UIViewController {
             self.followerButton.setTitle(title, for: .normal)
             self.followerButton.setTitleColor(titleColor, for: .normal)
         }
+     
     }
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
@@ -207,6 +208,7 @@ class UserInfoController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     @objc func handleChooseImage(){
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -364,6 +366,7 @@ class UserInfoController: UIViewController {
             
         }
     }
+    
     //MARK: - Fetch資料
     //不能放ViewWillAppear,陣列會重複.append
     func fetchArticles(completion: @escaping (User) -> Void){
