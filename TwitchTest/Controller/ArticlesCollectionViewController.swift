@@ -46,13 +46,11 @@ class ArticlesCollectionViewController: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         hud.textLabel.text = "載入中"
         hud.show(in: self.view, animated: true)
-        //強制重抓資料刷新頭像
-        fetchArticlesFromdDataBase()
     }
     override func viewDidAppear(_ animated: Bool) {
         hud.dismiss(afterDelay: 1, animated: true)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -65,6 +63,9 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.navigationItem.rightBarButtonItems = [postArticleButton,searchButton]
         searchBar.delegate = self
         setUpCollectionView()
+        
+        fetchArticlesFromdDataBase()
+
         setUpMessageLabel()
         observeArticlesRemove {
             self.collectionView.reloadData()
@@ -85,10 +86,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
     //MARK: - Fetch資料
     func fetchArticlesFromdDataBase(){
         guard let category = self.navigationItem.title else{return}
-        //防止疊加
-        if self.articlesArray.isEmpty == false{
-            self.articlesArray.removeAll()
-        }
         ref.child("類別").child(category).observe(.childAdded, with: { (snapshot) in
             //取得文章的UID,透過UID尋找文章
             let articleUID = snapshot.key
@@ -129,9 +126,9 @@ class ArticlesCollectionViewController: UICollectionViewController {
     @objc func handleReloadTable(){
         self.articlesArray.sort {$0.date! > $1.date!}
         self.filterdArticles = self.articlesArray
-        
+        print("art:",articlesArray.count)
+        print("filter:",filterdArticles.count)
         DispatchQueue.main.async {
-            
             self.collectionView.reloadData()
             let firstIndexPath = IndexPath(item: 0, section: 0)
             self.collectionView.scrollToItem(at: firstIndexPath, at: .top, animated: true)

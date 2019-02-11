@@ -109,10 +109,9 @@ class PostArticleController: UIViewController {
         setUpNavBar()
         setUpConstraints()
         addTapGesture()
-//        Play Arts 改 變體版 獨眼龍」高約27 公分，全身裝備擁有複雜的刻線和鮮豔的配色\n金黃色的盔甲呈現出打磨過的光澤和金屬的厚重質感\n上半身的不對稱造型讓本作更添玩味之處，配件部分包含普通、咬牙兩種版本的頭雕\n還附屬了紅色光束的特效零件以及多個替換手型，可再現獨眼龍發動攻擊的霸氣姿態\n而護目鏡的漸層塗裝也營造出彷彿發光的效果\n獨眼龍帥氣的造型和豐富的細節更是讓人大呼過癮～！
-
+        
         titleTextField.text = "《地獄犬的輓歌》文森特·瓦倫汀"
-        reviewTextView.text = "Play Arts 改 變體版 獨眼龍」高約27 公分，全身裝備擁有複雜的刻線和鮮豔的配色\n金黃色的盔甲呈現出打磨過的光澤和金屬的厚重質感\n上半身的不對稱造型讓本作更添玩味之處，配件部分包含普通、咬牙兩種版本的頭雕\n還附屬了紅色光束的特效零件以及多個替換手型，可再現獨眼龍發動攻擊的霸氣姿態\n而護目鏡的漸層塗裝也營造出彷彿發光的效果\n獨眼龍帥氣的造型和豐富的細節更是讓人大呼過癮～！"
+        reviewTextView.text = "「PLAY ARTS改 文森特·瓦倫汀」紅色披風的造型銳利，在施以強烈的陰影漸層後更是中二度滿點\n披風與頭髮皆設置了可動機構，能隨著帥氣的動作擺動！相較於過去可動滿悲劇的AC版\n這次算進步滿多的。配件則收錄了兩把愛槍「地獄犬（Cerberus）」、「九頭蛇（Hydra）」，地獄犬可收納於右腿的槍套。"
     }
     func setUpGradient(){
         let gradient = CAGradientLayer()
@@ -302,7 +301,6 @@ class PostArticleController: UIViewController {
         guard let title = self.titleTextField.text else{return}
         guard let review = self.reviewTextView.text else{return}
         guard let category = self.kindOfCategory else{return}
-        print(numberOfHeart())
         let values: [String : Any] = [  "category" : category,
                                         "authorUID" : userUID,
                                         "articleUID" : articleUID,

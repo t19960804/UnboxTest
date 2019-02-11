@@ -128,6 +128,7 @@
 			children = (
 				0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */,
 				0B8EC3A821F9A5280056C617 /* CustomNavController.swift */,
+				0B10847E21EC8B5E006F890E /* LoveImageView.swift */,
 			);
 			path = CustomSubViews;
 			sourceTree = "<group>";
@@ -185,7 +186,6 @@
 			children = (
 				0BC3415221E5A6F900BD3886 /* CategoryCell.swift */,
 				0B10847521E9EC4A006F890E /* ArticlesCell.swift */,
-				0B10847E21EC8B5E006F890E /* LoveImageView.swift */,
 				0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */,
 				0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */,
 				0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */,

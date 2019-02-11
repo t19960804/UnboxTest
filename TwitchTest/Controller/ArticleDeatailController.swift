@@ -104,7 +104,7 @@ class ArticleDeatailController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 20
+        reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 80
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,11 +179,6 @@ class ArticleDeatailController: UIViewController {
         titleLabel.topAnchor.constraint(equalTo: detailCollectionView.bottomAnchor, constant: 20).isActive = true
         
         
-        
-        //        loveImageStackView.rightAnchor.constraint(equalTo: commodityImageView.rightAnchor, constant: -8).isActive = true
-        //        loveImageStackView.bottomAnchor.constraint(equalTo: commodityImageView.bottomAnchor, constant: -8).isActive = true
-        //        loveImageStackView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        //        loveImageStackView.heightAnchor.constraint(equalToConstant: 35).isActive = true
         
         reviewTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         reviewTextView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
