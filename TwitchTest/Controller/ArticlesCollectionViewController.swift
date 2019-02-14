@@ -23,7 +23,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
     var category: String?{
         didSet{
             self.navigationItem.title = category!
-            
         }
     }
     lazy var searchBar: UISearchBar = {

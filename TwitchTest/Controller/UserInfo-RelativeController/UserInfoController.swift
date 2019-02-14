@@ -248,21 +248,22 @@ class UserInfoController: UIViewController {
         }
         
     }
-    func addFollowers(uid: String){
+    func addFollowers(follwerUID: String){
         let userRef = ref.child("使用者").child(userUID!)
         //找尋當前使用者的追蹤名單
         userRef.observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
             //第一次因為沒有followers節點會導致無法轉型,新增追蹤者時手用陣列包住
             if var follwersArray = dictionary["followers"] as? [String]{
-                follwersArray.append(uid)
+                follwersArray.append(follwerUID)
                 self.updateFollowers(value: follwersArray)
             }else{
                 self.updateFollowers(value: [self.authorUID])
             }
-            
+
         }
     }
+
     private func updateFollowers(value: [String]){
         let userRef = ref.child("使用者").child(userUID!)
         userRef.updateChildValues(["followers" : value]) { (error, ref) in
@@ -282,9 +283,10 @@ class UserInfoController: UIViewController {
                     return uid != followerUID
                 })
                 self.updateFollowers(value: newFollowersArray)
-            }            
+            }
         }
     }
+
     //MARK: - Seletor方法
     @objc func handleCheckFollowers(){
         let followersController = FollowersController()
@@ -299,11 +301,11 @@ class UserInfoController: UIViewController {
         followerButton.backgroundColor = notFollwYet ? specialCyan : specialWhite
         followerButton.setTitleColor(titleColor, for: .normal)
         followerButton.setTitle(title, for: .normal)
-        
+        guard let authorUID = user?.uid else{return}
+
         if notFollwYet{
-            addFollowers(uid: authorUID)
+            addFollowers(follwerUID: authorUID)
         }else{
-            guard let authorUID = user?.uid else{return}
             deleteFollowers(followerUID: authorUID)
         }
     }

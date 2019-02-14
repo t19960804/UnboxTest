@@ -171,7 +171,7 @@ class ArticleDeatailController: UIViewController {
         userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 8).isActive = true
         
         detailCollectionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        detailCollectionView.topAnchor.constraint(equalTo: userImageView.bottomAnchor,constant: 5).isActive = true
+        detailCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
         detailCollectionView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 1).isActive = true
         detailCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45).isActive = true
         

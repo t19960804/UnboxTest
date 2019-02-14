@@ -36,8 +36,21 @@
 		0BE3DF9B2203FE9500D53734 /* FollowersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */; };
 		0BE3DF9D220AD98500D53734 /* PostArticleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */; };
 		0BE3DF9F220C3BCF00D53734 /* ArticleDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */; };
+		0BF013B322117F9100F59CD1 /* AllCommodityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF013B222117F9100F59CD1 /* AllCommodityTests.swift */; };
+		0BF013B52212833D00F59CD1 /* ArticlesCollectionVIewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF013B42212833D00F59CD1 /* ArticlesCollectionVIewTests.swift */; };
+		0BF013B7221285F900F59CD1 /* PostArticleControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF013B6221285F900F59CD1 /* PostArticleControllerTests.swift */; };
 		DC86726B53D73FC2DECA9729 /* Pods_TwitchTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A8720CE5B1B0818AA928023 /* Pods_TwitchTest.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0BE3DFAB2211786D00D53734 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BC3413121E59E8800BD3886 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0BC3413821E59E8800BD3886;
+			remoteInfo = TwitchTest;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0A8720CE5B1B0818AA928023 /* Pods_TwitchTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TwitchTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +85,11 @@
 		0BE3DF9A2203FE9500D53734 /* FollowersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersTableViewCell.swift; sourceTree = "<group>"; };
 		0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostArticleCell.swift; sourceTree = "<group>"; };
 		0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailCell.swift; sourceTree = "<group>"; };
+		0BE3DFA62211786D00D53734 /* TwitchTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwitchTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0BE3DFAA2211786D00D53734 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0BF013B222117F9100F59CD1 /* AllCommodityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommodityTests.swift; sourceTree = "<group>"; };
+		0BF013B42212833D00F59CD1 /* ArticlesCollectionVIewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesCollectionVIewTests.swift; sourceTree = "<group>"; };
+		0BF013B6221285F900F59CD1 /* PostArticleControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostArticleControllerTests.swift; sourceTree = "<group>"; };
 		42B0C38300061E065A1D7C5B /* Pods-TwitchTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.release.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.release.xcconfig"; sourceTree = "<group>"; };
 		F5AA30C4EABCBB51605B34AA /* Pods-TwitchTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.debug.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,6 +100,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC86726B53D73FC2DECA9729 /* Pods_TwitchTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0BE3DFA32211786D00D53734 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				0BC3413B21E59E8800BD3886 /* TwitchTest */,
+				0BE3DFA72211786D00D53734 /* TwitchTestTests */,
 				0BC3413A21E59E8800BD3886 /* Products */,
 				05663CA9B53A891D4870A6ED /* Pods */,
 				BF33095FDA034C7712383A83 /* Frameworks */,
@@ -157,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				0BC3413921E59E8800BD3886 /* TwitchTest.app */,
+				0BE3DFA62211786D00D53734 /* TwitchTestTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -216,6 +243,17 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
+		0BE3DFA72211786D00D53734 /* TwitchTestTests */ = {
+			isa = PBXGroup;
+			children = (
+				0BE3DFAA2211786D00D53734 /* Info.plist */,
+				0BF013B222117F9100F59CD1 /* AllCommodityTests.swift */,
+				0BF013B42212833D00F59CD1 /* ArticlesCollectionVIewTests.swift */,
+				0BF013B6221285F900F59CD1 /* PostArticleControllerTests.swift */,
+			);
+			path = TwitchTestTests;
+			sourceTree = "<group>";
+		};
 		BF33095FDA034C7712383A83 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +284,24 @@
 			productReference = 0BC3413921E59E8800BD3886 /* TwitchTest.app */;
 			productType = "com.apple.product-type.application";
 		};
+		0BE3DFA52211786D00D53734 /* TwitchTestTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0BE3DFAD2211786D00D53734 /* Build configuration list for PBXNativeTarget "TwitchTestTests" */;
+			buildPhases = (
+				0BE3DFA22211786D00D53734 /* Sources */,
+				0BE3DFA32211786D00D53734 /* Frameworks */,
+				0BE3DFA42211786D00D53734 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0BE3DFAC2211786D00D53734 /* PBXTargetDependency */,
+			);
+			name = TwitchTestTests;
+			productName = TwitchTestTests;
+			productReference = 0BE3DFA62211786D00D53734 /* TwitchTestTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -258,6 +314,11 @@
 				TargetAttributes = {
 					0BC3413821E59E8800BD3886 = {
 						CreatedOnToolsVersion = 10.1;
+					};
+					0BE3DFA52211786D00D53734 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+						TestTargetID = 0BC3413821E59E8800BD3886;
 					};
 				};
 			};
@@ -275,6 +336,7 @@
 			projectRoot = "";
 			targets = (
 				0BC3413821E59E8800BD3886 /* TwitchTest */,
+				0BE3DFA52211786D00D53734 /* TwitchTestTests */,
 			);
 		};
 /* End PBXProject section */
@@ -288,6 +350,13 @@
 				0BC3414421E59E8C00BD3886 /* Assets.xcassets in Resources */,
 				0BC3414221E59E8800BD3886 /* Main.storyboard in Resources */,
 				0B10846C21E732FF006F890E /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0BE3DFA42211786D00D53734 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +452,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0BE3DFA22211786D00D53734 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BF013B322117F9100F59CD1 /* AllCommodityTests.swift in Sources */,
+				0BF013B52212833D00F59CD1 /* ArticlesCollectionVIewTests.swift in Sources */,
+				0BF013B7221285F900F59CD1 /* PostArticleControllerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0BE3DFAC2211786D00D53734 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0BC3413821E59E8800BD3886 /* TwitchTest */;
+			targetProxy = 0BE3DFAB2211786D00D53734 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0BC3414021E59E8800BD3886 /* Main.storyboard */ = {
@@ -557,6 +644,49 @@
 			};
 			name = Release;
 		};
+		0BE3DFAE2211786D00D53734 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Pods/**";
+				INFOPLIST_FILE = TwitchTestTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mySwift.TwitchTestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwitchTest.app/TwitchTest";
+			};
+			name = Debug;
+		};
+		0BE3DFAF2211786D00D53734 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Pods/**";
+				INFOPLIST_FILE = TwitchTestTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mySwift.TwitchTestTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TwitchTest.app/TwitchTest";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -574,6 +704,15 @@
 			buildConfigurations = (
 				0BC3414C21E59E8C00BD3886 /* Debug */,
 				0BC3414D21E59E8C00BD3886 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0BE3DFAD2211786D00D53734 /* Build configuration list for PBXNativeTarget "TwitchTestTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0BE3DFAE2211786D00D53734 /* Debug */,
+				0BE3DFAF2211786D00D53734 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

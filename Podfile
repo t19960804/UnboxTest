@@ -12,4 +12,10 @@ target 'TwitchTest' do
 	pod 'Firebase/Auth'
 	pod 'Firebase/Storage'
 	pod 'JGProgressHUD'
+
+	target 'TwitchTestTests' do
+        inherit! :search_paths
+        pod 'Firebase'
+    end
+	
 end

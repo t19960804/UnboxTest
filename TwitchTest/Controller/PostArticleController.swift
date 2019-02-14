@@ -17,6 +17,7 @@ class PostArticleController: UIViewController {
     var kindOfCategory: String?
     let hud = JGProgressHUD(style: .light)
     let cellID = "Cell"
+    let ref = Database.database().reference()
     lazy var uploadImagesColletionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: self.view.frame.width, height: self.view.frame.height * 0.2)
@@ -41,7 +42,6 @@ class PostArticleController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
-    
     let titleTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +58,6 @@ class PostArticleController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
-    
     let reviewTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -134,6 +133,7 @@ class PostArticleController: UIViewController {
         let tap_4 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_4))
         let tap_5 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_5))
         
+    
         loveImageView_1.addGestureRecognizer(tap_1)
         loveImageView_2.addGestureRecognizer(tap_2)
         loveImageView_3.addGestureRecognizer(tap_3)
@@ -214,19 +214,17 @@ class PostArticleController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
-    func whatKindOfError() -> String?{
+
+    func whatKindOfError() throws{
         if let title = titleTextField.text,let review = reviewTextView.text{
             if title.isEmpty || review.isEmpty || review == "輸入評論..."{
-                return UploadError.NotFillYet.rawValue
+                throw UploadError.NotFillYet
             }else if imageViewsIsEmpty(array: imageButtonsArray){
-                return UploadError.NoImage.rawValue
+                throw UploadError.NoImage
             }else if numberOfHeart() == 0{
-                return UploadError.NoEvaluate.rawValue
-            }else{
-                return nil
+                throw UploadError.NoEvaluate
             }
         }
-        return nil
     }
     func imageViewsIsEmpty(array: [UIButton]) -> Bool{
         if array.count != 3{
@@ -243,28 +241,31 @@ class PostArticleController: UIViewController {
     }
     
     func handleUploadArticle(){
-        let error = whatKindOfError()
-        switch error {
-        case UploadError.NotFillYet.rawValue:
+        do{
+            try whatKindOfError()
+        }catch UploadError.NotFillYet{
             Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
-        case UploadError.NoImage.rawValue:
+            return
+        }catch UploadError.NoImage{
             Alert.alert_BugReport(message: "請選擇照片", title: "錯誤", with: self)
-        case UploadError.NoEvaluate.rawValue:
+            return
+        }catch UploadError.NoEvaluate{
             Alert.alert_BugReport(message: "請給予評價", title: "錯誤", with: self)
-        default:
-            hud.textLabel.text = "上傳中"
-            hud.show(in: self.view, animated: true)
-            let imagesDataArray = compressImageToData(array: imageButtonsArray)
-            for image in imagesDataArray{
-                putDataToStorage(data: image) { (urlArray) in
-                    if urlArray.count == 3{
-                        self.addArticleDataToDataBase(array: urlArray)
-                    }
+            return
+        }catch{
+            Alert.alert_BugReport(message: "不明錯誤", title: "錯誤", with: self)
+            return
+        }
+        hud.textLabel.text = "上傳中"
+        hud.show(in: self.view, animated: true)
+        let imagesDataArray = compressImageToData(array: imageButtonsArray)
+        for image in imagesDataArray{
+            putDataToStorage(data: image) { (urlArray) in
+                if urlArray.count == 3{
+                    self.addArticleDataToDataBase(array: urlArray)
                 }
             }
- 
         }
-
     }
     func compressImageToData(array: [UIButton]) -> [Data]{
         var imagesDataArray = [Data]()
@@ -309,7 +310,7 @@ class PostArticleController: UIViewController {
                                         "review" : review,
                                         "numberOfHeart" : "\(numberOfHeart())",
                                         "date" : getTimeStamp()]
-        let ref = Database.database().reference()
+        
         //插入"文章"
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in
             if let error = error{
@@ -334,7 +335,7 @@ class PostArticleController: UIViewController {
             }
         }
     }
-    
+
     //取得時間
     func getTimeStamp() -> String{
         let date = Date()
@@ -391,7 +392,8 @@ extension PostArticleController: PostArticleCell_Delegate{
         self.present(picker, animated: true, completion: nil)
     }
 }
-enum UploadError: String{
+
+enum UploadError: Error{
     case NotFillYet
     case NoImage
     case NoEvaluate
