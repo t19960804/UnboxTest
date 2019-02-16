@@ -12,7 +12,7 @@ import FirebaseDatabase
 import FirebaseAuth
 
 protocol FollowersTableViewCell_Delegate {
-    func isSubscribing(userUID: String,completion: @escaping (String) -> Void)
+    func isSubscribing(followingUID: String,completion: @escaping (String) -> Void)
 }
 
 
@@ -21,13 +21,13 @@ class FollowersTableViewCell: UITableViewCell {
     var delegate: FollowersTableViewCell_Delegate?
     //
     let ref = Database.database().reference()
-    let userUID = Auth.auth().currentUser?.uid
+    let currentUserUID = Auth.auth().currentUser?.uid
     var user: User?{
         didSet{
             if let imageURl = user?.imageURL,let userName = user?.userName,let userUID = user?.uid{
                 self.userImageView.downLoadImageInCache(downLoadURL: URL(string: imageURl)!)
                 self.nameLabel.text = userName
-                delegate?.isSubscribing(userUID: userUID, completion: { (result) in
+                delegate?.isSubscribing(followingUID: userUID, completion: { (result) in
                     if result == "本人"{
                         self.followButton.isHidden = true
                     }else if result == "已追蹤"{
@@ -92,46 +92,51 @@ class FollowersTableViewCell: UITableViewCell {
         followButton.setTitleColor(titleColor, for: .normal)
         
         if isFollowing{
-            deleteFollowers(followerUID: userUID)
+            deleteFollowers(delete: currentUserUID!, from: userUID, path: "followers")
+            deleteFollowers(delete: userUID, from: currentUserUID!, path: "following")
+
         }else{
-            addFollowers(uid: userUID)
+            addFollowers(add: currentUserUID!, to: userUID, path: "followers")
+            addFollowers(add: userUID, to: currentUserUID!, path: "following")
+
         }
 
     }
-    func addFollowers(uid: String){
-        let userRef = ref.child("使用者").child(userUID!)
+    func addFollowers(add uid1: String,to uid2: String,path: String){
+        let toRef = ref.child("使用者").child(uid2)
         //找尋當前使用者的追蹤名單
-        userRef.observeSingleEvent(of: .value) { (snapshot) in
+        toRef.observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
             //第一次因為沒有followers節點會導致無法轉型,新增追蹤者時手用陣列包住
-            if var follwersArray = dictionary["followers"] as? [String]{
-                follwersArray.append(uid)
-                self.updateFollowers(value: follwersArray)
+            if var array = dictionary[path] as? [String]{
+                array.append(uid1)
+                self.updateFollowers(value: array,to: uid2,path: path)
             }else{
-                self.updateFollowers(value: [uid])
+                self.updateFollowers(value: [uid1],to: uid2,path: path)
             }
             
         }
     }
-    private func updateFollowers(value: [String]){
-        let userRef = ref.child("使用者").child(userUID!)
-        userRef.updateChildValues(["followers" : value]) { (error, ref) in
+    private func updateFollowers(value: [String],to uid: String,path: String){
+        let toRef = ref.child("使用者").child(uid)
+        toRef.updateChildValues([path : value]) { (error, ref) in
             if let error = error{
                 print("error:",error)
                 return
+                
             }
         }
     }
-    func deleteFollowers(followerUID: String){
-        let userRef = ref.child("使用者").child(userUID!)
+    func deleteFollowers(delete uid1: String,from uid2: String,path: String){
+        let fromRef = ref.child("使用者").child(uid2)
         //找尋當前使用者的追蹤名單
-        userRef.observeSingleEvent(of: .value) { (snapshot) in
+        fromRef.observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
-            if let follwersArray = dictionary["followers"] as? [String]{
+            if let follwersArray = dictionary[path] as? [String]{
                 let newFollowersArray = follwersArray.filter({ (uid) -> Bool in
-                    return uid != followerUID
+                    return uid != uid1
                 })
-                self.updateFollowers(value: newFollowersArray)
+                self.updateFollowers(value: newFollowersArray,to: uid2,path: path)
             }
         }
     }

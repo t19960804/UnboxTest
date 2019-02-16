@@ -208,7 +208,6 @@ class UserInfoController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyBoardHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
     @objc func handleChooseImage(){
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -236,8 +235,8 @@ class UserInfoController: UIViewController {
     private func isSubscribing(completion:@escaping (Bool)->Void){
         ref.child("使用者").child(userUID!).observe(.value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
-            if let followersArray = dictionary["followers"] as? [String]{
-                for items in followersArray{
+            if let followingArray = dictionary["following"] as? [String]{
+                for items in followingArray{
                     if items == self.authorUID{
                         completion(true)
                         return
@@ -248,41 +247,42 @@ class UserInfoController: UIViewController {
         }
         
     }
-    func addFollowers(follwerUID: String){
-        let userRef = ref.child("使用者").child(userUID!)
+    func addFollowData(add uid1: String,to uid2: String,path: String){
+        let toRef = ref.child("使用者").child(uid2)
         //找尋當前使用者的追蹤名單
-        userRef.observeSingleEvent(of: .value) { (snapshot) in
+        toRef.observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
             //第一次因為沒有followers節點會導致無法轉型,新增追蹤者時手用陣列包住
-            if var follwersArray = dictionary["followers"] as? [String]{
-                follwersArray.append(follwerUID)
-                self.updateFollowers(value: follwersArray)
+            if var array = dictionary[path] as? [String]{
+                array.append(uid1)
+                self.updateFollowData(value: array,to: uid2,path: path)
             }else{
-                self.updateFollowers(value: [self.authorUID])
+                self.updateFollowData(value: [uid1],to: uid2,path: path)
             }
-
+            
         }
     }
-
-    private func updateFollowers(value: [String]){
-        let userRef = ref.child("使用者").child(userUID!)
-        userRef.updateChildValues(["followers" : value]) { (error, ref) in
+    
+    private func updateFollowData(value: [String],to uid: String,path: String){
+        let toRef = ref.child("使用者").child(uid)
+        toRef.updateChildValues([path : value]) { (error, ref) in
             if let error = error{
                 print("error:",error)
                 return
+                
             }
         }
     }
-    func deleteFollowers(followerUID: String){
-        let userRef = ref.child("使用者").child(userUID!)
+    func deleteFollowData(delete uid1: String,from uid2: String,path: String){
+        let fromRef = ref.child("使用者").child(uid2)
         //找尋當前使用者的追蹤名單
-        userRef.observeSingleEvent(of: .value) { (snapshot) in
+        fromRef.observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
-            if let follwersArray = dictionary["followers"] as? [String]{
+            if let follwersArray = dictionary[path] as? [String]{
                 let newFollowersArray = follwersArray.filter({ (uid) -> Bool in
-                    return uid != followerUID
+                    return uid != uid1
                 })
-                self.updateFollowers(value: newFollowersArray)
+                self.updateFollowData(value: newFollowersArray,to: uid2,path: path)
             }
         }
     }
@@ -304,9 +304,11 @@ class UserInfoController: UIViewController {
         guard let authorUID = user?.uid else{return}
 
         if notFollwYet{
-            addFollowers(follwerUID: authorUID)
+            addFollowData(add: userUID!, to: authorUID,path: "followers")
+            addFollowData(add: authorUID, to: userUID!,path: "following")
         }else{
-            deleteFollowers(followerUID: authorUID)
+            deleteFollowData(delete: userUID!,from: authorUID,path: "followers")
+            deleteFollowData(delete: authorUID,from: userUID!,path: "following")
         }
     }
     @objc func handleCheckArticles(){

@@ -74,10 +74,10 @@ class FollowersController: UITableViewController {
     
 }
 extension FollowersController: FollowersTableViewCell_Delegate{
-    func isSubscribing(userUID: String, completion: @escaping (String) -> Void) {
+    func isSubscribing(followingUID: String, completion: @escaping (String) -> Void) {
         let ref = Database.database().reference()
         guard let currentUserUID = Auth.auth().currentUser?.uid else{return}
-        if currentUserUID == userUID{
+        if currentUserUID == followingUID{
             completion("本人")
             return
         }
@@ -86,11 +86,11 @@ extension FollowersController: FollowersTableViewCell_Delegate{
         //會產生三種情況,本人 / 已追蹤 / 未追蹤
         ref.child("使用者").child(currentUserUID).observeSingleEvent(of: .value) { (snapshot) in
             let dictionary = snapshot.value as! [String : Any]
-            if let followers = dictionary["followers"] as? [String]{
+            if let following = dictionary["following"] as? [String]{
                 //比對到了就return,不然會繼續比較
                 //若持續沒比對到,就不要return,讓它繼續比
-                for follower in followers{
-                    if follower == userUID{
+                for follower in following{
+                    if follower == followingUID{
                         completion("已追蹤")
                         return
                     }else{
