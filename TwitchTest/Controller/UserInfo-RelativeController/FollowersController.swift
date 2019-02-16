@@ -21,7 +21,7 @@ class FollowersController: UITableViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "尚無追蹤!"
         label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.textColor = specialGray2
+        label.textColor = .specialGray2
         return label
     }()
     

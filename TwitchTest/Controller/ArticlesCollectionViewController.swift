@@ -35,7 +35,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "尚無文章!"
         label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.textColor = specialGray2
+        label.textColor = .specialGray2
         return label
     }()
     let pencilImage = UIImage(named: "edit")
@@ -74,7 +74,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
     }
     func setUpCollectionView(){
         self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialWhite
+        self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
     }

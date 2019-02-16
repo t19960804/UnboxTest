@@ -24,7 +24,7 @@ class CategoryCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 8
-        imageView.tintColor = specialWhite
+        imageView.tintColor = .specialWhite
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -32,7 +32,7 @@ class CategoryCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = specialWhite
+        label.textColor = .specialWhite
         return label
     }()
     
@@ -45,7 +45,7 @@ class CategoryCell: UICollectionViewCell {
         self.contentView.layer.cornerRadius = 8
         self.contentView.layer.masksToBounds = true
         
-        self.backgroundColor = themeColor
+        self.backgroundColor = UIColor.themePink
         self.layer.shadowOffset = CGSize(width: 2, height: 2)
         self.layer.shadowOpacity = 0.7
         self.layer.shadowRadius = 2

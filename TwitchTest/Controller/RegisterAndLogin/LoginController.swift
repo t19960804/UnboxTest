@@ -12,15 +12,6 @@ import FirebaseAuth
 import JGProgressHUD
 
 
-
-let themeColor = UIColor(red: 252/255, green: 81/255, blue: 133/255, alpha: 1)
-let darkHeartColor = UIColor(red: 233/255, green: 47/255, blue: 96/255, alpha: 1)
-let specialWhite = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
-let specialCyan = UIColor(red: 63/255, green: 193/255, blue: 201/255, alpha: 1)
-let specialGray = UIColor(red: 228/255, green: 231/255, blue: 233/255, alpha: 1)
-let specialGray2 = UIColor(red: 52/255, green: 52/255, blue: 52/255, alpha: 1)
-let shadowGray = UIColor(red: 120/255, green: 121/255, blue: 122/255, alpha: 1.0)
-
 let safeAreaHeight_Top = UIApplication.shared.keyWindow!.safeAreaInsets.top
 let safeAreaHeight_Bottom = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
 
@@ -32,7 +23,7 @@ class LoginController: UIViewController {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "unboxing")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = themeColor
+        imageView.tintColor = UIColor.themePink
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -40,15 +31,15 @@ class LoginController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "開箱趣"
-        label.textColor = themeColor
+        label.textColor = UIColor.themePink
         label.font = UIFont.boldSystemFont(ofSize: 25)
         return label
     }()
     let accountTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.textColor = themeColor
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入帳號...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
+        textField.textColor = UIColor.themePink
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入帳號...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         return textField
     }()
     let label_1: UILabel = {
@@ -56,7 +47,7 @@ class LoginController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "帳號"
-        label.textColor = themeColor
+        label.textColor = UIColor.themePink
         return label
     }()
     let label_2: UILabel = {
@@ -65,39 +56,39 @@ class LoginController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "密碼"
         
-        label.textColor = themeColor
+        label.textColor = UIColor.themePink
         return label
     }()
     let bottomLine_1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = themeColor
+        view.backgroundColor = UIColor.themePink
         return view
     }()
     let bottomLine_2: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = themeColor
+        view.backgroundColor = UIColor.themePink
 
         return view
     }()
     let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入密碼...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入密碼...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         textField.backgroundColor = UIColor.clear
-        textField.textColor = themeColor
+        textField.textColor = UIColor.themePink
         textField.isSecureTextEntry = true
         return textField
     }()
     let loginButton: UIButton = {
        let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("登入", for: UIControl.State.normal)
-        button.backgroundColor = themeColor
+        button.backgroundColor = UIColor.themePink
 
        
         
-        button.setTitleColor(specialWhite, for: UIControl.State.normal)
+        button.setTitleColor(.specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.masksToBounds = true
@@ -108,11 +99,11 @@ class LoginController: UIViewController {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("註冊", for: UIControl.State.normal)
         button.backgroundColor = UIColor.clear
-        button.setTitleColor(themeColor, for: UIControl.State.normal)
+        button.setTitleColor(UIColor.themePink, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.borderWidth = 2
-        button.layer.borderColor = themeColor.cgColor
+        button.layer.borderColor = UIColor.themePink.cgColor
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return button
@@ -129,7 +120,7 @@ class LoginController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = specialWhite
+        self.view.backgroundColor = .specialWhite
         
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)

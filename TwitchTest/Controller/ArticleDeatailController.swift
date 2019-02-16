@@ -86,14 +86,14 @@ class ArticleDeatailController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = specialWhite
+        label.textColor = .specialWhite
         return label
     }()
     
 
     let reviewTextView: UITextView = {
         let textView = UITextView()
-        textView.backgroundColor = specialWhite
+        textView.backgroundColor = .specialWhite
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.font = UIFont.systemFont(ofSize: 20)
         textView.showsVerticalScrollIndicator = false
@@ -108,7 +108,7 @@ class ArticleDeatailController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = specialWhite
+        self.view.backgroundColor = .specialWhite
         self.view.addSubview(myScrollView)
         self.navigationItem.title = "商品詳情"
         detailCollectionView.delegate = self

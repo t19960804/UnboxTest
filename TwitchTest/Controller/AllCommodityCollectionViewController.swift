@@ -54,7 +54,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     }
     func setUpCollectionView(){
         self.collectionView!.register(CategoryCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.backgroundColor = specialWhite
+        self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
     }

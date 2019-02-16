@@ -36,7 +36,7 @@ class UserInfoCell: UICollectionViewCell {
         view.layer.shadowOpacity = 0.7
         view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 2
-        view.layer.shadowColor = specialGray2.cgColor
+        view.layer.shadowColor = UIColor.specialGray2.cgColor
         return view
     }()
     let commodityImageView: UIImageView = {
@@ -44,7 +44,7 @@ class UserInfoCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = specialWhite
+        imageView.backgroundColor = .specialWhite
         return imageView
     }()
     let commodityNameLabel: UILabel = {
@@ -52,7 +52,7 @@ class UserInfoCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "這只是測試這只是測試這只是測試這只是測試這只是測試"
-        label.textColor = specialWhite
+        label.textColor = .specialWhite
         return label
     }()
     lazy var deleteButton: UIButton = {
@@ -63,11 +63,11 @@ class UserInfoCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(handleDeleteArticle), for: .touchUpInside)
         return button
     }()
-    let loveImageView_1 = LoveImageView(tintColor: themeColor)
-    let loveImageView_2 = LoveImageView(tintColor: themeColor)
-    let loveImageView_3 = LoveImageView(tintColor: themeColor)
-    let loveImageView_4 = LoveImageView(tintColor: themeColor)
-    let loveImageView_5 = LoveImageView(tintColor: themeColor)
+    let loveImageView_1 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_2 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_3 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_4 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_5 = LoveImageView(tintColor: UIColor.themePink)
     
     
     lazy var loveImageStackView: UIStackView = {
@@ -134,7 +134,7 @@ class UserInfoCell: UICollectionViewCell {
     func lightUpTheHearts(number: Int){
         for i in 0...loveImageViewArray.count - 1{
             if i >= number{
-                loveImageViewArray[i].tintColor = specialGray
+                loveImageViewArray[i].tintColor = .specialGray
             }
         }
     }

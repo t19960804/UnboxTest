@@ -31,9 +31,9 @@ class FollowersTableViewCell: UITableViewCell {
                     if result == "本人"{
                         self.followButton.isHidden = true
                     }else if result == "已追蹤"{
-                        self.setUpFollowButton(title: result, titleColor: specialWhite, backgroundColor: specialCyan)
+                        self.setUpFollowButton(title: result, titleColor: .specialWhite, backgroundColor: .specialCyan)
                     }else{
-                        self.setUpFollowButton(title: result, titleColor: specialCyan, backgroundColor: specialWhite)
+                        self.setUpFollowButton(title: result, titleColor: .specialCyan, backgroundColor: .specialWhite)
 
                     }
                 })
@@ -54,15 +54,15 @@ class FollowersTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = specialGray2
+        label.textColor = .specialGray2
         return label
     }()
     lazy var followButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("追蹤", for: .normal)
-        button.setTitleColor(specialCyan, for: .normal)
-        button.backgroundColor = specialWhite
+        button.setTitleColor(.specialCyan, for: .normal)
+        button.backgroundColor = .specialWhite
         button.layer.cornerRadius = 8
         button.clipsToBounds = true
         button.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
@@ -85,9 +85,9 @@ class FollowersTableViewCell: UITableViewCell {
         guard let userUID = user?.uid else{return}
         let isFollowing = followButton.titleLabel?.text == "已追蹤"
         let title = isFollowing ? "追蹤" : "已追蹤"
-        let titleColor = isFollowing ? specialCyan : specialWhite
+        let titleColor: UIColor = isFollowing ? .specialCyan : .specialWhite
         
-        followButton.backgroundColor = isFollowing ? specialWhite :specialCyan
+        followButton.backgroundColor = isFollowing ? .specialWhite : .specialCyan
         followButton.setTitle(title, for: .normal)
         followButton.setTitleColor(titleColor, for: .normal)
         

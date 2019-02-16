@@ -35,13 +35,13 @@ class ArticlesCell: UICollectionViewCell {
     let backView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = specialWhite
+        view.backgroundColor = .specialWhite
         view.layer.cornerRadius = 10
         view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 2
 
         view.layer.shadowOpacity = 0.7
-        view.layer.shadowColor = shadowGray.cgColor
+        view.layer.shadowColor = UIColor.shadowGray.cgColor
         return view
     }()
     let background_commodityImageView: UIView = {
@@ -52,13 +52,13 @@ class ArticlesCell: UICollectionViewCell {
         view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.7
-        view.layer.shadowColor = shadowGray.cgColor
+        view.layer.shadowColor = UIColor.shadowGray.cgColor
         return view
     }()
     let commodityImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = specialWhite
+        imageView.backgroundColor = .specialWhite
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
@@ -83,7 +83,7 @@ class ArticlesCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = specialWhite
+        label.textColor = .specialWhite
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 0
         return label
@@ -91,7 +91,7 @@ class ArticlesCell: UICollectionViewCell {
     let reviewTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = specialWhite
+        textView.backgroundColor = .specialWhite
         textView.font = UIFont.systemFont(ofSize: 17)
         textView.textContainer.lineBreakMode = .byTruncatingTail
         textView.isEditable = false
@@ -103,17 +103,17 @@ class ArticlesCell: UICollectionViewCell {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("查看", for: UIControl.State.normal)
-        button.setTitleColor(specialWhite, for: UIControl.State.normal)
-        button.backgroundColor = themeColor
+        button.setTitleColor(.specialWhite, for: UIControl.State.normal)
+        button.backgroundColor = UIColor.themePink
         button.layer.cornerRadius = 5
         button.addTarget(self, action: #selector(handleCheckCommodity), for: .touchUpInside)
         return button
     }()
-    let loveImageView_1 = LoveImageView(tintColor: themeColor)
-    let loveImageView_2 = LoveImageView(tintColor: themeColor)
-    let loveImageView_3 = LoveImageView(tintColor: themeColor)
-    let loveImageView_4 = LoveImageView(tintColor: themeColor)
-    let loveImageView_5 = LoveImageView(tintColor: themeColor)
+    let loveImageView_1 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_2 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_3 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_4 = LoveImageView(tintColor: UIColor.themePink)
+    let loveImageView_5 = LoveImageView(tintColor: UIColor.themePink)
     
     lazy var loveImageStackView: UIStackView = {
         let stackView = UIStackView()
@@ -164,7 +164,7 @@ class ArticlesCell: UICollectionViewCell {
     func lightUpTheHearts(number: Int){
         for i in 0...loveImageViewArray.count - 1{
             if i >= number{
-                loveImageViewArray[i].tintColor = specialGray
+                loveImageViewArray[i].tintColor = .specialGray
             }
         }
     }

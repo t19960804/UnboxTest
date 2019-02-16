@@ -22,7 +22,7 @@ class ArticlesController: UICollectionViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "尚無文章!"
         label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.textColor = specialGray2
+        label.textColor = .specialGray2
         return label
     }()
     override func viewWillAppear(_ animated: Bool) {
@@ -34,7 +34,7 @@ class ArticlesController: UICollectionViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView.backgroundColor = specialWhite
+        self.collectionView.backgroundColor = .specialWhite
         self.navigationItem.title = "過往文章"
         self.collectionView!.register(UserInfoCell.self, forCellWithReuseIdentifier: cellID)
         if let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{

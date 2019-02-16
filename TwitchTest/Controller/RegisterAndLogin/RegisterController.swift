@@ -19,13 +19,13 @@ class RegisterController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "user256")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = themeColor
+        imageView.tintColor = UIColor.themePink
         imageView.backgroundColor = UIColor.clear
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
         imageView.layer.cornerRadius = 100
-        imageView.layer.borderColor = themeColor.cgColor
+        imageView.layer.borderColor = UIColor.themePink.cgColor
         imageView.layer.borderWidth = 3
         imageView.isUserInteractionEnabled = true
         //手勢
@@ -39,20 +39,20 @@ class RegisterController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "帳號"
-        label.textColor = themeColor
+        label.textColor = UIColor.themePink
         return label
     }()
     let accountTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.textColor = themeColor
-        textField.attributedPlaceholder = NSAttributedString(string: "設定帳號...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
+        textField.textColor = UIColor.themePink
+        textField.attributedPlaceholder = NSAttributedString(string: "設定帳號...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         return textField
     }()
     let bottomLine_1: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = themeColor
+        view.backgroundColor = UIColor.themePink
         return view
     }()
     //
@@ -62,22 +62,22 @@ class RegisterController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "密碼"
         
-        label.textColor = themeColor
+        label.textColor = UIColor.themePink
         return label
     }()
     let passwordTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.attributedPlaceholder = NSAttributedString(string: "設定密碼(至少六位數)...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
+        textField.attributedPlaceholder = NSAttributedString(string: "設定密碼(至少六位數)...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         textField.backgroundColor = UIColor.clear
-        textField.textColor = themeColor
+        textField.textColor = UIColor.themePink
         textField.isSecureTextEntry = true
         return textField
     }()
     let bottomLine_2: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = themeColor
+        view.backgroundColor = UIColor.themePink
         return view
     }()
     //
@@ -86,29 +86,29 @@ class RegisterController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.text = "暱稱"
-        label.textColor = themeColor
+        label.textColor = UIColor.themePink
         return label
     }()
     let userNameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.attributedPlaceholder = NSAttributedString(string: "設定暱稱...", attributes: [NSAttributedString.Key.foregroundColor : themeColor])
+        textField.attributedPlaceholder = NSAttributedString(string: "設定暱稱...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         textField.backgroundColor = UIColor.clear
-        textField.textColor = themeColor
+        textField.textColor = UIColor.themePink
         return textField
     }()
     let bottomLine_3: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = themeColor
+        view.backgroundColor = UIColor.themePink
         return view
     }()
     //
     let registerButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("註冊", for: UIControl.State.normal)
-        button.backgroundColor = themeColor
-        button.setTitleColor(specialWhite, for: UIControl.State.normal)
+        button.backgroundColor = UIColor.themePink
+        button.setTitleColor(.specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.masksToBounds = true
@@ -119,11 +119,11 @@ class RegisterController: UIViewController {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("取消", for: UIControl.State.normal)
         button.backgroundColor = UIColor.clear
-        button.setTitleColor(themeColor, for: UIControl.State.normal)
+        button.setTitleColor(UIColor.themePink, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
         button.layer.borderWidth = 2
-        button.layer.borderColor = themeColor.cgColor
+        button.layer.borderColor = UIColor.themePink.cgColor
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return button
@@ -140,7 +140,7 @@ class RegisterController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = specialWhite
+        self.view.backgroundColor = .specialWhite
         
         self.view.addSubview(uploadingImageView)
         self.view.addSubview(label_1)

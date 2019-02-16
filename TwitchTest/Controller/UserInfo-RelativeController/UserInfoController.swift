@@ -59,14 +59,14 @@ class UserInfoController: UIViewController {
         imageView.layer.cornerRadius = 75
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.borderColor = specialWhite.cgColor
+        imageView.layer.borderColor = UIColor.specialWhite.cgColor
         imageView.layer.borderWidth = 4
         return imageView
     }()
 
-    let userNameLabel = UserInfoLabel(content: "", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
-    let follwerLabel = UserInfoLabel(content: "追蹤人數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
-    let numberOfArticleLabel = UserInfoLabel(content: "文章數", fontSize: .boldSystemFont(ofSize: 18), textColor: specialWhite)
+    let userNameLabel = UserInfoLabel(content: "", fontSize: .boldSystemFont(ofSize: 18), textColor: .specialWhite)
+    let follwerLabel = UserInfoLabel(content: "追蹤人數", fontSize: .boldSystemFont(ofSize: 18), textColor: .specialWhite)
+    let numberOfArticleLabel = UserInfoLabel(content: "文章數", fontSize: .boldSystemFont(ofSize: 18), textColor: .specialWhite)
     let aboutMeLabel = UserInfoLabel(content: "關於我", fontSize: .boldSystemFont(ofSize: 25), textColor: UIColor.black)
     lazy var editBarButton = UIBarButtonItem(title: "編輯", style: .plain, target: self, action: #selector(handleEditing))
 
@@ -74,8 +74,8 @@ class UserInfoController: UIViewController {
         let button = UIButton(type: UIButton.ButtonType.system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "camera24")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = specialWhite
-        button.backgroundColor = specialCyan
+        button.tintColor = .specialWhite
+        button.backgroundColor = .specialCyan
         button.layer.cornerRadius = 20
         button.isHidden = true
         button.clipsToBounds = true
@@ -87,7 +87,7 @@ class UserInfoController: UIViewController {
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.textColor = specialWhite
+        label.textColor = .specialWhite
         label.textAlignment = .center
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleCheckFollowers))
         label.addGestureRecognizer(tap)
@@ -96,7 +96,7 @@ class UserInfoController: UIViewController {
     lazy var articleNumberLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = specialWhite
+        label.textColor = .specialWhite
         label.font = .boldSystemFont(ofSize: 30)
         label.isUserInteractionEnabled = true
         label.textAlignment = .center
@@ -112,7 +112,7 @@ class UserInfoController: UIViewController {
         textView.font = UIFont.systemFont(ofSize: 18)
         textView.isScrollEnabled = false
         textView.textContainer.lineBreakMode = .byTruncatingTail
-        textView.backgroundColor = specialWhite
+        textView.backgroundColor = .specialWhite
         textView.isEditable = false
         return textView
     }()
@@ -129,12 +129,12 @@ class UserInfoController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("追蹤", for: .normal)
-        button.setTitleColor(specialCyan, for: .normal)
-        button.backgroundColor = specialWhite
+        button.setTitleColor(.specialCyan, for: .normal)
+        button.backgroundColor = .specialWhite
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 10
         button.layer.shadowOffset = CGSize(width: 0, height: 3)
-        button.layer.shadowColor = shadowGray.cgColor
+        button.layer.shadowColor = UIColor.shadowGray.cgColor
         button.layer.shadowOpacity = 0.7
         button.layer.shadowRadius = 2
         button.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
@@ -157,7 +157,7 @@ class UserInfoController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = specialWhite
+        self.view.backgroundColor = .specialWhite
         self.view.addSubview(backImageView)
         self.view.addSubview(backView)
         self.view.addSubview(userImageView)
@@ -186,9 +186,9 @@ class UserInfoController: UIViewController {
             self.articleNumberLabel.text = String(self.articlesArray.count)
         }
         isSubscribing { (result) in
-            let titleColor = result ? specialWhite : specialCyan
+            let titleColor: UIColor = result ? .specialWhite : .specialCyan
             let title = result ? "已追蹤" : "追蹤"
-            self.followerButton.backgroundColor = result ? specialCyan : specialWhite
+            self.followerButton.backgroundColor = result ? .specialCyan : .specialWhite
             self.followerButton.setTitle(title, for: .normal)
             self.followerButton.setTitleColor(titleColor, for: .normal)
         }
@@ -295,10 +295,10 @@ class UserInfoController: UIViewController {
     }
     @objc func handleFollow(){
         //按下時判斷背景顏色是否為白色,白色代表未追蹤
-        let notFollwYet = followerButton.backgroundColor == specialWhite
-        let titleColor: UIColor = notFollwYet ? specialWhite : specialCyan
+        let notFollwYet = followerButton.backgroundColor == .specialWhite
+        let titleColor: UIColor = notFollwYet ? .specialWhite : .specialCyan
         let title: String = notFollwYet ? "已追蹤" : "追蹤"
-        followerButton.backgroundColor = notFollwYet ? specialCyan : specialWhite
+        followerButton.backgroundColor = notFollwYet ? .specialCyan : .specialWhite
         followerButton.setTitleColor(titleColor, for: .normal)
         followerButton.setTitle(title, for: .normal)
         guard let authorUID = user?.uid else{return}

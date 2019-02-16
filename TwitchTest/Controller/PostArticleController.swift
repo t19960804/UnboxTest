@@ -47,7 +47,7 @@ class PostArticleController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 20)
         textField.textColor = UIColor.black
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入標題...", attributes: [NSAttributedString.Key.foregroundColor : specialGray])
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入標題...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.specialGray])
         return textField
     }()
     let reviewBackGround: UIView = {
@@ -63,17 +63,17 @@ class PostArticleController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = UIColor.white
         textView.text = "輸入評論..."
-        textView.textColor = specialGray
+        textView.textColor = .specialGray
         textView.layer.cornerRadius = 8
         textView.font = UIFont.systemFont(ofSize: 20)
         textView.layer.masksToBounds = true
         return textView
     }()
-    let loveImageView_1 = LoveImageView(tintColor: specialWhite)
-    let loveImageView_2 = LoveImageView(tintColor: specialWhite)
-    let loveImageView_3 = LoveImageView(tintColor: specialWhite)
-    let loveImageView_4 = LoveImageView(tintColor: specialWhite)
-    let loveImageView_5 = LoveImageView(tintColor: specialWhite)
+    let loveImageView_1 = LoveImageView(tintColor: .specialWhite)
+    let loveImageView_2 = LoveImageView(tintColor: .specialWhite)
+    let loveImageView_3 = LoveImageView(tintColor: .specialWhite)
+    let loveImageView_4 = LoveImageView(tintColor: .specialWhite)
+    let loveImageView_5 = LoveImageView(tintColor: .specialWhite)
     lazy var heartStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,7 +95,7 @@ class PostArticleController: UIViewController {
         uploadImagesColletionView.delegate = self
         uploadImagesColletionView.dataSource = self
         
-        self.view.backgroundColor = specialWhite
+        self.view.backgroundColor = .specialWhite
         
         
         self.view.addSubview(titleBackGround)
@@ -149,14 +149,14 @@ class PostArticleController: UIViewController {
     //點擊愛心變色
     func pressHeart(number: Int){
         for i in 0...loveImageViews.count - 1{
-            loveImageViews[i].tintColor = (i <= number - 1) ? darkHeartColor : specialWhite
+            loveImageViews[i].tintColor = (i <= number - 1) ? .darkHeartColor : .specialWhite
         }
     }
     //判斷幾顆愛心
     func numberOfHeart() -> Int{
         var count = 0
         for love in loveImageViews{
-            if love.tintColor == darkHeartColor{
+            if love.tintColor == .darkHeartColor{
                 count += 1
             }
         }
@@ -351,7 +351,7 @@ extension PostArticleController: UITextViewDelegate{
  
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if reviewTextView.textColor == specialGray{
+        if reviewTextView.textColor == .specialGray{
             reviewTextView.text = ""
             reviewTextView.textColor = UIColor.black
         }
@@ -359,7 +359,7 @@ extension PostArticleController: UITextViewDelegate{
     }
     func textViewDidEndEditing(_ textView: UITextView) {
         if reviewTextView.text.isEmpty{
-            reviewTextView.textColor = specialGray
+            reviewTextView.textColor = .specialGray
             reviewTextView.text = "輸入評論..."
         }
         
