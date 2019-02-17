@@ -18,7 +18,7 @@ let safeAreaHeight_Bottom = UIApplication.shared.keyWindow!.safeAreaInsets.botto
 
 class LoginController: UIViewController {
     
-    
+    let cellID = "Cell"
     let logoImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,59 +35,18 @@ class LoginController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 25)
         return label
     }()
-    let accountTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.textColor = UIColor.themePink
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入帳號...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
-        return textField
+    lazy var loginTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(LoginCell.self, forCellReuseIdentifier: cellID)
+        tableView.backgroundColor = UIColor.specialWhite
+        return tableView
     }()
-    let label_1: UILabel = {
-      let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.text = "帳號"
-        label.textColor = UIColor.themePink
-        return label
-    }()
-    let label_2: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.text = "密碼"
-        
-        label.textColor = UIColor.themePink
-        return label
-    }()
-    let bottomLine_1: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.themePink
-        return view
-    }()
-    let bottomLine_2: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.themePink
 
-        return view
-    }()
-    let passwordTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入密碼...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
-        textField.backgroundColor = UIColor.clear
-        textField.textColor = UIColor.themePink
-        textField.isSecureTextEntry = true
-        return textField
-    }()
     let loginButton: UIButton = {
        let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("登入", for: UIControl.State.normal)
         button.backgroundColor = UIColor.themePink
-
-       
-        
         button.setTitleColor(.specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.layer.cornerRadius = 25
@@ -120,20 +79,14 @@ class LoginController: UIViewController {
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .specialWhite
         
+        self.view.backgroundColor = .specialWhite
+        loginTableView.delegate = self
+        loginTableView.dataSource = self
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)
-        self.view.addSubview(label_1)
-        self.view.addSubview(accountTextField)
-        self.view.addSubview(bottomLine_1)
-        self.view.addSubview(label_2)
-        self.view.addSubview(passwordTextField)
-        self.view.addSubview(bottomLine_2)
+        self.view.addSubview(loginTableView)
         self.view.addSubview(stackView)
-        
-        accountTextField.text = "Asiagodtone@q.com"
-        passwordTextField.text = "Qqqqqq"
         
         setUpConstraints()
         addKeyboardObserver()
@@ -142,45 +95,19 @@ class LoginController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     func setUpConstraints(){
         logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 80).isActive = true
+        logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 60).isActive = true
         logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         logoImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
         sloganLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         sloganLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 10).isActive = true
         
-        label_1.topAnchor.constraint(equalTo: sloganLabel.bottomAnchor, constant: 70).isActive = true
-        label_1.leftAnchor.constraint(equalTo: accountTextField.leftAnchor).isActive = true
-        
-        
-        accountTextField.topAnchor.constraint(equalTo: label_1.bottomAnchor, constant: 5).isActive = true
-        accountTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        accountTextField.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
-        accountTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        bottomLine_1.topAnchor.constraint(equalTo: accountTextField.bottomAnchor).isActive = true
-        bottomLine_1.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        bottomLine_1.widthAnchor.constraint(equalTo: accountTextField.widthAnchor).isActive = true
-        bottomLine_1.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        
-        
-        label_2.topAnchor.constraint(equalTo: bottomLine_1.bottomAnchor, constant: 15).isActive = true
-        label_2.leftAnchor.constraint(equalTo: passwordTextField.leftAnchor).isActive = true
-        
-        
-        passwordTextField.topAnchor.constraint(equalTo: label_2.bottomAnchor, constant: 5).isActive = true
-        passwordTextField.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        passwordTextField.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
-        passwordTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        bottomLine_2.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor).isActive = true
-        bottomLine_2.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        bottomLine_2.widthAnchor.constraint(equalTo: passwordTextField.widthAnchor).isActive = true
-        bottomLine_2.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        
-        
-        
-        stackView.topAnchor.constraint(equalTo: bottomLine_2.bottomAnchor, constant: 50).isActive = true
+        loginTableView.topAnchor.constraint(equalTo: sloganLabel.bottomAnchor, constant: 40).isActive = true
+        loginTableView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        loginTableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
+        loginTableView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+
+        stackView.topAnchor.constraint(equalTo: loginTableView.bottomAnchor, constant: 50).isActive = true
         stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         stackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
         stackView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3).isActive = true
@@ -209,15 +136,16 @@ class LoginController: UIViewController {
     }
     //MARK: - Selector方法
     @objc func handleLogin(){
+        let account = getInputValue().account
+        let password = getInputValue().password
         let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = "登入中..."
         hud.show(in: self.view, animated: true)
-        if let account = accountTextField.text,let password = passwordTextField.text{
-            if account.isEmpty || password.isEmpty{
-                hud.dismiss(afterDelay: 1)
-                Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
-            }else{
-                Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
+        if account.isEmpty || password.isEmpty{
+            hud.dismiss(afterDelay: 1)
+            Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
+        }else{
+            Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
                     if let error = error{
                         hud.dismiss(afterDelay: 1)
                         let errorCode = (error as NSError).code
@@ -227,11 +155,19 @@ class LoginController: UIViewController {
                         UserDefaults.standard.setIsLogIn(value: true)
                         self.dismiss(animated: true, completion: nil)
                     }
-                    
+
                 }
-                
-            }
         }
+
+    }
+    func getInputValue() -> (account: String,password: String){
+        let accountIndexPath = IndexPath(row: 0, section: 0)
+        let passwordIndexPath = IndexPath(row: 0, section: 1)
+        let accountCell = loginTableView.cellForRow(at: accountIndexPath) as! LoginCell
+        let passwordCell = loginTableView.cellForRow(at: passwordIndexPath) as! LoginCell
+        let account = accountCell.inputTextField.text
+        let password = passwordCell.inputTextField.text
+        return (account! , password!)
     }
     @objc func handleRegister(){
         self.present(RegisterController(), animated: true, completion: nil)
@@ -252,6 +188,50 @@ class LoginController: UIViewController {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         }, completion: nil)
+    }
+}
+
+extension LoginController: UITableViewDelegate,UITableViewDataSource{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = loginTableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! LoginCell
+        cell.inputTextField.isSecureTextEntry = indexPath.section == 0 ? false : true
+        cell.inputTextField.text = indexPath.section == 0 ? "Asiagodtone@q.com" : "Qqqqqq"
+
+        let placeHolder = indexPath.section == 0 ? "輸入帳號..." : "輸入密碼..."
+        cell.inputTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
+        return cell
+    }
+    //Header高
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    //Footer高
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 20
+    }
+    //Header
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        let titleLabel = UILabel(frame: CGRect(x: 3, y: 3, width: 100, height: 10))
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.text = section == 0 ? "帳號" : "密碼"
+        titleLabel.textColor = .themePink
+        view.addSubview(titleLabel)
+        
+        return view
+    }
+    //Footer
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }
 }
 class LeftPaddedTextField: UITextField {

@@ -175,7 +175,7 @@ class UserInfoController: UIViewController {
         setUpBottomView()
         addKeyBoardObserver()
         fetchArticles { (user) in
-            self.abouMeTextView.text = user.aboutMe
+            self.abouMeTextView.text = user.aboutMe ?? ""
             self.articlesArray.sort {$0.date! > $1.date!}
             self.articleNumberLabel.text = String(self.articlesArray.count)
         }
