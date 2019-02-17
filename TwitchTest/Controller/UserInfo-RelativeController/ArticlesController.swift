@@ -16,7 +16,7 @@ class ArticlesController: UICollectionViewController {
     let cellID = "Cell"
     var articlesArray = [Article]()
     let ref = Database.database().reference()
-    let hud = JGProgressHUD(style: .light)
+    let hud = JGProgressHUD(style: .dark)
     let messageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +48,9 @@ class ArticlesController: UICollectionViewController {
         observeArticlesRemove {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
+                if self.articlesArray.isEmpty{
+                    self.messageLabel.isHidden = false
+                }
             }
         }
         messageLabel.isHidden = articlesArray.isEmpty ? false : true

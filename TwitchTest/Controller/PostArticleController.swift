@@ -15,7 +15,7 @@ import JGProgressHUD
 class PostArticleController: UIViewController {
     var loveImageViews = [UIImageView]()
     var kindOfCategory: String?
-    let hud = JGProgressHUD(style: .light)
+    let hud = JGProgressHUD(style: .dark)
     let cellID = "Cell"
     let ref = Database.database().reference()
     lazy var uploadImagesColletionView: UICollectionView = {

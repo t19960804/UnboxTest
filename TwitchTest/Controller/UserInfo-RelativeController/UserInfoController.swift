@@ -29,7 +29,8 @@ class UserInfoController: UIViewController {
     var timer: Timer?
     let ref = Database.database().reference()
     var authorUID = String()
-    
+    let hud = JGProgressHUD(style: .dark)
+
     let userUID = Auth.auth().currentUser?.uid
     var followersArray = [User]()
     
@@ -323,9 +324,7 @@ class UserInfoController: UIViewController {
         abouMeTextView.becomeFirstResponder()
     }
     @objc func handleSaveUserInfo(){
-        let hud = JGProgressHUD(style: .light)
-        hud.textLabel.text = "編輯成功"
-        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+        hud.textLabel.text = "上傳中"
         hud.show(in: self.view, animated: true)
         //First Responder 代表的是目前畫面中，處於焦點狀態的元件
         //而當輸入文字時，這個輸入框就是 First Responder
@@ -335,10 +334,8 @@ class UserInfoController: UIViewController {
         abouMeTextView.resignFirstResponder()
         chooseImageButton.isHidden = true
         saveUserInfo(with: abouMeTextView.text)
-        hud.dismiss(afterDelay: 0.6, animated: true)
     }
     func saveUserInfo(with userInfo: String){
-        
         let imageUID = NSUUID().uuidString
         let storageRef = Storage.storage().reference().child("userImages").child(imageUID)
         guard let userImage = self.userImageView.image?.jpegData(compressionQuality: 0.2) else{return}
@@ -367,7 +364,9 @@ class UserInfoController: UIViewController {
                 print("error:",error)
                 return
             }
-            
+            self.hud.textLabel.text = "編輯成功"
+            self.hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+            self.hud.dismiss(afterDelay: 0.6, animated: true)
         }
     }
     

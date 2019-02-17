@@ -19,7 +19,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
     let ref = Database.database().reference()
 
     var timer: Timer?
-    let hud = JGProgressHUD(style: .light)
+    let hud = JGProgressHUD(style: .dark)
     var category: String?{
         didSet{
             self.navigationItem.title = category!

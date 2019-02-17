@@ -272,7 +272,7 @@ extension RegisterController: UITableViewDelegate,UITableViewDataSource{
             placeHolder = "輸入密碼..."
             isSecurity = true
         case 2:
-            cell.inputTextField.text = "Asiagodtone"
+            cell.inputTextField.text = ""
             placeHolder = "輸入暱稱..."
             isSecurity = false
         default: fatalError("Invalid Sction")

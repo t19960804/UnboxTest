@@ -138,7 +138,7 @@ class LoginController: UIViewController {
     @objc func handleLogin(){
         let account = getInputValue().account
         let password = getInputValue().password
-        let hud = JGProgressHUD(style: .light)
+        let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "登入中..."
         hud.show(in: self.view, animated: true)
         if account.isEmpty || password.isEmpty{
