@@ -42,7 +42,6 @@ class LoginController: UIViewController {
         tableView.backgroundColor = UIColor.specialWhite
         return tableView
     }()
-
     let loginButton: UIButton = {
        let button = UIButton(type: UIButton.ButtonType.system)
         button.setTitle("登入", for: UIControl.State.normal)
@@ -114,8 +113,6 @@ class LoginController: UIViewController {
         
 
     }
-    
-    
     func detectErrorCode(code: Int){
         switch code {
         case 17008:
@@ -138,9 +135,11 @@ class LoginController: UIViewController {
     @objc func handleLogin(){
         let account = getInputValue().account
         let password = getInputValue().password
+        
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "登入中..."
         hud.show(in: self.view, animated: true)
+        
         if account.isEmpty || password.isEmpty{
             hud.dismiss(afterDelay: 1)
             Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)

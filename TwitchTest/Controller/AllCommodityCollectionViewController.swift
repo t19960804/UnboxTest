@@ -10,6 +10,7 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import JGProgressHUD
 
 private let reuseIdentifier = "Cell"
 
@@ -17,9 +18,16 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     
     let category = ["3C產品","美妝","家電","動漫模型","運動用品","零食","精品","嬰幼兒用品"]
     var currentUser: User?
+    let hud = JGProgressHUD(style: .dark)
+    
     override func viewWillAppear(_ animated: Bool) {
+        hud.textLabel.text = "載入中"
+        hud.show(in: self.view, animated: true)
         observeCurrentUser { (user) in
             self.currentUser = user
+            print(self.currentUser?.userName)
+            //避免使用者剛載入就按下UserInfo
+            self.hud.dismiss(afterDelay: 0.5, animated: true)
         }
     }
     
