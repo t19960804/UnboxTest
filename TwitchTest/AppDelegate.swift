@@ -22,8 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         let allGamesCollectionViewController = AllCommodityCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
         window?.rootViewController = UINavigationController(rootViewController: allGamesCollectionViewController)
-        
-        
+        //NavBar設定
+        UINavigationBar.appearance().tintColor = .black
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        //NavBar的Title顏色
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         FirebaseApp.configure()
         return true
     }

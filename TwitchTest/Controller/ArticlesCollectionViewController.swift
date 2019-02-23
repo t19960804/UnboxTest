@@ -67,7 +67,9 @@ class ArticlesCollectionViewController: UICollectionViewController {
 
         setUpMessageLabel()
         observeArticlesRemove {
-            self.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
             self.messageLabel.isHidden = false
         }
         
@@ -77,6 +79,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
+        self.navigationController?.hidesBarsOnSwipe = true
     }
     func setUpMessageLabel(){
         messageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true

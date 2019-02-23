@@ -68,16 +68,10 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
+        self.navigationController?.hidesBarsOnSwipe = true
     }
     func setUpNavBar(){
         self.navigationItem.title = "商品分類"
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        
-        self.navigationController?.navigationBar.tintColor = UIColor.black
-        //NavBar的Title顏色
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-        
         let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
         let checkProfileButton = UIBarButtonItem(image: UIImage(named: "avatar"), style: .plain, target: self, action: #selector(handleCheckProfile))
         self.navigationItem.leftBarButtonItem = logoutButton
