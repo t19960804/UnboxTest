@@ -157,7 +157,7 @@ class RegisterController: UIViewController {
                                                               "account" : account,
                                                               "imageURL" : url?.absoluteString as Any]
                                 //需要一點時間,不能馬上切到UserInfo
-                                self.addUserToDataBase(uid: userUID, values: values)
+                                self.createUser(with: userUID, values: values)
                             })
 
                         })
@@ -183,7 +183,7 @@ class RegisterController: UIViewController {
 
         return(account!,password!,userName!)
     }
-    func addUserToDataBase(uid: String,values: [String : Any]){
+    func createUser(with uid: String,values: [String : Any]){
         let ref = Database.database().reference().child("使用者").child(uid)
         ref.setValue(values) { (error, metaData) in
             if let error = error{

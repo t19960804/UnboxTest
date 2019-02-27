@@ -236,7 +236,10 @@ extension ArticleDeatailController: ArticleDetailCell_Delagate{
             background?.alpha = 0
             keyWindow.addSubview(background!)
             keyWindow.addSubview(zoomingImageView)
+            
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                self.userImageView.alpha = 0
+                self.userNameLabel.alpha = 0
                 self.background?.alpha = 1
                 //等比例放大
                 // h2 / w2 = h1 / w1
@@ -244,7 +247,7 @@ extension ArticleDeatailController: ArticleDetailCell_Delagate{
                 let endingHeight = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: endingHeight)
                 zoomingImageView.center = keyWindow.center
-            }, completion: nil)
+            })
         }
        
         
@@ -254,16 +257,17 @@ extension ArticleDeatailController: ArticleDetailCell_Delagate{
         if let imageView = tapGesture.view as? UIImageView{
             imageView.layer.cornerRadius = 8
             imageView.clipsToBounds = true
+            
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 guard let startingFrame = self.startingFrame else{return}
-                
                 self.background?.alpha = 0
+                
                 imageView.frame = startingFrame
             }) { (complete) in
-                if complete{
                     imageView.removeFromSuperview()
                     self.startingImageView?.isHidden = false
-                }
+                    self.userImageView.alpha = 1
+                    self.userNameLabel.alpha = 1
             }
 
             

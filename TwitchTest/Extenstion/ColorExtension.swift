@@ -35,5 +35,11 @@ extension UIColor{
     static var shadowGray: UIColor{
         return UIColor.setRGB(red: 120, green: 121, blue: 122)
     }
+    static var gradient_Pink: UIColor{
+        return UIColor(red: 237/255, green: 110/255, blue: 160/255, alpha: 1)
+    }
+    static var gradient_Orange: UIColor{
+        return UIColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
+    }
 }
 

@@ -114,9 +114,7 @@ class PostArticleController: UIViewController {
     }
     func setUpGradient(){
         let gradient = CAGradientLayer()
-        let color1 = UIColor(red: 237/255, green: 110/255, blue: 160/255, alpha: 1)
-        let color2 = UIColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
-        gradient.colors = [color2.cgColor,color1.cgColor]
+        gradient.colors = [UIColor.gradient_Orange.cgColor,UIColor.gradient_Pink.cgColor]
         gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         self.view.layer.addSublayer(gradient)
     }

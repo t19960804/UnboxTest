@@ -248,7 +248,7 @@ class UserInfoController: UIViewController {
         }
         
     }
-    func addFollowData(add uid1: String,to uid2: String,path: String){
+    func add(_ uid1: String,to uid2: String,path: String){
         let toRef = ref.child("使用者").child(uid2)
         //找尋當前使用者的追蹤名單
         toRef.observeSingleEvent(of: .value) { (snapshot) in
@@ -274,7 +274,7 @@ class UserInfoController: UIViewController {
             }
         }
     }
-    func deleteFollowData(delete uid1: String,from uid2: String,path: String){
+    func delete(_ uid1: String,from uid2: String,path: String){
         let fromRef = ref.child("使用者").child(uid2)
         //找尋當前使用者的追蹤名單
         fromRef.observeSingleEvent(of: .value) { (snapshot) in
@@ -305,11 +305,11 @@ class UserInfoController: UIViewController {
         guard let authorUID = user?.uid else{return}
 
         if notFollwYet{
-            addFollowData(add: userUID!, to: authorUID,path: "followers")
-            addFollowData(add: authorUID, to: userUID!,path: "following")
+            add(userUID!, to: authorUID,path: "followers")
+            add(authorUID, to: userUID!,path: "following")
         }else{
-            deleteFollowData(delete: userUID!,from: authorUID,path: "followers")
-            deleteFollowData(delete: authorUID,from: userUID!,path: "following")
+            delete(userUID!,from: authorUID,path: "followers")
+            delete(authorUID,from: userUID!,path: "following")
         }
     }
     @objc func handleCheckArticles(){
@@ -351,13 +351,13 @@ class UserInfoController: UIViewController {
                 }
                 let values: [String : Any] = ["aboutMe" : userInfo,
                                               "imageURL" : url!.absoluteString]
-                self.updateToDataBase(values: values)
+                self.updateUserInfo(values: values)
             })
         }
 
         
     }
-    func updateToDataBase(values: [String : Any]){
+    func updateUserInfo(values: [String : Any]){
         guard let userUID = userUID else{return}
         self.ref.child("使用者").child(userUID).updateChildValues(values) { (error, ref) in
             if let error = error{
@@ -419,14 +419,12 @@ class UserInfoController: UIViewController {
         }
     }
     func fetchFollowers(completion: @escaping () -> Void){
-        ref.child("使用者").child(authorUID).observe(.value, with: { (snapshot) in
+        ref.child("使用者").child(authorUID).child("followers").observe(.value, with: { (snapshot) in
             //防止疊加
             if self.followersArray.isEmpty == false{
                 self.followersArray.removeAll()
             }
-            let dictionary = snapshot.value as! [String : Any]
-            //如果能轉型就至少有一位追蹤者
-            if let followers = dictionary["followers"] as? [String]{
+            if let followers = snapshot.value as? [String]{
                 for followerUID in followers{
                     self.ref.child("使用者").child(followerUID).observeSingleEvent(of: .value, with: { (snapshot) in
                         let dictionary = snapshot.value as! [String : Any]
@@ -435,7 +433,8 @@ class UserInfoController: UIViewController {
                         completion()
                     })
                 }
-            }else{
+            }
+            else{
                 completion()
                 return
             }

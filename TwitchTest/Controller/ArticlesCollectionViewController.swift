@@ -63,7 +63,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         searchBar.delegate = self
         setUpCollectionView()
         
-        fetchArticlesFromdDataBase()
+        fetchArticles()
 
         setUpMessageLabel()
         observeArticlesRemove {
@@ -86,7 +86,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         messageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }
     //MARK: - Fetch資料
-    func fetchArticlesFromdDataBase(){
+    func fetchArticles(){
         guard let category = self.navigationItem.title else{return}
         ref.child("類別").child(category).observe(.childAdded, with: { (snapshot) in
             //取得文章的UID,透過UID尋找文章
@@ -128,8 +128,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
     @objc func handleReloadTable(){
         self.articlesArray.sort {$0.date! > $1.date!}
         self.filterdArticles = self.articlesArray
-        print("art:",articlesArray.count)
-        print("filter:",filterdArticles.count)
         DispatchQueue.main.async {
             self.collectionView.reloadData()
             let firstIndexPath = IndexPath(item: 0, section: 0)
