@@ -111,6 +111,7 @@ class ArticleDeatailController: UIViewController {
         self.view.backgroundColor = .specialWhite
         self.view.addSubview(myScrollView)
         self.navigationItem.title = "商品詳情"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "comment"), style: .plain, target: self, action: #selector(handleComment))
         detailCollectionView.delegate = self
         detailCollectionView.dataSource = self
         
@@ -133,7 +134,13 @@ class ArticleDeatailController: UIViewController {
        
     }
 
-    
+    @objc func handleComment(){
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let commentController = CommentController(collectionViewLayout: layout)
+        self.navigationController?.pushViewController(commentController, animated: true)
+        
+    }
     @objc func handleToUserInfo(){
         let userInfoController = UserInfoController()
         userInfoController.user = article?.author

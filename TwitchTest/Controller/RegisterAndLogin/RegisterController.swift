@@ -259,24 +259,26 @@ extension RegisterController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var placeHolder: String
         var isSecurity: Bool
+        var inputText: String
         
         let cell = registerTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! LoginCell
         
         switch indexPath.section {
         case 0:
-            cell.inputTextField.text = "Asiagodtone@q.com"
+            inputText = "Asiagodtone@q.com"
             placeHolder = "輸入帳號..."
             isSecurity = false
         case 1:
-            cell.inputTextField.text = "Qqqqqq"
+            inputText = "Qqqqqq"
             placeHolder = "輸入密碼..."
             isSecurity = true
         case 2:
-            cell.inputTextField.text = ""
+            inputText = ""
             placeHolder = "輸入暱稱..."
             isSecurity = false
         default: fatalError("Invalid Sction")
         }
+        cell.inputTextField.text = inputText
         cell.inputTextField.isSecureTextEntry = isSecurity
         cell.inputTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         return cell
