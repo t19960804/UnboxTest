@@ -21,6 +21,7 @@ class CommentController: UICollectionViewController {
     let hud = JGProgressHUD(style: .dark)
     var comments = [Comment]()
     var timer: Timer?
+    var articleDetailController: ArticleDeatailController?
     
     let commentView: UIView = {
         let view = UIView()
@@ -33,6 +34,7 @@ class CommentController: UICollectionViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "輸入留言..."
         textField.delegate = self
+        
         return textField
     }()
     lazy var sendButton: UIButton = {
@@ -47,6 +49,7 @@ class CommentController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.collectionView.backgroundColor = .specialWhite
+        self.collectionView.showsVerticalScrollIndicator = false
         self.navigationItem.title = "留言板"
         self.collectionView!.register(CommentCell.self, forCellWithReuseIdentifier: cellID)
         setUpConstraints()
@@ -65,22 +68,23 @@ class CommentController: UICollectionViewController {
         hud.show(in: self.view, animated: true)
         
         guard let articleUID = self.article?.articleUID else{return}
+        
         ref.child("文章").child(articleUID).child("comments").observe(.childAdded) { (snapshot) in
             if let commentUID = snapshot.value as? String{
+                
                 self.ref.child("評論").child(commentUID).observeSingleEvent(of: .value, with: { (snapshot) in
                     if let dictionary = snapshot.value as? [String : Any]{
                         var comment = Comment(value: dictionary)
-
                         //透過comment裡的authorUID包裝成User
                         if let authorUID = dictionary["author"] as? String{
+                            
                             self.ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
                                 if let dictionary = snapshot.value as? [String : Any]{
                                     let author = User(value: dictionary)
                                     comment.author = author
                                     self.comments.append(comment)
-                                    self.attemptReloadData()
                                 }
-                                
+                                self.attemptReloadData()
                             })
                             
                         }
@@ -90,13 +94,17 @@ class CommentController: UICollectionViewController {
             }
         }
     }
+    
     private func attemptReloadData(){
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadData), userInfo: nil, repeats: false)
     }
     @objc func handleReloadData(){
+        self.comments.sort {$0.date! > $1.date!}
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            let firstIndexPath = IndexPath(item: 0, section: 0)
+            self.collectionView.scrollToItem(at: firstIndexPath, at: .top, animated: true)
         }
     }
     @objc func handleSendComment(){
@@ -111,7 +119,8 @@ class CommentController: UICollectionViewController {
         
         if textInput?.isEmpty == false{
             let value = ["comment" : textInput!,
-                         "author" : currntUserUID]
+                         "author" : currntUserUID,
+                         "date" : Date.getTimeStamp()]
             //新增至"評論"以及該文章底下
             ref.child("評論").child(commentUID).setValue(value)
             ref.child("文章").child(articleUID).observeSingleEvent(of: .value) { (snapshot) in
@@ -195,7 +204,6 @@ class CommentController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CommentCell
         cell.comment = comments[indexPath.row]
-        
         return cell
     }
    
@@ -204,7 +212,9 @@ class CommentController: UICollectionViewController {
 }
 extension CommentController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width, height: 180)
+        let estimateFrame = articleDetailController?.estimateTextViewFrame(string: comments[indexPath.row].comment!, fontSize: .systemFont(ofSize: 15))
+    
+        return CGSize(width: self.view.frame.width, height: (estimateFrame?.size.height)! + 90)
     }
 }
 extension CommentController: UITextFieldDelegate{

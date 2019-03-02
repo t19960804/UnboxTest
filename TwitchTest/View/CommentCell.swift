@@ -26,7 +26,6 @@ class CommentCell: UICollectionViewCell {
     let userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .yellow
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
         return imageView
@@ -34,20 +33,23 @@ class CommentCell: UICollectionViewCell {
     let userNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .green
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.textColor = UIColor.specialGray2
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
     }()
     let commentTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = .red
+        textView.backgroundColor = .clear
+        textView.font = UIFont.systemFont(ofSize: 15)
         textView.isEditable = false
+        //消除左邊的padding
+        textView.textContainer.lineFragmentPadding = 0
         return textView
     }()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .blue
+        self.backgroundColor = .specialWhite
         setUpConstraints()
     }
     func setUpConstraints(){

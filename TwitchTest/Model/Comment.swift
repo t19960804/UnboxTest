@@ -12,9 +12,11 @@ import UIKit
 struct Comment {
     var comment: String?
     var authorUID: String?
+    var date: String?
     var author: User?
     init(value: [String : Any]) {
         self.comment = value["comment"] as? String
         self.authorUID = value["authorUID"] as? String
+        self.date = value["date"] as? String
     }
 }

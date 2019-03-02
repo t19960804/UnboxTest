@@ -109,20 +109,10 @@ class ArticleDeatailController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
-        self.view.addSubview(myScrollView)
         self.navigationItem.title = "商品詳情"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "comment"), style: .plain, target: self, action: #selector(handleComment))
         detailCollectionView.delegate = self
         detailCollectionView.dataSource = self
-        
-        myScrollView.addSubview(backGroundView)
-        backGroundView.addSubview(titleLabel)
-        
-        backGroundView.addSubview(reviewTextView)
-        backGroundView.addSubview(detailCollectionView)
-        backGroundView.addSubview(userImageView)
-        backGroundView.addSubview(userNameLabel)
-
         setUpConstraints()
         
         if article?.authorUID == Auth.auth().currentUser?.uid{
@@ -136,8 +126,9 @@ class ArticleDeatailController: UIViewController {
 
     @objc func handleComment(){
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         let commentController = CommentController(collectionViewLayout: layout)
+        commentController.articleDetailController = self
         commentController.article = self.article
         self.navigationController?.pushViewController(commentController, animated: true)
         
@@ -159,6 +150,16 @@ class ArticleDeatailController: UIViewController {
     }
    
     func setUpConstraints(){
+        self.view.addSubview(myScrollView)
+        
+        myScrollView.addSubview(backGroundView)
+        backGroundView.addSubview(titleLabel)
+        
+        backGroundView.addSubview(reviewTextView)
+        backGroundView.addSubview(detailCollectionView)
+        backGroundView.addSubview(userImageView)
+        backGroundView.addSubview(userNameLabel)
+        
         myScrollView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
         myScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         myScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true

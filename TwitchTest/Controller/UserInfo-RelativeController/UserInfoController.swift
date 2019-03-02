@@ -159,6 +159,7 @@ class UserInfoController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
+        
         self.view.addSubview(backImageView)
         self.view.addSubview(backView)
         self.view.addSubview(userImageView)
@@ -324,6 +325,7 @@ class UserInfoController: UIViewController {
         abouMeTextView.becomeFirstResponder()
     }
     @objc func handleSaveUserInfo(){
+        hud.indicatorView = JGProgressHUDIndicatorView()
         hud.textLabel.text = "上傳中"
         hud.show(in: self.view, animated: true)
         //First Responder 代表的是目前畫面中，處於焦點狀態的元件

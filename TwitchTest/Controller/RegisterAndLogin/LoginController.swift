@@ -82,17 +82,18 @@ class LoginController: UIViewController {
         self.view.backgroundColor = .specialWhite
         loginTableView.delegate = self
         loginTableView.dataSource = self
-        self.view.addSubview(logoImageView)
-        self.view.addSubview(sloganLabel)
-        self.view.addSubview(loginTableView)
-        self.view.addSubview(stackView)
-        
+
         setUpConstraints()
         addKeyboardObserver()
     }
     override func viewWillDisappear(_ animated: Bool) {NotificationCenter.default.removeObserver(self)}
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     func setUpConstraints(){
+        self.view.addSubview(logoImageView)
+        self.view.addSubview(sloganLabel)
+        self.view.addSubview(loginTableView)
+        self.view.addSubview(stackView)
+        
         logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 60).isActive = true
         logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true

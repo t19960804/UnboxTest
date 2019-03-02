@@ -58,7 +58,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
             layout.minimumLineSpacing = 10
             layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         }
-        self.view.addSubview(messageLabel)
         self.navigationItem.rightBarButtonItems = [postArticleButton,searchButton]
         searchBar.delegate = self
         setUpCollectionView()
@@ -82,6 +81,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.navigationController?.hidesBarsOnSwipe = true
     }
     func setUpMessageLabel(){
+        self.view.addSubview(messageLabel)
         messageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         messageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }

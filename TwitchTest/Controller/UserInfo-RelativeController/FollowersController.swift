@@ -34,7 +34,6 @@ class FollowersController: UITableViewController {
         super.viewDidLoad()
         self.tableView.register(FollowersTableViewCell.self, forCellReuseIdentifier: cellID)
         setUpNavBar()
-        self.view.addSubview(messageLabel)
         setUpConstraints()
         messageLabel.isHidden = followersArray.isEmpty ? false : true
         self.tableView.separatorStyle = followersArray.isEmpty ? .none : .singleLine
@@ -43,6 +42,8 @@ class FollowersController: UITableViewController {
         self.navigationItem.title = "追蹤名單"
     }
     func setUpConstraints(){
+        self.view.addSubview(messageLabel)
+
         messageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         messageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }

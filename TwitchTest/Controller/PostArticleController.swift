@@ -90,21 +90,13 @@ class PostArticleController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .specialWhite
+
         reviewTextView.delegate = self
         setUpGradient()
         uploadImagesColletionView.delegate = self
         uploadImagesColletionView.dataSource = self
-        
-        self.view.backgroundColor = .specialWhite
-        
-        
-        self.view.addSubview(titleBackGround)
-        self.view.addSubview(titleTextField)
-        self.view.addSubview(reviewBackGround)
-        self.view.addSubview(reviewTextView)
-        self.view.addSubview(heartStackView)
-        self.view.addSubview(uploadImagesColletionView)
-        
+    
         setUpNavBar()
         setUpConstraints()
         addTapGesture()
@@ -167,7 +159,13 @@ class PostArticleController: UIViewController {
         self.navigationItem.rightBarButtonItem = uploadButtonItem
     }
     func setUpConstraints(){
-
+        self.view.addSubview(titleBackGround)
+        self.view.addSubview(titleTextField)
+        self.view.addSubview(reviewBackGround)
+        self.view.addSubview(reviewTextView)
+        self.view.addSubview(heartStackView)
+        self.view.addSubview(uploadImagesColletionView)
+        
         uploadImagesColletionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 18).isActive = true
         uploadImagesColletionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         uploadImagesColletionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
@@ -307,7 +305,7 @@ class PostArticleController: UIViewController {
                                         "imageURL" : array,
                                         "review" : review,
                                         "numberOfHeart" : "\(numberOfHeart())",
-                                        "date" : getTimeStamp()]
+                                        "date" : Date.getTimeStamp()]
         
         //插入"文章"
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in
@@ -332,15 +330,6 @@ class PostArticleController: UIViewController {
                 return
             }
         }
-    }
-
-    //取得時間
-    func getTimeStamp() -> String{
-        let date = Date()
-        let dateFormat = DateFormatter()
-        dateFormat.dateFormat = "yyyy年MM月dd日 HH:mm:ss"
-        let dateNow = dateFormat.string(from: date)
-        return dateNow
     }
 }
 
@@ -396,3 +385,5 @@ enum UploadError: Error{
     case NoImage
     case NoEvaluate
 }
+
+

@@ -78,10 +78,6 @@ class RegisterController: UIViewController {
         self.view.backgroundColor = .specialWhite
         registerTableView.delegate = self
         registerTableView.dataSource = self
-        self.view.addSubview(uploadingImageView)
-        self.view.addSubview(registerTableView)
-        self.view.addSubview(stackView)
-        
         setUpConstraints()
         addKeyboardObserver()
     }
@@ -92,6 +88,10 @@ class RegisterController: UIViewController {
         self.view.endEditing(true)
     }
     func setUpConstraints(){
+        self.view.addSubview(uploadingImageView)
+        self.view.addSubview(registerTableView)
+        self.view.addSubview(stackView)
+        
         uploadingImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         uploadingImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 70).isActive = true
         uploadingImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true

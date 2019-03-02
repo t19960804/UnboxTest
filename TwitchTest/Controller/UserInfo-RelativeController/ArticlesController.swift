@@ -43,7 +43,6 @@ class ArticlesController: UICollectionViewController {
             layout.itemSize = CGSize(width: self.view.frame.width - 20, height: self.view.frame.height * 0.2)
             layout.scrollDirection = .vertical
         }
-        self.view.addSubview(messageLabel)
         setUpConstraints()
         observeArticlesRemove {
             DispatchQueue.main.async {
@@ -56,6 +55,8 @@ class ArticlesController: UICollectionViewController {
         messageLabel.isHidden = articlesArray.isEmpty ? false : true
     }
     func setUpConstraints(){
+        self.view.addSubview(messageLabel)
+
         messageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         messageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }
