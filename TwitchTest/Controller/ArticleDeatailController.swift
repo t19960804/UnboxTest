@@ -138,6 +138,7 @@ class ArticleDeatailController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let commentController = CommentController(collectionViewLayout: layout)
+        commentController.article = self.article
         self.navigationController?.pushViewController(commentController, animated: true)
         
     }
