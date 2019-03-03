@@ -204,6 +204,7 @@ class CommentController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CommentCell
         cell.comment = comments[indexPath.row]
+        
         return cell
     }
    
