@@ -44,7 +44,7 @@
 		0BF0141C2228E5BD00F59CD1 /* CommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0141B2228E5BD00F59CD1 /* CommentController.swift */; };
 		0BF0141E2229380F00F59CD1 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0141D2229380F00F59CD1 /* Comment.swift */; };
 		0BF01420222A5EB400F59CD1 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0141F222A5EB400F59CD1 /* CommentCell.swift */; };
-		0BF01422222A82BC00F59CD1 /* OthersExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF01421222A82BC00F59CD1 /* OthersExtension.swift */; };
+		0BF01422222A82BC00F59CD1 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF01421222A82BC00F59CD1 /* DateExtension.swift */; };
 		DC86726B53D73FC2DECA9729 /* Pods_TwitchTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A8720CE5B1B0818AA928023 /* Pods_TwitchTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -101,7 +101,7 @@
 		0BF0141B2228E5BD00F59CD1 /* CommentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentController.swift; sourceTree = "<group>"; };
 		0BF0141D2229380F00F59CD1 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		0BF0141F222A5EB400F59CD1 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
-		0BF01421222A82BC00F59CD1 /* OthersExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersExtension.swift; sourceTree = "<group>"; };
+		0BF01421222A82BC00F59CD1 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		42B0C38300061E065A1D7C5B /* Pods-TwitchTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.release.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.release.xcconfig"; sourceTree = "<group>"; };
 		F5AA30C4EABCBB51605B34AA /* Pods-TwitchTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitchTest.debug.xcconfig"; path = "Target Support Files/Pods-TwitchTest/Pods-TwitchTest.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,7 +149,7 @@
 			children = (
 				0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */,
 				0BF013DF2217FBB200F59CD1 /* ColorExtension.swift */,
-				0BF01421222A82BC00F59CD1 /* OthersExtension.swift */,
+				0BF01421222A82BC00F59CD1 /* DateExtension.swift */,
 			);
 			path = Extenstion;
 			sourceTree = "<group>";
@@ -465,7 +465,7 @@
 				0B8EC3A421F86D310056C617 /* UserInfoController.swift in Sources */,
 				0B8EC3AE21FEF2890056C617 /* ArticlesController.swift in Sources */,
 				0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */,
-				0BF01422222A82BC00F59CD1 /* OthersExtension.swift in Sources */,
+				0BF01422222A82BC00F59CD1 /* DateExtension.swift in Sources */,
 				0BF0141C2228E5BD00F59CD1 /* CommentController.swift in Sources */,
 				0B10847221E88A03006F890E /* UserDefaultExtension.swift in Sources */,
 				0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */,
