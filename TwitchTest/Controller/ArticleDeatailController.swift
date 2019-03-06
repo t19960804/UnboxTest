@@ -51,7 +51,6 @@ class ArticleDeatailController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentSize = CGSize(width:self.view.frame.width , height: halfViewHeight + estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 80)
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
         scrollView.bounces = false
         return scrollView
     }()
@@ -60,9 +59,6 @@ class ArticleDeatailController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    ////////////////////////////
-
-
     let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -102,8 +98,8 @@ class ArticleDeatailController: UIViewController {
     }()
 
     
-    
     override func viewWillAppear(_ animated: Bool) {
+        //評論區動態拉高
         reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 80
     }
     override func viewDidLoad() {
@@ -113,6 +109,7 @@ class ArticleDeatailController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "comment"), style: .plain, target: self, action: #selector(handleComment))
         detailCollectionView.delegate = self
         detailCollectionView.dataSource = self
+
         setUpConstraints()
         
         if article?.authorUID == Auth.auth().currentUser?.uid{
@@ -123,7 +120,6 @@ class ArticleDeatailController: UIViewController {
         
        
     }
-
     @objc func handleComment(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -165,11 +161,16 @@ class ArticleDeatailController: UIViewController {
         myScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         myScrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
         
+        //backGroundView的高要和scrollview的contentSize相等
         backGroundView.widthAnchor.constraint(equalTo: myScrollView.widthAnchor).isActive = true
         backGroundView.heightAnchor.constraint(equalToConstant: halfViewHeight + estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 80 ).isActive = true
         backGroundView.topAnchor.constraint(equalTo: myScrollView.topAnchor).isActive = true
         backGroundView.centerXAnchor.constraint(equalTo: myScrollView.centerXAnchor).isActive = true
         
+        detailCollectionView.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
+        detailCollectionView.topAnchor.constraint(equalTo: backGroundView.topAnchor).isActive = true
+        detailCollectionView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 1).isActive = true
+        detailCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45).isActive = true
         
         userImageView.topAnchor.constraint(equalTo: detailCollectionView.topAnchor, constant: 8).isActive = true
         userImageView.leftAnchor.constraint(equalTo: reviewTextView.leftAnchor,constant: 8).isActive = true
@@ -179,18 +180,14 @@ class ArticleDeatailController: UIViewController {
         userNameLabel.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor).isActive = true
         userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 8).isActive = true
         
-        detailCollectionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        detailCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
-        detailCollectionView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 1).isActive = true
-        detailCollectionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.45).isActive = true
         
-        titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
         titleLabel.topAnchor.constraint(equalTo: detailCollectionView.bottomAnchor, constant: 20).isActive = true
         
         
         
         reviewTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
-        reviewTextView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        reviewTextView.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
         reviewTextView.widthAnchor.constraint(equalTo: backGroundView.widthAnchor, multiplier: 0.8).isActive = true
         reviewTextViewHeightAnchor = reviewTextView.heightAnchor.constraint(equalToConstant: 200)
         reviewTextViewHeightAnchor?.isActive = true

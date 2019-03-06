@@ -78,7 +78,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
-        self.navigationController?.hidesBarsOnSwipe = true
     }
     func setUpMessageLabel(){
         self.view.addSubview(messageLabel)

@@ -67,6 +67,7 @@ class PostArticleController: UIViewController {
         textView.layer.cornerRadius = 8
         textView.font = UIFont.systemFont(ofSize: 20)
         textView.layer.masksToBounds = true
+        textView.showsVerticalScrollIndicator = false
         return textView
     }()
     let loveImageView_1 = LoveImageView(tintColor: .specialWhite)
@@ -101,8 +102,8 @@ class PostArticleController: UIViewController {
         setUpConstraints()
         addTapGesture()
         
-        titleTextField.text = "《地獄犬的輓歌》文森特·瓦倫汀"
-        reviewTextView.text = "「PLAY ARTS改 文森特·瓦倫汀」紅色披風的造型銳利，在施以強烈的陰影漸層後更是中二度滿點\n披風與頭髮皆設置了可動機構，能隨著帥氣的動作擺動！相較於過去可動滿悲劇的AC版\n這次算進步滿多的。配件則收錄了兩把愛槍「地獄犬（Cerberus）」、「九頭蛇（Hydra）」，地獄犬可收納於右腿的槍套。"
+        titleTextField.text = "Marvel Universe 變體版【X-23】"
+        reviewTextView.text = "「VARIANT PLAY ARTS改 X-23」高約25.4 公分\n戰衣的風格不像狼叔擁有極重的裝甲感\n呈現出在緊身衣外再覆蓋鎧甲的輕裝風格\n符合她在漫畫中十分敏捷的形象\n腰部還做出了鏤空的設計更凸顯X-23 的身形曲線\n鎧甲有著漂亮的光澤感並刻劃出豐富的細節與紋路\n頭雕有戴上頭盔、脫盔兩種樣貌\n除了多個出爪的替換手型外，在腳尖也能裝上鋼爪，可以變化出多種帥氣的戰鬥姿態！\n鎧甲有著漂亮的光澤感並刻劃出豐富的細節與紋路\n頭雕有戴上頭盔、脫盔兩種樣貌\n除了多個出爪的替換手型外，在腳尖也能裝上鋼爪，可以變化出多種帥氣的戰鬥姿態！"
     }
     func setUpGradient(){
         let gradient = CAGradientLayer()

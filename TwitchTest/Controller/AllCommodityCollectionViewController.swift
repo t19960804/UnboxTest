@@ -68,7 +68,6 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
-        self.navigationController?.hidesBarsOnSwipe = true
     }
     func setUpNavBar(){
         self.navigationItem.title = "商品分類"

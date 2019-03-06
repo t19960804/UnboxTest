@@ -89,8 +89,6 @@ extension FollowersController: FollowersTableViewCell_Delegate{
             let dictionary = snapshot.value as! [String : Any]
             if let following = dictionary["following"] as? [String]{
                 //比對到了就return,不然會繼續比較
-                //若持續沒比對到,就不要return,讓它繼續比
-                
                 for follower in following{
                     if follower == followingUID{
                         completion("已追蹤")

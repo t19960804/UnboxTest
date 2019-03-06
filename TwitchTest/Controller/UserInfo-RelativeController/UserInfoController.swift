@@ -325,7 +325,7 @@ class UserInfoController: UIViewController {
         abouMeTextView.becomeFirstResponder()
     }
     @objc func handleSaveUserInfo(){
-        hud.indicatorView = JGProgressHUDIndicatorView()
+        hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
         hud.textLabel.text = "上傳中"
         hud.show(in: self.view, animated: true)
         //First Responder 代表的是目前畫面中，處於焦點狀態的元件
