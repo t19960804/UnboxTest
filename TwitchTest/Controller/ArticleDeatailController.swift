@@ -13,6 +13,8 @@ import FirebaseDatabase
 class ArticleDeatailController: UIViewController {
     let cellID = "Cell"
     var reviewTextViewHeightAnchor: NSLayoutConstraint?
+    var titleLabelHeightAnchor: NSLayoutConstraint?
+    
     var startingFrame: CGRect?
     var background: UIView?
     var startingImageView: UIImageView?
@@ -65,6 +67,7 @@ class ArticleDeatailController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .gray
         label.textAlignment = .center
+        label.numberOfLines = 2
         return label
     }()
     lazy var userImageView: UIImageView = {
@@ -101,6 +104,7 @@ class ArticleDeatailController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         //評論區動態拉高
         reviewTextViewHeightAnchor?.constant = estimateTextViewFrame(string: reviewTextView.text, fontSize: UIFont.systemFont(ofSize: 20)).height + 80
+        titleLabelHeightAnchor?.constant = estimateTextViewFrame(string: titleLabel.text!, fontSize: UIFont.boldSystemFont(ofSize: 18)).height + 10
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -182,9 +186,11 @@ class ArticleDeatailController: UIViewController {
         
         
         titleLabel.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: detailCollectionView.bottomAnchor, constant: 20).isActive = true
-        
-        
+        titleLabel.topAnchor.constraint(equalTo: detailCollectionView.bottomAnchor, constant: 10).isActive = true
+        titleLabel.widthAnchor.constraint(equalTo: reviewTextView.widthAnchor).isActive = true
+        titleLabelHeightAnchor = titleLabel.heightAnchor.constraint(equalToConstant: 80)
+        titleLabelHeightAnchor?.isActive = true
+
         
         reviewTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         reviewTextView.centerXAnchor.constraint(equalTo: backGroundView.centerXAnchor).isActive = true
