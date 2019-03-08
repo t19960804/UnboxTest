@@ -160,7 +160,7 @@ class ArticleDeatailController: UIViewController {
         backGroundView.addSubview(userImageView)
         backGroundView.addSubview(userNameLabel)
         
-        myScrollView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: safeAreaHeight_Top + 44).isActive = true
+        myScrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
         myScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         myScrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         myScrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true

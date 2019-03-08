@@ -33,15 +33,7 @@ class UserInfoController: UIViewController {
 
     let userUID = Auth.auth().currentUser?.uid
     var followersArray = [User]()
-    
-    let backImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "beach")
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+ 
     lazy var backView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -160,7 +152,6 @@ class UserInfoController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
         
-        self.view.addSubview(backImageView)
         self.view.addSubview(backView)
         self.view.addSubview(userImageView)
         self.view.addSubview(userNameLabel)
@@ -443,17 +434,11 @@ class UserInfoController: UIViewController {
         })
     }
     func setUpTopView(){
-        
-        backImageView.topAnchor.constraint(equalTo: self.view.topAnchor,constant: 0).isActive = true
-        backImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        backImageView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        backImageView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
-        
-        
-        backView.topAnchor.constraint(equalTo: backImageView.topAnchor).isActive = true
-        backView.leftAnchor.constraint(equalTo: backImageView.leftAnchor).isActive = true
-        backView.rightAnchor.constraint(equalTo: backImageView.rightAnchor).isActive = true
-        backView.heightAnchor.constraint(equalTo: backImageView.heightAnchor).isActive = true
+    
+        backView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        backView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        backView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        backView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.5).isActive = true
         
         
         chooseImageButton.centerYAnchor.constraint(equalTo: userImageView.topAnchor).isActive = true
@@ -463,7 +448,7 @@ class UserInfoController: UIViewController {
         
         
         userImageView.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
-        userImageView.topAnchor.constraint(equalTo: backView.topAnchor, constant: safeAreaHeight_Top + 44 + 40).isActive = true
+        userImageView.topAnchor.constraint(equalTo: backView.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
         userImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
         userImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         

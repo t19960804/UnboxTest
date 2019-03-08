@@ -11,11 +11,6 @@ import FirebaseDatabase
 import FirebaseAuth
 import JGProgressHUD
 
-
-let safeAreaHeight_Top = UIApplication.shared.keyWindow!.safeAreaInsets.top
-let safeAreaHeight_Bottom = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
-
-
 class LoginController: UIViewController {
     
     let cellID = "Cell"
@@ -95,7 +90,7 @@ class LoginController: UIViewController {
         self.view.addSubview(stackView)
         
         logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        logoImageView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 60).isActive = true
+        logoImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true
         logoImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         logoImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         

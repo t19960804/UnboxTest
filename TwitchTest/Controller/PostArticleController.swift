@@ -167,7 +167,7 @@ class PostArticleController: UIViewController {
         self.view.addSubview(heartStackView)
         self.view.addSubview(uploadImagesColletionView)
         
-        uploadImagesColletionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: safeAreaHeight_Top + 44 + 18).isActive = true
+        uploadImagesColletionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 18).isActive = true
         uploadImagesColletionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         uploadImagesColletionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         uploadImagesColletionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.25).isActive = true
