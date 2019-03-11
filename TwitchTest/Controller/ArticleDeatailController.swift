@@ -67,7 +67,7 @@ class ArticleDeatailController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .gray
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         return label
     }()
     lazy var userImageView: UIImageView = {

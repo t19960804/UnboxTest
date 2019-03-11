@@ -20,6 +20,7 @@
 		0B10848221ED9A45006F890E /* ImageDownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */; };
 		0B10848421EF19E4006F890E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848321EF19E4006F890E /* User.swift */; };
 		0B10848621F03976006F890E /* ArticleDeatailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848521F03976006F890E /* ArticleDeatailController.swift */; };
+		0B66DF7D223666D50022F4EC /* HeartsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF7C223666D50022F4EC /* HeartsStackView.swift */; };
 		0B8EC3A421F86D310056C617 /* UserInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A321F86D310056C617 /* UserInfoController.swift */; };
 		0B8EC3A721F979BE0056C617 /* UserInfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */; };
 		0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A821F9A5280056C617 /* CustomNavController.swift */; };
@@ -73,6 +74,7 @@
 		0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadHelper.swift; sourceTree = "<group>"; };
 		0B10848321EF19E4006F890E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0B10848521F03976006F890E /* ArticleDeatailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDeatailController.swift; sourceTree = "<group>"; };
+		0B66DF7C223666D50022F4EC /* HeartsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartsStackView.swift; sourceTree = "<group>"; };
 		0B8EC3A321F86D310056C617 /* UserInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoController.swift; sourceTree = "<group>"; };
 		0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoLabel.swift; sourceTree = "<group>"; };
 		0B8EC3A821F9A5280056C617 /* CustomNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavController.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				0BE3DF9C220AD98500D53734 /* PostArticleCell.swift */,
 				0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */,
 				0BF0141F222A5EB400F59CD1 /* CommentCell.swift */,
+				0B66DF7C223666D50022F4EC /* HeartsStackView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -450,6 +453,7 @@
 				0BF01420222A5EB400F59CD1 /* CommentCell.swift in Sources */,
 				0B10848421EF19E4006F890E /* User.swift in Sources */,
 				0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */,
+				0B66DF7D223666D50022F4EC /* HeartsStackView.swift in Sources */,
 				0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */,
 				0BF01402221914E200F59CD1 /* LoginCell.swift in Sources */,
 				0B10847A21EB269B006F890E /* PostArticleController.swift in Sources */,

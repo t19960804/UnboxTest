@@ -70,25 +70,7 @@ class PostArticleController: UIViewController {
         textView.showsVerticalScrollIndicator = false
         return textView
     }()
-    let loveImageView_1 = LoveImageView(tintColor: .specialWhite)
-    let loveImageView_2 = LoveImageView(tintColor: .specialWhite)
-    let loveImageView_3 = LoveImageView(tintColor: .specialWhite)
-    let loveImageView_4 = LoveImageView(tintColor: .specialWhite)
-    let loveImageView_5 = LoveImageView(tintColor: .specialWhite)
-    lazy var heartStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(loveImageView_1)
-        stackView.addArrangedSubview(loveImageView_2)
-        stackView.addArrangedSubview(loveImageView_3)
-        stackView.addArrangedSubview(loveImageView_4)
-        stackView.addArrangedSubview(loveImageView_5)
-        stackView.distribution = .fillEqually
-        stackView.axis = .horizontal
-        stackView.spacing = 7
-        return stackView
-    }()
-    
+    let heartStackView = HeartsStackView()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
@@ -100,7 +82,6 @@ class PostArticleController: UIViewController {
     
         setUpNavBar()
         setUpConstraints()
-        addTapGesture()
         
         titleTextField.text = "《地獄犬的輓歌》文森特·瓦倫汀《地獄犬的輓歌》文森特·瓦倫汀《地獄犬的輓歌》文森特·瓦倫汀"
         reviewTextView.text = "「PLAY ARTS改 文森特·瓦倫汀」紅色披風的造型銳利\n在施以強烈的陰影漸層後更是中二度滿點\n披風與頭髮皆設置了可動機構\n能隨著帥氣的動作擺動！\n相較於過去可動滿悲劇的AC版，這次算進步滿多的。配件則收錄了兩把愛槍「地獄犬（Cerberus）」、「九頭蛇（Hydra）」\n地獄犬可收納於右腿的槍套\n參考售價 15,984 日圓\n約W267mm×D126mm×H276mm\n預計 2018 年 05 月發售。"
@@ -111,42 +92,10 @@ class PostArticleController: UIViewController {
         gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         self.view.layer.addSublayer(gradient)
     }
-    func addTapGesture(){
-        loveImageViews.append(loveImageView_1)
-        loveImageViews.append(loveImageView_2)
-        loveImageViews.append(loveImageView_3)
-        loveImageViews.append(loveImageView_4)
-        loveImageViews.append(loveImageView_5)
-        
-        let tap_1 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_1))
-        let tap_2 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_2))
-        let tap_3 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_3))
-        let tap_4 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_4))
-        let tap_5 = UITapGestureRecognizer(target: self, action: #selector(handleHeartPressed_5))
-        
-    
-        loveImageView_1.addGestureRecognizer(tap_1)
-        loveImageView_2.addGestureRecognizer(tap_2)
-        loveImageView_3.addGestureRecognizer(tap_3)
-        loveImageView_4.addGestureRecognizer(tap_4)
-        loveImageView_5.addGestureRecognizer(tap_5)
-        
-    }
-    @objc func handleHeartPressed_1(){pressHeart(number: 1)}
-    @objc func handleHeartPressed_2(){pressHeart(number: 2)}
-    @objc func handleHeartPressed_3(){pressHeart(number: 3)}
-    @objc func handleHeartPressed_4(){pressHeart(number: 4)}
-    @objc func handleHeartPressed_5(){pressHeart(number: 5)}
-    //點擊愛心變色
-    func pressHeart(number: Int){
-        for i in 0...loveImageViews.count - 1{
-            loveImageViews[i].tintColor = (i <= number - 1) ? .darkHeartColor : .specialWhite
-        }
-    }
     //判斷幾顆愛心
     func numberOfHeart() -> Int{
         var count = 0
-        for love in loveImageViews{
+        for love in heartStackView.loveImageViews{
             if love.tintColor == .darkHeartColor{
                 count += 1
             }
@@ -172,8 +121,6 @@ class PostArticleController: UIViewController {
         uploadImagesColletionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         uploadImagesColletionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.25).isActive = true
         
-
-
         titleBackGround.topAnchor.constraint(equalTo: uploadImagesColletionView.bottomAnchor, constant: 18).isActive = true
         titleBackGround.leftAnchor.constraint(equalTo: uploadImagesColletionView.leftAnchor,constant: 18).isActive = true
         titleBackGround.rightAnchor.constraint(equalTo: uploadImagesColletionView.rightAnchor,constant: -18).isActive = true
