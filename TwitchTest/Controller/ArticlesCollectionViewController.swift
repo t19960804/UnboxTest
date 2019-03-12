@@ -23,6 +23,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
     var category: String?{
         didSet{
             self.navigationItem.title = category!
+            fetchArticles(with: category!)
         }
     }
     lazy var searchBar: UISearchBar = {
@@ -61,9 +62,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
         self.navigationItem.rightBarButtonItems = [postArticleButton,searchButton]
         searchBar.delegate = self
         setUpCollectionView()
-        
-        fetchArticles()
-
         setUpMessageLabel()
         observeArticlesRemove {
             DispatchQueue.main.async {
@@ -85,8 +83,7 @@ class ArticlesCollectionViewController: UICollectionViewController {
         messageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
     }
     //MARK: - Fetch資料
-    func fetchArticles(){
-        guard let category = self.navigationItem.title else{return}
+    func fetchArticles(with category: String){
         ref.child("類別").child(category).observe(.childAdded, with: { (snapshot) in
             //取得文章的UID,透過UID尋找文章
             let articleUID = snapshot.key
