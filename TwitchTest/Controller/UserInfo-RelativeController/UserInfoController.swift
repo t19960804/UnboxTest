@@ -24,7 +24,6 @@ class UserInfoController: UIViewController {
         }
     }
 
-    let cellID = "Cell"
     var articlesArray = [Article]()
     var timer: Timer?
     let ref = Database.database().reference()

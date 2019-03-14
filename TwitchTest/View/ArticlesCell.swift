@@ -129,7 +129,7 @@ class ArticlesCell: UICollectionViewCell {
         return stackView
     }()
     
-    
+    let gradientLayer = CAGradientLayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -152,7 +152,7 @@ class ArticlesCell: UICollectionViewCell {
         self.addSubview(checkButton)
         
         setUpConstraints()
-        
+        setUpGrdientLayer()
         
     }
     
@@ -169,12 +169,6 @@ class ArticlesCell: UICollectionViewCell {
         }
     }
     func setUpConstraints(){
-        
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.frame.width * 0.45, height: 40)
-        gradientLayer.colors = [UIColor.black.cgColor,UIColor.clear.cgColor]
-        commodityImageView.layer.insertSublayer(gradientLayer, at: 0)
-        
         backView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         backView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         backView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 30).isActive = true
@@ -218,6 +212,14 @@ class ArticlesCell: UICollectionViewCell {
         checkButton.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -7).isActive = true
         checkButton.leftAnchor.constraint(equalTo: backView.leftAnchor, constant: 7).isActive = true
         checkButton.rightAnchor.constraint(equalTo: backView.rightAnchor, constant: -7).isActive = true
+    }
+    func setUpGrdientLayer(){
+        gradientLayer.colors = [UIColor.black.cgColor,UIColor.clear.cgColor]
+        gradientLayer.locations = [0.01,0.15]
+        commodityImageView.layer.addSublayer(gradientLayer)
+    }
+    override func layoutSubviews() {
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: commodityImageView.frame.width, height: commodityImageView.frame.height)
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

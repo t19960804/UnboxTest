@@ -14,7 +14,7 @@ class ArticleDeatailController: UIViewController {
     let cellID = "Cell"
     var reviewTextViewHeightAnchor: NSLayoutConstraint?
     var titleLabelHeightAnchor: NSLayoutConstraint?
-    
+    var zoomingImageView: UIImageView?
     var startingFrame: CGRect?
     var background: UIView?
     var startingImageView: UIImageView?
@@ -88,8 +88,6 @@ class ArticleDeatailController: UIViewController {
         label.textColor = .specialWhite
         return label
     }()
-    
-
     let reviewTextView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .specialWhite
@@ -231,59 +229,54 @@ extension ArticleDeatailController: ArticleDetailCell_Delagate{
         self.startingImageView = startingImageView
         self.startingImageView?.isHidden = true
         
+        background = UIView(frame: self.view.frame)
+        background?.backgroundColor = .black
+        background?.alpha = 0
         //找出imageView在當前畫面的frame
-        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil)
-        let zoomingImageView = UIImageView(frame: startingFrame!)
-        zoomingImageView.backgroundColor = .black
-        zoomingImageView.image = startingImageView.image
+        startingFrame = startingImageView.superview?.convert(startingImageView.frame, to: self.view)
+        zoomingImageView = UIImageView(frame: startingFrame!)
+        zoomingImageView?.image = startingImageView.image
+        zoomingImageView?.layer.cornerRadius = 8
+        zoomingImageView?.layer.masksToBounds = true
         //加入縮回去的動作
-        zoomingImageView.isUserInteractionEnabled = true
+        zoomingImageView?.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleZoomOut))
-        zoomingImageView.addGestureRecognizer(tap)
-        //加入畫面中
-        //keyWindow.frame 相等 self.view.frame
-        if let keyWindow = UIApplication.shared.keyWindow{
-            background = UIView(frame: keyWindow.frame)
-            background?.backgroundColor = .black
-            background?.alpha = 0
-            keyWindow.addSubview(background!)
-            keyWindow.addSubview(zoomingImageView)
-            
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.userImageView.alpha = 0
-                self.userNameLabel.alpha = 0
-                self.background?.alpha = 1
-                //等比例放大
-                // h2 / w2 = h1 / w1
-                //h2 = (h1 / w1)*w2
-                let endingHeight = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
-                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: endingHeight)
-                zoomingImageView.center = keyWindow.center
-            })
-        }
-       
-        
+        zoomingImageView?.addGestureRecognizer(tap)
 
+        self.view.addSubview(background!)
+        self.view.addSubview(zoomingImageView!)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.userImageView.alpha = 0
+            self.userNameLabel.alpha = 0
+            self.background?.alpha = 1
+            //等比例放大
+            //h2 / w2 = h1 / w1
+            //h2 = (h1 / w1)*w2
+            let endingHeight = self.startingFrame!.height / self.startingFrame!.width * self.view.frame.width
+            self.zoomingImageView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: endingHeight)
+            self.zoomingImageView?.center = self.view.center
+        }) { (completed) in
+            self.zoomingImageView?.layer.cornerRadius = 1
+        }
     }
     @objc func handleZoomOut(tapGesture: UITapGestureRecognizer){
-        if let imageView = tapGesture.view as? UIImageView{
-            imageView.layer.cornerRadius = 8
-            imageView.clipsToBounds = true
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            guard let startingFrame = self.startingFrame else{return}
+            self.zoomingImageView?.frame = startingFrame
+            self.zoomingImageView?.layer.cornerRadius = 8
+            self.background?.alpha = 0
             
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                guard let startingFrame = self.startingFrame else{return}
-                self.background?.alpha = 0
-                
-                imageView.frame = startingFrame
-            }) { (complete) in
-                    imageView.removeFromSuperview()
-                    self.startingImageView?.isHidden = false
-                    self.userImageView.alpha = 1
-                    self.userNameLabel.alpha = 1
-            }
-
+        }) { (complete) in
+            self.background?.removeFromSuperview()
+            self.zoomingImageView?.removeFromSuperview()
+            self.startingImageView?.isHidden = false
             
+            self.userImageView.alpha = 1
+            self.userNameLabel.alpha = 1
         }
+
+        
     }
     
     
