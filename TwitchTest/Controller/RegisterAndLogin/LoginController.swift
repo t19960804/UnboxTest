@@ -172,17 +172,18 @@ class LoginController: UIViewController {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            
+            let bottomSpace = self.view.frame.height - stackView.frame.origin.y - stackView.frame.height
+            let difference = keyboardHeight - bottomSpace
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.view.frame = CGRect(x: 0, y: -keyboardHeight, width: self.view.frame.width, height: self.view.frame.height)
-            }, completion: nil)
+                self.view.transform = CGAffineTransform(translationX: 0, y: -difference)
+            })
             
         }
     }
     @objc func handleKeyboardHide(_ notification: Notification){
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
+            self.view.transform = CGAffineTransform.identity
+        })
     }
 }
 
