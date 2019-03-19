@@ -13,7 +13,9 @@ import JGProgressHUD
 
 class LoginController: UIViewController {
     
-    let cellID = "Cell"
+    let accountCellID = "accountCellID"
+    let passwordCellID = "passwordCellID"
+    
     let logoImageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +35,8 @@ class LoginController: UIViewController {
     lazy var loginTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(LoginCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(AccountCell.self, forCellReuseIdentifier: accountCellID)
+        tableView.register(PasswordCell.self, forCellReuseIdentifier: passwordCellID)
         tableView.backgroundColor = UIColor.specialWhite
         return tableView
     }()
@@ -155,11 +158,12 @@ class LoginController: UIViewController {
         }
 
     }
+    
     func getInputValue() -> (account: String,password: String){
         let accountIndexPath = IndexPath(row: 0, section: 0)
         let passwordIndexPath = IndexPath(row: 0, section: 1)
-        let accountCell = loginTableView.cellForRow(at: accountIndexPath) as! LoginCell
-        let passwordCell = loginTableView.cellForRow(at: passwordIndexPath) as! LoginCell
+        let accountCell = loginTableView.cellForRow(at: accountIndexPath) as! AccountCell
+        let passwordCell = loginTableView.cellForRow(at: passwordIndexPath) as! PasswordCell
         let account = accountCell.inputTextField.text
         let password = passwordCell.inputTextField.text
         return (account! , password!)
@@ -196,12 +200,12 @@ extension LoginController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = loginTableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! LoginCell
-        cell.inputTextField.isSecureTextEntry = indexPath.section == 0 ? false : true
-        cell.inputTextField.text = indexPath.section == 0 ? "Asiagodtone@q.com" : "Qqqqqq"
-
-        let placeHolder = indexPath.section == 0 ? "輸入帳號..." : "輸入密碼..."
-        cell.inputTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
+        let cell: UITableViewCell
+        if indexPath.section == 0{
+            cell = loginTableView.dequeueReusableCell(withIdentifier: accountCellID, for: indexPath) as! AccountCell
+        }else{
+            cell = loginTableView.dequeueReusableCell(withIdentifier: passwordCellID, for: indexPath) as! PasswordCell
+        }
         return cell
     }
     //Header高

@@ -54,6 +54,7 @@ class HeartsStackView: UIStackView {
     @objc func handleHeartPressed_3(){pressHeart(number: 3)}
     @objc func handleHeartPressed_4(){pressHeart(number: 4)}
     @objc func handleHeartPressed_5(){pressHeart(number: 5)}
+    
     //點擊愛心變色
     func pressHeart(number: Int){
         for i in 0...loveImageViews.count - 1{

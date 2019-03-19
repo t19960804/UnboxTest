@@ -21,6 +21,9 @@
 		0B10848421EF19E4006F890E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848321EF19E4006F890E /* User.swift */; };
 		0B10848621F03976006F890E /* ArticleDeatailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B10848521F03976006F890E /* ArticleDeatailController.swift */; };
 		0B66DF7D223666D50022F4EC /* HeartsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF7C223666D50022F4EC /* HeartsStackView.swift */; };
+		0B66DF902240883C0022F4EC /* PasswordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF8F2240883C0022F4EC /* PasswordCell.swift */; };
+		0B66DF9222408BD00022F4EC /* UserNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF9122408BD00022F4EC /* UserNameCell.swift */; };
+		0B66DF96224091080022F4EC /* GeneralCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF95224091080022F4EC /* GeneralCell.swift */; };
 		0B8EC3A421F86D310056C617 /* UserInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A321F86D310056C617 /* UserInfoController.swift */; };
 		0B8EC3A721F979BE0056C617 /* UserInfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */; };
 		0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A821F9A5280056C617 /* CustomNavController.swift */; };
@@ -41,7 +44,7 @@
 		0BF013B52212833D00F59CD1 /* ArticlesCollectionVIewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF013B42212833D00F59CD1 /* ArticlesCollectionVIewTests.swift */; };
 		0BF013B7221285F900F59CD1 /* PostArticleControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF013B6221285F900F59CD1 /* PostArticleControllerTests.swift */; };
 		0BF013E02217FBB200F59CD1 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF013DF2217FBB200F59CD1 /* ColorExtension.swift */; };
-		0BF01402221914E200F59CD1 /* LoginCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF01401221914E200F59CD1 /* LoginCell.swift */; };
+		0BF01402221914E200F59CD1 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF01401221914E200F59CD1 /* AccountCell.swift */; };
 		0BF0141C2228E5BD00F59CD1 /* CommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0141B2228E5BD00F59CD1 /* CommentController.swift */; };
 		0BF0141E2229380F00F59CD1 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0141D2229380F00F59CD1 /* Comment.swift */; };
 		0BF01420222A5EB400F59CD1 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0141F222A5EB400F59CD1 /* CommentCell.swift */; };
@@ -75,6 +78,9 @@
 		0B10848321EF19E4006F890E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0B10848521F03976006F890E /* ArticleDeatailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDeatailController.swift; sourceTree = "<group>"; };
 		0B66DF7C223666D50022F4EC /* HeartsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartsStackView.swift; sourceTree = "<group>"; };
+		0B66DF8F2240883C0022F4EC /* PasswordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordCell.swift; sourceTree = "<group>"; };
+		0B66DF9122408BD00022F4EC /* UserNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNameCell.swift; sourceTree = "<group>"; };
+		0B66DF95224091080022F4EC /* GeneralCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCell.swift; sourceTree = "<group>"; };
 		0B8EC3A321F86D310056C617 /* UserInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoController.swift; sourceTree = "<group>"; };
 		0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoLabel.swift; sourceTree = "<group>"; };
 		0B8EC3A821F9A5280056C617 /* CustomNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavController.swift; sourceTree = "<group>"; };
@@ -99,7 +105,7 @@
 		0BF013B42212833D00F59CD1 /* ArticlesCollectionVIewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesCollectionVIewTests.swift; sourceTree = "<group>"; };
 		0BF013B6221285F900F59CD1 /* PostArticleControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostArticleControllerTests.swift; sourceTree = "<group>"; };
 		0BF013DF2217FBB200F59CD1 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		0BF01401221914E200F59CD1 /* LoginCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCell.swift; sourceTree = "<group>"; };
+		0BF01401221914E200F59CD1 /* AccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		0BF0141B2228E5BD00F59CD1 /* CommentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentController.swift; sourceTree = "<group>"; };
 		0BF0141D2229380F00F59CD1 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		0BF0141F222A5EB400F59CD1 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
@@ -154,6 +160,17 @@
 				0BF01421222A82BC00F59CD1 /* DateExtension.swift */,
 			);
 			path = Extenstion;
+			sourceTree = "<group>";
+		};
+		0B66DF8E223F9EC70022F4EC /* LogInAndRegister */ = {
+			isa = PBXGroup;
+			children = (
+				0B66DF95224091080022F4EC /* GeneralCell.swift */,
+				0BF01401221914E200F59CD1 /* AccountCell.swift */,
+				0B66DF8F2240883C0022F4EC /* PasswordCell.swift */,
+				0B66DF9122408BD00022F4EC /* UserNameCell.swift */,
+			);
+			path = LogInAndRegister;
 			sourceTree = "<group>";
 		};
 		0B8EC3A221F86CF60056C617 /* RegisterAndLogin */ = {
@@ -228,7 +245,7 @@
 		0BC3415021E5A6D700BD3886 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				0BF01401221914E200F59CD1 /* LoginCell.swift */,
+				0B66DF8E223F9EC70022F4EC /* LogInAndRegister */,
 				0BC3415221E5A6F900BD3886 /* CategoryCell.swift */,
 				0B10847521E9EC4A006F890E /* ArticlesCell.swift */,
 				0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */,
@@ -455,10 +472,12 @@
 				0B10846A21E5FAFE006F890E /* LoginController.swift in Sources */,
 				0B66DF7D223666D50022F4EC /* HeartsStackView.swift in Sources */,
 				0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */,
-				0BF01402221914E200F59CD1 /* LoginCell.swift in Sources */,
+				0BF01402221914E200F59CD1 /* AccountCell.swift in Sources */,
 				0B10847A21EB269B006F890E /* PostArticleController.swift in Sources */,
+				0B66DF902240883C0022F4EC /* PasswordCell.swift in Sources */,
 				0B8EC3AB21FAFE9F0056C617 /* UserInfoCell.swift in Sources */,
 				0BF0141E2229380F00F59CD1 /* Comment.swift in Sources */,
+				0B66DF96224091080022F4EC /* GeneralCell.swift in Sources */,
 				0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */,
 				0BE3DF9D220AD98500D53734 /* PostArticleCell.swift in Sources */,
 				0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */,
@@ -477,6 +496,7 @@
 				0BC3415321E5A6F900BD3886 /* CategoryCell.swift in Sources */,
 				0BE3DF9B2203FE9500D53734 /* FollowersTableViewCell.swift in Sources */,
 				0BF013E02217FBB200F59CD1 /* ColorExtension.swift in Sources */,
+				0B66DF9222408BD00022F4EC /* UserNameCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

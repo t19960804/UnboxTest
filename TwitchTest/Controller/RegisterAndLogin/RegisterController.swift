@@ -15,7 +15,10 @@ import JGProgressHUD
 
 class RegisterController: UIViewController {
     let hud = JGProgressHUD(style: .dark)
-
+    let accountCellID = "accountCellID"
+    let passwordCellID = "passwordCellID"
+    let userNameCellID = "userNameCellID"
+    
     lazy var uploadingImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +37,10 @@ class RegisterController: UIViewController {
     lazy var registerTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(LoginCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(AccountCell.self, forCellReuseIdentifier: accountCellID)
+        tableView.register(PasswordCell.self, forCellReuseIdentifier: passwordCellID)
+        tableView.register(UserNameCell.self, forCellReuseIdentifier: userNameCellID)
+
         tableView.backgroundColor = UIColor.specialWhite
         return tableView
     }()
@@ -172,9 +178,9 @@ class RegisterController: UIViewController {
         let passwordIndexPath = IndexPath(row: 0, section: 1)
         let userNameIndexPath = IndexPath(row: 0, section: 2)
         
-        let accountCell = registerTableView.cellForRow(at: accountIndexPath) as! LoginCell
-        let passwordCell = registerTableView.cellForRow(at: passwordIndexPath) as! LoginCell
-        let userNameCell = registerTableView.cellForRow(at: userNameIndexPath) as! LoginCell
+        let accountCell = registerTableView.cellForRow(at: accountIndexPath) as! AccountCell
+        let passwordCell = registerTableView.cellForRow(at: passwordIndexPath) as! PasswordCell
+        let userNameCell = registerTableView.cellForRow(at: userNameIndexPath) as! UserNameCell
         
         let account = accountCell.inputTextField.text
         let password = passwordCell.inputTextField.text
@@ -257,30 +263,14 @@ extension RegisterController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var placeHolder: String
-        var isSecurity: Bool
-        var inputText: String
-        
-        let cell = registerTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! LoginCell
-        
-        switch indexPath.section {
-        case 0:
-            inputText = "Asiagodtone@q.com"
-            placeHolder = "輸入帳號..."
-            isSecurity = false
-        case 1:
-            inputText = "Qqqqqq"
-            placeHolder = "輸入密碼..."
-            isSecurity = true
-        case 2:
-            inputText = ""
-            placeHolder = "輸入暱稱..."
-            isSecurity = false
-        default: fatalError("Invalid Sction")
+        let cell: UITableViewCell
+        if indexPath.section == 0{
+            cell = registerTableView.dequeueReusableCell(withIdentifier: accountCellID, for: indexPath) as! AccountCell
+        }else if indexPath.section == 1{
+            cell = registerTableView.dequeueReusableCell(withIdentifier: passwordCellID, for: indexPath) as! PasswordCell
+        }else{
+            cell = registerTableView.dequeueReusableCell(withIdentifier: userNameCellID, for: indexPath) as! UserNameCell
         }
-        cell.inputTextField.text = inputText
-        cell.inputTextField.isSecureTextEntry = isSecurity
-        cell.inputTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor : UIColor.themePink])
         return cell
     }
     //Header高

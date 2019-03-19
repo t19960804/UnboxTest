@@ -6,15 +6,17 @@
 //  Copyright © 2019 t19960804. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class LoginCell: UITableViewCell {
-    let inputTextField: UITextField = {
+class AccountCell: GeneralCell {
+    lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.textColor = UIColor.themePink
-        textField.backgroundColor = UIColor.specialWhite
+        textField.textColor = .themePink
+        textField.backgroundColor = .specialWhite
+        textField.text = "Asiagodtone@q.com"
+        textField.placeholder = "輸入帳號..."
+        textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [.foregroundColor : UIColor.themePink])
         return textField
     }()
     let bottomLine: UIView = {
@@ -23,8 +25,7 @@ class LoginCell: UITableViewCell {
         view.backgroundColor = UIColor.themePink
         return view
     }()
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override func setUpConstarints() {
         self.addSubview(inputTextField)
         self.addSubview(bottomLine)
         inputTextField.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
@@ -37,8 +38,5 @@ class LoginCell: UITableViewCell {
         bottomLine.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         bottomLine.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+   
 }
