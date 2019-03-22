@@ -6,27 +6,24 @@
 //  Copyright © 2019 t19960804. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class RegistrationViewModel {
-    var account: String?{
+    
+    var isRegistering: Bool?{
         didSet{
-            test()
+            isRegisteringObserver?(isRegistering)
         }
     }
-    var password: String?{
+    var userImage: UIImage?{
         didSet{
-            test()
+            pickImageObserver?(userImage)
         }
     }
-    var userName: String?{
-        didSet{
-            test()
-        }
-    }
-    func test(){
-        print("account:\(account)")
-        print("pswd:\(password)")
-        print("userName:\(userName)")
-    }
+    var account: String?
+    var password: String?
+    var userName: String?
+    
+    var pickImageObserver: ((UIImage?) -> Void)?
+    var isRegisteringObserver: ((Bool?) -> Void)?
 }

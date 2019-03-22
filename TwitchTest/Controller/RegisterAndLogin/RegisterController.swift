@@ -11,12 +11,14 @@ import Firebase
 import JGProgressHUD
 
 class RegisterController: UIViewController {
-    let hud = JGProgressHUD(style: .dark)
     let accountCellID = "accountCellID"
     let passwordCellID = "passwordCellID"
     let userNameCellID = "userNameCellID"
-    let registartionViewModel = RegistrationViewModel()
-
+    let registrationViewModel = RegistrationViewModel()
+    let registerHUD = JGProgressHUD(style: .dark)
+    var accountCell: AccountCell?
+    var passwordCell: PasswordCell?
+    var userNameCell: UserNameCell?
     
     lazy var uploadingImageView: UIImageView = {
         let imageView = UIImageView()
@@ -39,7 +41,8 @@ class RegisterController: UIViewController {
         tableView.register(AccountCell.self, forCellReuseIdentifier: accountCellID)
         tableView.register(PasswordCell.self, forCellReuseIdentifier: passwordCellID)
         tableView.register(UserNameCell.self, forCellReuseIdentifier: userNameCellID)
-
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.backgroundColor = UIColor.specialWhite
         return tableView
     }()
@@ -80,16 +83,13 @@ class RegisterController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
-        registerTableView.delegate = self
-        registerTableView.dataSource = self
         setUpConstraints()
         addKeyboardObserver()
+        setUpViewModelObserver()
     }
-    override func viewDidAppear(_ animated: Bool) {
-        addTarget()
-
-    }
+    override func viewDidAppear(_ animated: Bool) {addTarget()}
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
+    
     func setUpConstraints(){
         self.view.addSubview(uploadingImageView)
         self.view.addSubview(registerTableView)
@@ -111,6 +111,20 @@ class RegisterController: UIViewController {
         stackView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3).isActive = true
         
     }
+    fileprivate func setUpViewModelObserver(){
+        registrationViewModel.pickImageObserver = { [weak self] (userImage) in
+            self?.uploadingImageView.image = userImage
+        }
+        registrationViewModel.isRegisteringObserver = { [weak self] (isRegistering) in
+            guard let isRegistering = isRegistering else {return}
+            if isRegistering{
+                self?.showRegisterHUD()
+            }else{
+                self?.registerHUD.dismiss(afterDelay: 1)
+            }
+            
+        }
+    }
     @objc func handleOpenAlbum(){
         let picker = UIImagePickerController()
         picker.sourceType = .photoLibrary
@@ -118,21 +132,15 @@ class RegisterController: UIViewController {
         picker.delegate = self
         self.present(picker, animated: true, completion: nil)
     }
-    let registrationViewModel = RegistrationViewModel()
-
     @objc func handleRegister(){
         guard let account = registrationViewModel.account,let password = registrationViewModel.password,let userName = registrationViewModel.userName else{return}
-        hud.textLabel.text = "驗證中..."
-        hud.show(in: self.view)
-        
+        registrationViewModel.isRegistering = true
         if userName.isEmpty || account.isEmpty || password.isEmpty{
-                hud.dismiss(afterDelay: 1)
-                Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
+                showErrorHUD(title: "錯誤", detail: "錯誤尚有欄位未輸入")
             }else{
                 //新增帳號
                 Auth.auth().createUser(withEmail: account, password: password) { (result, error) in
                     if let error = error{
-                        self.hud.dismiss(afterDelay: 1)
                         let errorCode = (error as NSError).code
                         self.detectErrorCode(code: errorCode)
                     }else{
@@ -142,6 +150,20 @@ class RegisterController: UIViewController {
 
                 }
             }
+    }
+    fileprivate func showRegisterHUD(){
+        registerHUD.textLabel.text = "驗證中"
+        registerHUD.detailTextLabel.text = "請稍候"
+        registerHUD.show(in: self.view, animated: true)
+    }
+    fileprivate func showErrorHUD(title: String,detail: String){
+        registerHUD.dismiss(animated: true)
+        let errorHUD = JGProgressHUD(style: .dark)
+        errorHUD.textLabel.text = title
+        errorHUD.detailTextLabel.text = detail
+        errorHUD.indicatorView = JGProgressHUDErrorIndicatorView()
+        errorHUD.show(in: self.view, animated: true)
+        errorHUD.dismiss(afterDelay: 3, animated: true)
     }
     fileprivate func saveImageAndUserInfo(userUID: String,userName: String,account: String){
         let imageUID = NSUUID().uuidString
@@ -172,9 +194,7 @@ class RegisterController: UIViewController {
         
     }
     
-    var accountCell: AccountCell?
-    var passwordCell: PasswordCell?
-    var userNameCell: UserNameCell?
+    
 
     fileprivate func addTarget(){
         let accountIndexPath = IndexPath(row: 0, section: 0)
@@ -198,7 +218,6 @@ class RegisterController: UIViewController {
             registrationViewModel.userName = textField.text
         }
     }
-    ////////////////////////////////////////////
     func createUser(with uid: String,values: [String : Any]){
         let ref = Database.database().reference().child("使用者").child(uid)
         ref.setValue(values) { (error, metaData) in
@@ -206,7 +225,7 @@ class RegisterController: UIViewController {
                 print("error:",error)
                 return
             }
-            self.hud.dismiss(afterDelay: 1)
+            self.registrationViewModel.isRegistering = false
             //dismiss所有的Controller,回到根畫面
             self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
             UserDefaults.standard.setIsLogIn(value: true)
@@ -215,13 +234,13 @@ class RegisterController: UIViewController {
     func detectErrorCode(code: Int){
         switch code {
         case 17007:
-            Alert.alert_BugReport(message: "帳號已被使用", title: "錯誤", with: self)
+            showErrorHUD(title: "錯誤", detail: "帳號已被使用")
         case 17008:
-            Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
+            showErrorHUD(title: "錯誤", detail: "帳號格式不符")
         case 17020:
-            Alert.alert_BugReport(message: "請檢查網路", title: "錯誤", with: self)
+            showErrorHUD(title: "錯誤", detail: "請檢查網路")
         case 17026:
-            Alert.alert_BugReport(message: "密碼不足6位數", title: "錯誤", with: self)
+            showErrorHUD(title: "錯誤", detail: "密碼不足6位數")
         default:
             return
         }
@@ -257,7 +276,7 @@ extension RegisterController: UIImagePickerControllerDelegate,UINavigationContro
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
         self.dismiss(animated: true, completion: nil)
-        uploadingImageView.image = getImage
+        registrationViewModel.userImage = getImage
     }
     //按下取消
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
