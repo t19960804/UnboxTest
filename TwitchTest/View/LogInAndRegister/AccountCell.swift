@@ -38,5 +38,5 @@ class AccountCell: GeneralCell {
         bottomLine.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         bottomLine.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     }
-   
+    
 }

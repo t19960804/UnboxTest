@@ -7,10 +7,7 @@
 //
 
 import UIKit
-import FirebaseAuth
-import FirebaseDatabase
-import FirebaseStorage
-
+import Firebase
 import JGProgressHUD
 
 class RegisterController: UIViewController {
@@ -18,6 +15,8 @@ class RegisterController: UIViewController {
     let accountCellID = "accountCellID"
     let passwordCellID = "passwordCellID"
     let userNameCellID = "userNameCellID"
+    let registartionViewModel = RegistrationViewModel()
+
     
     lazy var uploadingImageView: UIImageView = {
         let imageView = UIImageView()
@@ -86,12 +85,11 @@ class RegisterController: UIViewController {
         setUpConstraints()
         addKeyboardObserver()
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self)
+    override func viewDidAppear(_ animated: Bool) {
+        addTarget()
+
     }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     func setUpConstraints(){
         self.view.addSubview(uploadingImageView)
         self.view.addSubview(registerTableView)
@@ -120,12 +118,10 @@ class RegisterController: UIViewController {
         picker.delegate = self
         self.present(picker, animated: true, completion: nil)
     }
-    @objc func handleRegister(){
+    let registrationViewModel = RegistrationViewModel()
 
-        let account = getInputValue().account
-        let password = getInputValue().password
-        let userName = getInputValue().userName
-        
+    @objc func handleRegister(){
+        guard let account = registrationViewModel.account,let password = registrationViewModel.password,let userName = registrationViewModel.userName else{return}
         hud.textLabel.text = "驗證中..."
         hud.show(in: self.view)
         
@@ -140,54 +136,69 @@ class RegisterController: UIViewController {
                         let errorCode = (error as NSError).code
                         self.detectErrorCode(code: errorCode)
                     }else{
-                        let imageUID = NSUUID().uuidString
-                        guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
-                        //圖片存進Storage,再從裡面抓出URL
-                        let imageRef = Storage.storage().reference().child("userImages").child(imageUID)
-                        imageRef.putData(userImage, metadata: nil, completion: { (metadata, error) in
-                            if let error = error{
-                                print("error:",error)
-                                return
-                            }
-                            //抓出在Storage的URL
-                            imageRef.downloadURL(completion: { (url, error) in
-                                if let error = error{
-                                    print("error:",error)
-                                    return
-                                }
-                                //新增user後,user有自帶的uid
-                                guard let userUID = result?.user.uid else{return}
-                                let values: [String : Any] = ["uid" : userUID,
-                                                              "userName" : userName,
-                                                              "account" : account,
-                                                              "imageURL" : url?.absoluteString as Any]
-                                //需要一點時間,不能馬上切到UserInfo
-                                self.createUser(with: userUID, values: values)
-                            })
-
-                        })
-                        
+                        guard let userUID = result?.user.uid else{ return }
+                        self.saveImageAndUserInfo(userUID: userUID, userName: userName, account: account)
                     }
 
                 }
             }
     }
+    fileprivate func saveImageAndUserInfo(userUID: String,userName: String,account: String){
+        let imageUID = NSUUID().uuidString
+        guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
+        //圖片存進Storage,再從裡面抓出URL
+        let imageRef = Storage.storage().reference().child("userImages").child(imageUID)
+        imageRef.putData(userImage, metadata: nil, completion: { (metadata, error) in
+            if let error = error{
+                print("error:",error)
+                return
+            }
+            //抓出在Storage的URL
+            imageRef.downloadURL(completion: { (url, error) in
+                if let error = error{
+                    print("error:",error)
+                    return
+                }
+                
+                let values: [String : Any] = ["uid" : userUID,
+                                              "userName" : userName,
+                                              "account" : account,
+                                              "imageURL" : url?.absoluteString as Any]
+                //需要一點時間,不能馬上切到UserInfo
+                self.createUser(with: userUID, values: values)
+            })
+            
+        })
+        
+    }
     
-    func getInputValue() -> (account: String,password: String,userName: String){
+    var accountCell: AccountCell?
+    var passwordCell: PasswordCell?
+    var userNameCell: UserNameCell?
+
+    fileprivate func addTarget(){
         let accountIndexPath = IndexPath(row: 0, section: 0)
         let passwordIndexPath = IndexPath(row: 0, section: 1)
         let userNameIndexPath = IndexPath(row: 0, section: 2)
         
-        let accountCell = registerTableView.cellForRow(at: accountIndexPath) as! AccountCell
-        let passwordCell = registerTableView.cellForRow(at: passwordIndexPath) as! PasswordCell
-        let userNameCell = registerTableView.cellForRow(at: userNameIndexPath) as! UserNameCell
+        accountCell = registerTableView.cellForRow(at: accountIndexPath) as? AccountCell
+        passwordCell = registerTableView.cellForRow(at: passwordIndexPath) as? PasswordCell
+        userNameCell = registerTableView.cellForRow(at: userNameIndexPath) as? UserNameCell
         
-        let account = accountCell.inputTextField.text
-        let password = passwordCell.inputTextField.text
-        let userName = userNameCell.inputTextField.text
-
-        return(account!,password!,userName!)
+        accountCell?.inputTextField.addTarget(self, action: #selector(handleInputChanged(textField:)), for: .editingChanged)
+        passwordCell?.inputTextField.addTarget(self, action: #selector(handleInputChanged(textField:)), for: .editingChanged)
+        userNameCell?.inputTextField.addTarget(self, action: #selector(handleInputChanged(textField:)), for: .editingChanged)
     }
+    @objc fileprivate func handleInputChanged(textField: UITextField){
+        if textField == accountCell?.inputTextField{
+            registrationViewModel.account = textField.text
+        }else if textField == passwordCell?.inputTextField{
+            registrationViewModel.password = textField.text
+        }else{
+            registrationViewModel.userName = textField.text
+        }
+    }
+    ////////////////////////////////////////////
     func createUser(with uid: String,values: [String : Any]){
         let ref = Database.database().reference().child("使用者").child(uid)
         ref.setValue(values) { (error, metaData) in

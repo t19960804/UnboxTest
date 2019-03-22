@@ -8,7 +8,8 @@
 
 import UIKit
 class UserNameCell: GeneralCell {
-    let inputTextField: UITextField = {
+
+    lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textColor = .themePink
@@ -36,5 +37,6 @@ class UserNameCell: GeneralCell {
         bottomLine.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         bottomLine.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     }
+    
 }
 
