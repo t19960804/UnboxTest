@@ -37,6 +37,8 @@ class LoginController: UIViewController {
         tableView.register(AccountCell.self, forCellReuseIdentifier: accountCellID)
         tableView.register(PasswordCell.self, forCellReuseIdentifier: passwordCellID)
         tableView.backgroundColor = UIColor.specialWhite
+        tableView.delegate = self
+        tableView.dataSource = self
         return tableView
     }()
     let loginButton: UIButton = {
@@ -73,19 +75,22 @@ class LoginController: UIViewController {
         stackView.spacing = 20
         return stackView
     }()
+    
+    var accountCell: AccountCell?
+    var passwordCell: PasswordCell?
+    let loginHUD = JGProgressHUD(style: .dark)
+    let loginViewModel = LoginViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.backgroundColor = .specialWhite
-        loginTableView.delegate = self
-        loginTableView.dataSource = self
-
         setUpConstraints()
         addKeyboardObserver()
+        setUpViewModelObserver()
     }
+    override func viewDidAppear(_ animated: Bool) {addTextFieldTarget()}
     override func viewWillDisappear(_ animated: Bool) {NotificationCenter.default.removeObserver(self)}
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
-    func setUpConstraints(){
+    fileprivate func setUpConstraints(){
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)
         self.view.addSubview(loginTableView)
@@ -111,66 +116,67 @@ class LoginController: UIViewController {
         
 
     }
-    func detectErrorCode(code: Int){
-        switch code {
-        case 17008:
-            Alert.alert_BugReport(message: "帳號格式不符", title: "錯誤", with: self)
-        case 17009:
-            Alert.alert_BugReport(message: "密碼錯誤", title: "錯誤", with: self)
-        case 17011:
-            Alert.alert_BugReport(message: "帳號尚未註冊", title: "錯誤", with: self)
-        case 17020:
-            Alert.alert_BugReport(message: "請檢查網路連線", title: "錯誤", with: self)
-        default:
-            return
-        }
-    }
-    func addKeyboardObserver(){
+    
+    fileprivate func addKeyboardObserver(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardShow(_:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardHide(_:)), name:UIResponder.keyboardWillHideNotification, object: nil)
     }
+    fileprivate func setUpViewModelObserver(){
+        loginViewModel.isLoginingObserver = { [weak self] (isLogining) in
+            guard let isLogining = isLogining else{ return }
+            if isLogining{
+                self?.showLoginHUD()
+            }else{
+                self?.loginHUD.dismiss(animated: true)
+            }
+            
+        }
+    }
+    fileprivate func showLoginHUD(){
+        loginHUD.textLabel.text = "登入中"
+        loginHUD.detailTextLabel.text = "請稍候"
+        loginHUD.show(in: self.view, animated: true)
+    }
+    fileprivate func showErrorHUD(detail: String){
+        loginHUD.dismiss(animated: true)
+        let errorHUD = JGProgressHUD(style: .dark)
+        errorHUD.textLabel.text = "錯誤"
+        errorHUD.detailTextLabel.text = detail
+        errorHUD.indicatorView = JGProgressHUDErrorIndicatorView()
+        errorHUD.show(in: self.view, animated: true)
+        errorHUD.dismiss(afterDelay: 3, animated: true)
+    }
     //MARK: - Selector方法
     @objc func handleLogin(){
-        let account = getInputValue().account
-        let password = getInputValue().password
-        
-        let hud = JGProgressHUD(style: .dark)
-        hud.textLabel.text = "登入中..."
-        hud.show(in: self.view, animated: true)
-        
-        if account.isEmpty || password.isEmpty{
-            hud.dismiss(afterDelay: 1)
-            Alert.alert_BugReport(message: "尚有欄位未輸入", title: "錯誤", with: self)
-        }else{
-            Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
-                    if let error = error{
-                        hud.dismiss(afterDelay: 1)
-                        let errorCode = (error as NSError).code
-                        self.detectErrorCode(code: errorCode)
-                    }else{
-                        hud.dismiss(animated: true)
-                        UserDefaults.standard.setIsLogIn(value: true)
-                        self.dismiss(animated: true, completion: nil)
-                    }
-
-                }
+        self.view.endEditing(true)
+        loginViewModel.performLogin { (error) in
+            if let error = error{
+                self.showErrorHUD(detail: error.localizedDescription)
+                return
+            }
+            self.dismiss(animated: true, completion: nil)
         }
-
     }
-    
-    func getInputValue() -> (account: String,password: String){
+    fileprivate func  addTextFieldTarget(){
         let accountIndexPath = IndexPath(row: 0, section: 0)
         let passwordIndexPath = IndexPath(row: 0, section: 1)
-        let accountCell = loginTableView.cellForRow(at: accountIndexPath) as! AccountCell
-        let passwordCell = loginTableView.cellForRow(at: passwordIndexPath) as! PasswordCell
-        let account = accountCell.inputTextField.text
-        let password = passwordCell.inputTextField.text
-        return (account! , password!)
+        
+        accountCell = loginTableView.cellForRow(at: accountIndexPath) as? AccountCell
+        passwordCell = loginTableView.cellForRow(at: passwordIndexPath) as? PasswordCell
+        
+        accountCell?.inputTextField.addTarget(self, action: #selector(handleInputChanged(textField:)), for: .editingChanged)
+        passwordCell?.inputTextField.addTarget(self, action: #selector(handleInputChanged(textField:)), for: .editingChanged)
+        
     }
-    @objc func handleRegister(){
-        self.present(RegisterController(), animated: true, completion: nil)
+    @objc fileprivate func handleInputChanged(textField: UITextField){
+        if textField == accountCell?.inputTextField{
+            loginViewModel.account = textField.text
+        }else{
+            loginViewModel.password = textField.text
+        }
     }
     
+    @objc func handleRegister(){self.present(RegisterController(), animated: true, completion: nil)}
     @objc func handleKeyboardShow(_ notification: Notification){
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
@@ -178,7 +184,7 @@ class LoginController: UIViewController {
             let bottomSpace = self.view.frame.height - stackView.frame.origin.y - stackView.frame.height
             let difference = keyboardHeight - bottomSpace
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.view.transform = CGAffineTransform(translationX: 0, y: -difference)
+                self.view.transform = CGAffineTransform(translationX: 0, y: -difference + 10)
             })
             
         }

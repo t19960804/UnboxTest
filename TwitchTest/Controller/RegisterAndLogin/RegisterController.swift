@@ -88,7 +88,7 @@ class RegisterController: UIViewController {
         addKeyboardObserver()
         setUpViewModelObserver()
     }
-    override func viewDidAppear(_ animated: Bool) {addTarget()}
+    override func viewDidAppear(_ animated: Bool) {addTextfieldTarget()}
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     
     func setUpConstraints(){
@@ -134,6 +134,7 @@ class RegisterController: UIViewController {
         self.present(picker, animated: true, completion: nil)
     }
     @objc func handleRegister(){
+        self.view.endEditing(true)
         registrationViewModel.performRegister { (error, values) in
             if let error = error{
                 self.showErrorHUD(detail: error.localizedDescription)
@@ -161,7 +162,6 @@ class RegisterController: UIViewController {
     fileprivate func saveImageAndUserInfo(userUID: String,userName: String,account: String){
         let imageUID = NSUUID().uuidString
         guard let userImage = self.uploadImageButton.currentImage?.jpegData(compressionQuality: 0.2) else{return}
-//        guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
         //圖片存進Storage,再從裡面抓出URL
         let imageRef = Storage.storage().reference().child("userImages").child(imageUID)
         imageRef.putData(userImage, metadata: nil, completion: { (metadata, error) in
@@ -190,7 +190,7 @@ class RegisterController: UIViewController {
     
     
 
-    fileprivate func addTarget(){
+    fileprivate func addTextfieldTarget(){
         let accountIndexPath = IndexPath(row: 0, section: 0)
         let passwordIndexPath = IndexPath(row: 0, section: 1)
         let userNameIndexPath = IndexPath(row: 0, section: 2)
@@ -223,20 +223,6 @@ class RegisterController: UIViewController {
             //dismiss所有的Controller,回到根畫面
             self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
             UserDefaults.standard.setIsLogIn(value: true)
-        }
-    }
-    func detectErrorCode(code: Int){
-        switch code {
-        case 17007:
-            showErrorHUD(detail: "帳號已被使用")
-        case 17008:
-            showErrorHUD(detail: "帳號格式不符")
-        case 17020:
-            showErrorHUD(detail: "請檢查網路")
-        case 17026:
-            showErrorHUD(detail: "密碼不足6位數")
-        default:
-            return
         }
     }
     func addKeyboardObserver(){
