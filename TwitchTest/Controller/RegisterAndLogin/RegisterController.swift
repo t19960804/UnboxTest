@@ -20,21 +20,22 @@ class RegisterController: UIViewController {
     var passwordCell: PasswordCell?
     var userNameCell: UserNameCell?
     
-    lazy var uploadingImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "user256")
-        imageView.backgroundColor = UIColor.clear
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 100
-        imageView.layer.borderColor = UIColor.themePink.cgColor
-        imageView.layer.borderWidth = 3
-        imageView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleOpenAlbum))
-        imageView.addGestureRecognizer(tapGesture)
-        return imageView
+    lazy var uploadImageButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("選擇照片", for: .normal)
+        button.setTitleColor(.themePink, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        button.backgroundColor = .clear
+        button.imageView?.contentMode = .scaleAspectFill
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 100
+        button.layer.borderColor = UIColor.themePink.cgColor
+        button.layer.borderWidth = 3
+        button.addTarget(self, action: #selector(handleOpenAlbum), for: .touchUpInside)
+        return button
     }()
+
     lazy var registerTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,16 +92,16 @@ class RegisterController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     
     func setUpConstraints(){
-        self.view.addSubview(uploadingImageView)
+        self.view.addSubview(uploadImageButton)
         self.view.addSubview(registerTableView)
         self.view.addSubview(stackView)
         
-        uploadingImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        uploadingImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
-        uploadingImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        uploadingImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        uploadImageButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        uploadImageButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
+        uploadImageButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        uploadImageButton.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
-        registerTableView.topAnchor.constraint(equalTo: uploadingImageView.bottomAnchor, constant: 60).isActive = true
+        registerTableView.topAnchor.constraint(equalTo: uploadImageButton.bottomAnchor, constant: 60).isActive = true
         registerTableView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         registerTableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
         registerTableView.heightAnchor.constraint(equalToConstant: 300).isActive = true
@@ -113,14 +114,14 @@ class RegisterController: UIViewController {
     }
     fileprivate func setUpViewModelObserver(){
         registrationViewModel.pickImageObserver = { [weak self] (userImage) in
-            self?.uploadingImageView.image = userImage
+            self?.uploadImageButton.setImage(userImage?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
         registrationViewModel.isRegisteringObserver = { [weak self] (isRegistering) in
             guard let isRegistering = isRegistering else {return}
             if isRegistering{
                 self?.showRegisterHUD()
             }else{
-                self?.registerHUD.dismiss(afterDelay: 1)
+                self?.registerHUD.dismiss(animated: true)
             }
             
         }
@@ -133,33 +134,25 @@ class RegisterController: UIViewController {
         self.present(picker, animated: true, completion: nil)
     }
     @objc func handleRegister(){
-        guard let account = registrationViewModel.account,let password = registrationViewModel.password,let userName = registrationViewModel.userName else{return}
-        registrationViewModel.isRegistering = true
-        if userName.isEmpty || account.isEmpty || password.isEmpty{
-                showErrorHUD(title: "錯誤", detail: "錯誤尚有欄位未輸入")
-            }else{
-                //新增帳號
-                Auth.auth().createUser(withEmail: account, password: password) { (result, error) in
-                    if let error = error{
-                        let errorCode = (error as NSError).code
-                        self.detectErrorCode(code: errorCode)
-                    }else{
-                        guard let userUID = result?.user.uid else{ return }
-                        self.saveImageAndUserInfo(userUID: userUID, userName: userName, account: account)
-                    }
-
-                }
+        registrationViewModel.performRegister { (error, values) in
+            if let error = error{
+                self.showErrorHUD(detail: error.localizedDescription)
+                return
             }
+            guard let userUID = values?["uid"] as? String else{return}
+            self.createUser(with: userUID, values: values!)
+    
+        }
     }
     fileprivate func showRegisterHUD(){
         registerHUD.textLabel.text = "驗證中"
         registerHUD.detailTextLabel.text = "請稍候"
         registerHUD.show(in: self.view, animated: true)
     }
-    fileprivate func showErrorHUD(title: String,detail: String){
+    fileprivate func showErrorHUD(detail: String){
         registerHUD.dismiss(animated: true)
         let errorHUD = JGProgressHUD(style: .dark)
-        errorHUD.textLabel.text = title
+        errorHUD.textLabel.text = "錯誤"
         errorHUD.detailTextLabel.text = detail
         errorHUD.indicatorView = JGProgressHUDErrorIndicatorView()
         errorHUD.show(in: self.view, animated: true)
@@ -167,7 +160,8 @@ class RegisterController: UIViewController {
     }
     fileprivate func saveImageAndUserInfo(userUID: String,userName: String,account: String){
         let imageUID = NSUUID().uuidString
-        guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
+        guard let userImage = self.uploadImageButton.currentImage?.jpegData(compressionQuality: 0.2) else{return}
+//        guard let userImage = self.uploadingImageView.image?.jpegData(compressionQuality: 0.2) else{return}
         //圖片存進Storage,再從裡面抓出URL
         let imageRef = Storage.storage().reference().child("userImages").child(imageUID)
         imageRef.putData(userImage, metadata: nil, completion: { (metadata, error) in
@@ -222,7 +216,7 @@ class RegisterController: UIViewController {
         let ref = Database.database().reference().child("使用者").child(uid)
         ref.setValue(values) { (error, metaData) in
             if let error = error{
-                print("error:",error)
+                self.showErrorHUD(detail: error.localizedDescription)
                 return
             }
             self.registrationViewModel.isRegistering = false
@@ -234,13 +228,13 @@ class RegisterController: UIViewController {
     func detectErrorCode(code: Int){
         switch code {
         case 17007:
-            showErrorHUD(title: "錯誤", detail: "帳號已被使用")
+            showErrorHUD(detail: "帳號已被使用")
         case 17008:
-            showErrorHUD(title: "錯誤", detail: "帳號格式不符")
+            showErrorHUD(detail: "帳號格式不符")
         case 17020:
-            showErrorHUD(title: "錯誤", detail: "請檢查網路")
+            showErrorHUD(detail: "請檢查網路")
         case 17026:
-            showErrorHUD(title: "錯誤", detail: "密碼不足6位數")
+            showErrorHUD(detail: "密碼不足6位數")
         default:
             return
         }
