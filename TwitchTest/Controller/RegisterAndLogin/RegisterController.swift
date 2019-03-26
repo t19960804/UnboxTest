@@ -11,9 +11,7 @@ import Firebase
 import JGProgressHUD
 
 class RegisterController: UIViewController {
-    let accountCellID = "accountCellID"
-    let passwordCellID = "passwordCellID"
-    let userNameCellID = "userNameCellID"
+
     let registrationViewModel = RegistrationViewModel()
     let registerHUD = JGProgressHUD(style: .dark)
     var accountCell: AccountCell?
@@ -39,9 +37,6 @@ class RegisterController: UIViewController {
     lazy var registerTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(AccountCell.self, forCellReuseIdentifier: accountCellID)
-        tableView.register(PasswordCell.self, forCellReuseIdentifier: passwordCellID)
-        tableView.register(UserNameCell.self, forCellReuseIdentifier: userNameCellID)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIColor.specialWhite
@@ -252,14 +247,9 @@ class RegisterController: UIViewController {
 
 //MARK: - 相簿存取
 extension RegisterController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{
-    //完成選取
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let getImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
-        self.dismiss(animated: true, completion: nil)
+        let getImage = info[.editedImage] as! UIImage
         registrationViewModel.userImage = getImage
-    }
-    //按下取消
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
 }
@@ -275,11 +265,11 @@ extension RegisterController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         if indexPath.section == 0{
-            cell = registerTableView.dequeueReusableCell(withIdentifier: accountCellID, for: indexPath) as! AccountCell
+            cell = AccountCell(style: .default, reuseIdentifier: nil)
         }else if indexPath.section == 1{
-            cell = registerTableView.dequeueReusableCell(withIdentifier: passwordCellID, for: indexPath) as! PasswordCell
+            cell = PasswordCell(style: .default, reuseIdentifier: nil)
         }else{
-            cell = registerTableView.dequeueReusableCell(withIdentifier: userNameCellID, for: indexPath) as! UserNameCell
+            cell = UserNameCell(style: .default, reuseIdentifier: nil)
         }
         return cell
     }
@@ -296,13 +286,12 @@ extension RegisterController: UITableViewDelegate,UITableViewDataSource{
         let view = UIView()
         let titleLabel = UILabel(frame: CGRect(x: 3, y: 3, width: 100, height: 10))
         titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.textColor = .themePink
         switch section{
         case 0: titleLabel.text = "帳號"
         case 1: titleLabel.text = "密碼"
-        case 2: titleLabel.text = "暱稱"
-        default : fatalError("Invalid Section")
+        default : titleLabel.text = "暱稱"
         }
-        titleLabel.textColor = .themePink
         view.addSubview(titleLabel)
         
         return view

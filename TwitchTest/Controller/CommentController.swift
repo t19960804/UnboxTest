@@ -29,8 +29,8 @@ class CommentController: UICollectionViewController {
         view.backgroundColor = .white
         return view
     }()
-    lazy var commentTextField: LeftPaddedTextField = {
-        let textField = LeftPaddedTextField()
+    lazy var commentTextField: LeftPaddingTextField = {
+        let textField = LeftPaddingTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "輸入留言..."
         textField.delegate = self

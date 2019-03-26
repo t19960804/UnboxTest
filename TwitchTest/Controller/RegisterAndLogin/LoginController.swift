@@ -12,8 +12,7 @@ import JGProgressHUD
 
 class LoginController: UIViewController {
     
-    let accountCellID = "accountCellID"
-    let passwordCellID = "passwordCellID"
+    
     
     let logoImageView: UIImageView = {
        let imageView = UIImageView()
@@ -34,9 +33,7 @@ class LoginController: UIViewController {
     lazy var loginTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(AccountCell.self, forCellReuseIdentifier: accountCellID)
-        tableView.register(PasswordCell.self, forCellReuseIdentifier: passwordCellID)
-        tableView.backgroundColor = UIColor.specialWhite
+        tableView.backgroundColor = .specialWhite
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
@@ -80,6 +77,7 @@ class LoginController: UIViewController {
     var passwordCell: PasswordCell?
     let loginHUD = JGProgressHUD(style: .dark)
     let loginViewModel = LoginViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
@@ -207,9 +205,9 @@ extension LoginController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         if indexPath.section == 0{
-            cell = loginTableView.dequeueReusableCell(withIdentifier: accountCellID, for: indexPath) as! AccountCell
+            cell = AccountCell(style: .default, reuseIdentifier: nil)
         }else{
-            cell = loginTableView.dequeueReusableCell(withIdentifier: passwordCellID, for: indexPath) as! PasswordCell
+            cell = PasswordCell(style: .default, reuseIdentifier: nil)
         }
         return cell
     }
@@ -225,7 +223,7 @@ extension LoginController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         let titleLabel = UILabel(frame: CGRect(x: 3, y: 3, width: 100, height: 10))
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.text = section == 0 ? "帳號" : "密碼"
         titleLabel.textColor = .themePink
         view.addSubview(titleLabel)
@@ -239,14 +237,12 @@ extension LoginController: UITableViewDelegate,UITableViewDataSource{
         return view
     }
 }
-class LeftPaddedTextField: UITextField {
-    
+class LeftPaddingTextField: UITextField {
+ 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x + 5, y: bounds.origin.y, width: bounds.width + 5, height: bounds.height)
+        return bounds.insetBy(dx: 5, dy: 0)
     }
-    
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x + 5, y: bounds.origin.y, width: bounds.width + 5, height: bounds.height)
+        return bounds.insetBy(dx: 5, dy: 0)
     }
-    
 }

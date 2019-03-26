@@ -29,6 +29,8 @@ class PostArticleController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         collectionView.register(PostArticleCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView.delegate = self
+        collectionView.dataSource = self
         return collectionView
     }()
     var imageButtonsArray = [UIButton]()
@@ -42,12 +44,12 @@ class PostArticleController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
-    let titleTextField: LeftPaddedTextField = {
-        let textField = LeftPaddedTextField()
+    let titleTextField: LeftPaddingTextField = {
+        let textField = LeftPaddingTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 20)
         textField.textColor = UIColor.black
-        textField.attributedPlaceholder = NSAttributedString(string: "輸入標題...", attributes: [NSAttributedString.Key.foregroundColor : UIColor.specialGray])
+        textField.attributedPlaceholder = NSAttributedString(string: "輸入標題...", attributes: [.foregroundColor : UIColor.specialGray])
         return textField
     }()
     let reviewBackGround: UIView = {
@@ -58,7 +60,7 @@ class PostArticleController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
-    let reviewTextView: UITextView = {
+    lazy var reviewTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = UIColor.white
@@ -68,18 +70,14 @@ class PostArticleController: UIViewController {
         textView.font = UIFont.systemFont(ofSize: 20)
         textView.layer.masksToBounds = true
         textView.showsVerticalScrollIndicator = false
+        textView.delegate = self
         return textView
     }()
     let heartStackView = HeartsStackView()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
-
-        reviewTextView.delegate = self
         setUpGradient()
-        uploadImagesColletionView.delegate = self
-        uploadImagesColletionView.dataSource = self
-    
         setUpNavBar()
         setUpConstraints()
         
