@@ -48,7 +48,7 @@ class RegistrationViewModel {
                 
             }
         }else{
-            let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Plaese choose a Image"])
+            let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Please choose a Image"])
             completion(emptyError,nil)
             return
         }

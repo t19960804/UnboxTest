@@ -85,9 +85,9 @@ class LoginController: UIViewController {
         addKeyboardObserver()
         setUpViewModelObserver()
     }
-    override func viewDidAppear(_ animated: Bool) {addTextFieldTarget()}
-    override func viewWillDisappear(_ animated: Bool) {NotificationCenter.default.removeObserver(self)}
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
+    override func viewDidAppear(_ animated: Bool) { addTextFieldTarget() }
+    override func viewWillDisappear(_ animated: Bool) { NotificationCenter.default.removeObserver(self) }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { self.view.endEditing(true) }
     fileprivate func setUpConstraints(){
         self.view.addSubview(logoImageView)
         self.view.addSubview(sloganLabel)
@@ -147,12 +147,12 @@ class LoginController: UIViewController {
     //MARK: - Selector方法
     @objc func handleLogin(){
         self.view.endEditing(true)
-        loginViewModel.performLogin { (error) in
+        loginViewModel.performLogin { [weak self] (error) in
             if let error = error{
-                self.showErrorHUD(detail: error.localizedDescription)
+                self?.showErrorHUD(detail: error.localizedDescription)
                 return
             }
-            self.dismiss(animated: true, completion: nil)
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     fileprivate func  addTextFieldTarget(){
@@ -237,12 +237,4 @@ extension LoginController: UITableViewDelegate,UITableViewDataSource{
         return view
     }
 }
-class LeftPaddingTextField: UITextField {
- 
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: 5, dy: 0)
-    }
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: 5, dy: 0)
-    }
-}
+

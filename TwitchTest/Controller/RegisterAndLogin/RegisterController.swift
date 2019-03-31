@@ -132,7 +132,7 @@ class RegisterController: UIViewController {
         self.view.endEditing(true)
         registrationViewModel.performRegister { (error, values) in
             if let error = error{
-                self.showErrorHUD(detail: error.localizedDescription)
+                JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                 return
             }
             guard let userUID = values?["uid"] as? String else{return}
@@ -144,15 +144,6 @@ class RegisterController: UIViewController {
         registerHUD.textLabel.text = "驗證中"
         registerHUD.detailTextLabel.text = "請稍候"
         registerHUD.show(in: self.view, animated: true)
-    }
-    fileprivate func showErrorHUD(detail: String){
-        registerHUD.dismiss(animated: true)
-        let errorHUD = JGProgressHUD(style: .dark)
-        errorHUD.textLabel.text = "錯誤"
-        errorHUD.detailTextLabel.text = detail
-        errorHUD.indicatorView = JGProgressHUDErrorIndicatorView()
-        errorHUD.show(in: self.view, animated: true)
-        errorHUD.dismiss(afterDelay: 3, animated: true)
     }
     fileprivate func saveImageAndUserInfo(userUID: String,userName: String,account: String){
         let imageUID = NSUUID().uuidString
@@ -211,7 +202,8 @@ class RegisterController: UIViewController {
         let ref = Database.database().reference().child("使用者").child(uid)
         ref.setValue(values) { (error, metaData) in
             if let error = error{
-                self.showErrorHUD(detail: error.localizedDescription)
+                self.registerHUD.dismiss(animated: true)
+                JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                 return
             }
             self.registrationViewModel.isRegistering = false

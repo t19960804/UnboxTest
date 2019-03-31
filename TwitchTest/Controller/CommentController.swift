@@ -56,12 +56,8 @@ class CommentController: UICollectionViewController {
         addKeyboardObserver()
         fetchComments()
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self)
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        hud.dismiss(afterDelay: 1, animated: true)
-    }
+    override func viewWillDisappear(_ animated: Bool) { NotificationCenter.default.removeObserver(self) }
+    override func viewDidAppear(_ animated: Bool) { hud.dismiss(afterDelay: 1, animated: true) }
     func fetchComments(){
         hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
         hud.textLabel.text = "載入中"
@@ -74,27 +70,28 @@ class CommentController: UICollectionViewController {
                 
                 self.ref.child("評論").child(commentUID).observeSingleEvent(of: .value, with: { (snapshot) in
                     if let dictionary = snapshot.value as? [String : Any]{
-                        var comment = Comment(value: dictionary)
-                        //透過comment裡的authorUID包裝成User
-                        if let authorUID = dictionary["author"] as? String{
-                            
-                            self.ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
-                                if let dictionary = snapshot.value as? [String : Any]{
-                                    let author = User(value: dictionary)
-                                    comment.author = author
-                                    self.comments.append(comment)
-                                }
-                                self.attemptReloadData()
-                            })
-                            
-                        }
-                        
+                        self.analyzeComments(dictionary: dictionary)
                     }
                 })
             }
         }
     }
-    
+    fileprivate func analyzeComments(dictionary: [String : Any]){
+        var comment = Comment(value: dictionary)
+        //透過comment裡的authorUID包裝成User
+        if let authorUID = dictionary["author"] as? String{
+            self.ref.child("使用者").child(authorUID).observeSingleEvent(of: .value, with: { (snapshot) in
+                if let dictionary = snapshot.value as? [String : Any]{
+                    let author = User(value: dictionary)
+                    comment.author = author
+                    self.comments.append(comment)
+                }
+                self.attemptReloadData()
+            })
+            
+        }
+        
+    }
     private func attemptReloadData(){
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.handleReloadData), userInfo: nil, repeats: false)
@@ -128,7 +125,6 @@ class CommentController: UICollectionViewController {
                     if var comments = dictionary["comments"] as? [String]{
                         comments.append(commentUID)
                         self.update(with: articleUID, value: comments)
-                        
                     }else{
                         self.update(with: articleUID, value: [commentUID])
                     }
@@ -192,19 +188,14 @@ class CommentController: UICollectionViewController {
         sendButton.heightAnchor.constraint(equalTo: commentTextField.heightAnchor).isActive = true
     }
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+    override func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
 
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return comments.count
-    }
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { return comments.count }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! CommentCell
         cell.comment = comments[indexPath.row]
-        
         return cell
     }
    

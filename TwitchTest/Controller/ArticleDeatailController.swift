@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import FirebaseAuth
-import FirebaseDatabase
+import Firebase
+import SDWebImage
 
 class ArticleDeatailController: UIViewController {
     let cellID = "Cell"
@@ -23,7 +23,7 @@ class ArticleDeatailController: UIViewController {
             if let imagesURl = article?.imageURL,let title = article?.title,let userImageURL = article?.author?.imageURL,
                 let userName = article?.author?.userName,let review = article?.review{
                 imageURLArray = imagesURl
-                userImageView.downLoadImageInCache(downLoadURL: URL(string: userImageURL)!)
+                userImageView.sd_setImage(with: URL(string: userImageURL)!)
                 titleLabel.text = title
                 userNameLabel.text = userName
                 reviewTextView.text = review
@@ -44,6 +44,8 @@ class ArticleDeatailController: UIViewController {
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(ArticleDetailCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView.delegate = self
+        collectionView.dataSource = self
         return collectionView
         
     }()
@@ -109,14 +111,13 @@ class ArticleDeatailController: UIViewController {
         self.view.backgroundColor = .specialWhite
         self.navigationItem.title = "商品詳情"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "comment"), style: .plain, target: self, action: #selector(handleComment))
-        detailCollectionView.delegate = self
-        detailCollectionView.dataSource = self
-
         setUpConstraints()
         
         if article?.authorUID == Auth.auth().currentUser?.uid{
-            observeUserImageChanged { (url) in
-                self.userImageView.downLoadImageInCache(downLoadURL: URL(string: url)!)
+            Database.database().observeUserImageChanged { (url) in
+                if let imageURL = URL(string: url){
+                    self.userImageView.sd_setImage(with: imageURL)
+                }
             }
         }
         
@@ -143,7 +144,7 @@ class ArticleDeatailController: UIViewController {
         //usesLineFragmentOrigin,文本将以每行组成的矩形为单位计算整个文本的尺寸
         //attributes,字體大小
         let constraintSize = CGSize(width: self.view.frame.width * 0.8, height: 1000)
-        let estimateFrame = NSString(string: string).boundingRect(with: constraintSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font : fontSize], context: nil)
+        let estimateFrame = NSString(string: string).boundingRect(with: constraintSize, options: .usesLineFragmentOrigin, attributes: [.font : fontSize], context: nil)
         return estimateFrame
     }
    
@@ -198,22 +199,9 @@ class ArticleDeatailController: UIViewController {
         
         
     }
-    //觀察使用者更換頭像
-    func observeUserImageChanged(completion: @escaping (String) -> Void){
-        let ref = Database.database().reference()
-        guard let userUID = Auth.auth().currentUser?.uid else{return}
-        ref.child("使用者").child(userUID).child("imageURL").observe(.value) { (snapshot) in
-            if let url = snapshot.value as? String{
-                completion(url)
-            }
-        }
-    }
-
 }
 extension ArticleDeatailController: UICollectionViewDelegate,UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
-    }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { return 3 }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.detailCollectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ArticleDetailCell

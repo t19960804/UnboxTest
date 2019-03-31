@@ -25,6 +25,8 @@
 		0B66DF9222408BD00022F4EC /* UserNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF9122408BD00022F4EC /* UserNameCell.swift */; };
 		0B66DF96224091080022F4EC /* GeneralCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF95224091080022F4EC /* GeneralCell.swift */; };
 		0B66DF9F224480580022F4EC /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B66DF9E224480580022F4EC /* RegistrationViewModel.swift */; };
+		0B74224E225068FD002B7F08 /* JGProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B74224D225068FD002B7F08 /* JGProgressHUD.swift */; };
+		0B74225022506B6D002B7F08 /* RealTimeDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B74224F22506B6D002B7F08 /* RealTimeDataBase.swift */; };
 		0B8EC3A421F86D310056C617 /* UserInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A321F86D310056C617 /* UserInfoController.swift */; };
 		0B8EC3A721F979BE0056C617 /* UserInfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */; };
 		0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3A821F9A5280056C617 /* CustomNavController.swift */; };
@@ -32,6 +34,7 @@
 		0B8EC3AE21FEF2890056C617 /* ArticlesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */; };
 		0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */; };
 		0BAD04B02246097900A6A669 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAD04AF2246097900A6A669 /* LoginViewModel.swift */; };
+		0BAD04BB224A152800A6A669 /* LeftPaddingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAD04BA224A152800A6A669 /* LeftPaddingTextField.swift */; };
 		0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413C21E59E8800BD3886 /* AppDelegate.swift */; };
 		0BC3413F21E59E8800BD3886 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413E21E59E8800BD3886 /* ViewController.swift */; };
 		0BC3414221E59E8800BD3886 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BC3414021E59E8800BD3886 /* Main.storyboard */; };
@@ -84,6 +87,8 @@
 		0B66DF9122408BD00022F4EC /* UserNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNameCell.swift; sourceTree = "<group>"; };
 		0B66DF95224091080022F4EC /* GeneralCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralCell.swift; sourceTree = "<group>"; };
 		0B66DF9E224480580022F4EC /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
+		0B74224D225068FD002B7F08 /* JGProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGProgressHUD.swift; sourceTree = "<group>"; };
+		0B74224F22506B6D002B7F08 /* RealTimeDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealTimeDataBase.swift; sourceTree = "<group>"; };
 		0B8EC3A321F86D310056C617 /* UserInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoController.swift; sourceTree = "<group>"; };
 		0B8EC3A621F979BE0056C617 /* UserInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoLabel.swift; sourceTree = "<group>"; };
 		0B8EC3A821F9A5280056C617 /* CustomNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavController.swift; sourceTree = "<group>"; };
@@ -91,6 +96,7 @@
 		0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesController.swift; sourceTree = "<group>"; };
 		0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersController.swift; sourceTree = "<group>"; };
 		0BAD04AF2246097900A6A669 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		0BAD04BA224A152800A6A669 /* LeftPaddingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftPaddingTextField.swift; sourceTree = "<group>"; };
 		0BC3413921E59E8800BD3886 /* TwitchTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BC3413C21E59E8800BD3886 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0BC3413E21E59E8800BD3886 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -162,6 +168,8 @@
 				0B10848121ED9A45006F890E /* ImageDownloadHelper.swift */,
 				0BF013DF2217FBB200F59CD1 /* ColorExtension.swift */,
 				0BF01421222A82BC00F59CD1 /* DateExtension.swift */,
+				0B74224D225068FD002B7F08 /* JGProgressHUD.swift */,
+				0B74224F22506B6D002B7F08 /* RealTimeDataBase.swift */,
 			);
 			path = Extenstion;
 			sourceTree = "<group>";
@@ -268,6 +276,7 @@
 				0BE3DF9E220C3BCF00D53734 /* ArticleDetailCell.swift */,
 				0BF0141F222A5EB400F59CD1 /* CommentCell.swift */,
 				0B66DF7C223666D50022F4EC /* HeartsStackView.swift */,
+				0BAD04BA224A152800A6A669 /* LeftPaddingTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -477,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B10847F21EC8B5E006F890E /* LoveImageView.swift in Sources */,
+				0B74225022506B6D002B7F08 /* RealTimeDataBase.swift in Sources */,
 				0B66DF9F224480580022F4EC /* RegistrationViewModel.swift in Sources */,
 				0B10847D21EC3FEE006F890E /* Article.swift in Sources */,
 				0B10847421E9DEC8006F890E /* ArticlesCollectionViewController.swift in Sources */,
@@ -492,6 +502,7 @@
 				0B66DF902240883C0022F4EC /* PasswordCell.swift in Sources */,
 				0B8EC3AB21FAFE9F0056C617 /* UserInfoCell.swift in Sources */,
 				0BF0141E2229380F00F59CD1 /* Comment.swift in Sources */,
+				0B74224E225068FD002B7F08 /* JGProgressHUD.swift in Sources */,
 				0B66DF96224091080022F4EC /* GeneralCell.swift in Sources */,
 				0B8EC3A921F9A5280056C617 /* CustomNavController.swift in Sources */,
 				0BE3DF9D220AD98500D53734 /* PostArticleCell.swift in Sources */,
@@ -506,6 +517,7 @@
 				0BF01422222A82BC00F59CD1 /* DateExtension.swift in Sources */,
 				0BF0141C2228E5BD00F59CD1 /* CommentController.swift in Sources */,
 				0BAD04B02246097900A6A669 /* LoginViewModel.swift in Sources */,
+				0BAD04BB224A152800A6A669 /* LeftPaddingTextField.swift in Sources */,
 				0B10847221E88A03006F890E /* UserDefaultExtension.swift in Sources */,
 				0BC3414F21E59EF300BD3886 /* AllCommodityCollectionViewController.swift in Sources */,
 				0B10848221ED9A45006F890E /* ImageDownloadHelper.swift in Sources */,

@@ -211,7 +211,7 @@ class PostArticleController: UIViewController {
     }
     func compressImageToData(array: [UIButton]) -> [Data]{
         var imagesDataArray = [Data]()
-        for button in array{
+        array.forEach { (button) in
             if let jpgImage = button.currentImage?.jpegData(compressionQuality: 1){
                 imagesDataArray.append(jpgImage)
             }
@@ -223,12 +223,12 @@ class PostArticleController: UIViewController {
         let imageRef = Storage.storage().reference().child("ArticleImages").child(imageUID)
         imageRef.putData(data, metadata: nil) { (metadata, error) in
             if let error = error{
-                print("error:",error)
+                JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                 return
             }
             imageRef.downloadURL(completion: { (url, error) in
                 if let error = error{
-                    print("error:",error)
+                    JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                     return
                 }
                 guard let downloadURL = url?.absoluteString else{return}
@@ -256,14 +256,14 @@ class PostArticleController: UIViewController {
         //插入"文章"
         ref.child("文章").child(articleUID).setValue(values, withCompletionBlock: { (error, ref) in
             if let error = error{
-                print("error:",error)
+                JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                 return
             }
         })
         //插入"類別中的文章"
         ref.child("類別").child(category).child(articleUID).setValue(1) { (error, ref) in
             if let error = error{
-                print("error:",error)
+                JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                 return
             }
             self.hud.dismiss(animated: true)
@@ -272,7 +272,7 @@ class PostArticleController: UIViewController {
         //插入"使用者-文章"
         ref.child("使用者-文章").child(userUID).child(articleUID).setValue(1) { (error, ref) in
             if let error = error{
-                print("error:",error)
+                JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
                 return
             }
         }
@@ -281,8 +281,6 @@ class PostArticleController: UIViewController {
 
 //MARK: - 相簿存取 + TextView的PlaceHolder處理
 extension PostArticleController: UITextViewDelegate{
- 
-    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if reviewTextView.textColor == .specialGray{
             reviewTextView.text = ""

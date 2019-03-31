@@ -88,12 +88,8 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         self.present(LoginController(), animated: true, completion: nil)
     }
   
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return category.count
-    }
+    override func numberOfSections(in collectionView: UICollectionView) -> Int { return 1 }
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { return category.count }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CategoryCell
         cell.category = category[indexPath.row]
