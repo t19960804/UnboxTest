@@ -31,10 +31,7 @@ class PostArticleControllerTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-    func testCheckHeart(){
-        postArticleController?.pressHeart(number: 4)
-        XCTAssertEqual(postArticleController?.numberOfHeart(), 4)
-    }
+    
     func testWhatKindOfError(){
 
         postArticleController?.titleTextField.text = "123"

@@ -18,26 +18,21 @@ class LoginViewModel {
         }
     }
     var isLoginingObserver: ((Bool?) -> Void)?
-    func performLogin(completion: @escaping (Error?) -> Void){
-        guard let account = self.account,let password = self.password else {return}
-        self.isLogining = true
-        
+    func performLogin(completion: @escaping (Result<String,Error>) -> Void){
+        guard let account = self.account,let password = self.password else { return }
         if account.isEmpty || password.isEmpty{
             let customError = NSError(domain: "", code: 321, userInfo: [NSLocalizedDescriptionKey : "Please fill the field"])
-            completion(customError)
+            completion(.failure(customError))
         }else{
             Auth.auth().signIn(withEmail: account, password: password) { (result, error) in
                 if let error = error{
-                    completion(error)
+                    completion(.failure(error))
                     return
-                }else{
-                    self.isLogining = false
-                    UserDefaults.standard.setIsLogIn(value: true)
-                    completion(nil)
                 }
-                
+                UserDefaults.standard.setIsLogIn(value: true)
+                completion(.success("login success"))
             }
         }
-
     }
+
 }

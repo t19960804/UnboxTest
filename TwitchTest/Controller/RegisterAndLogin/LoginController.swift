@@ -136,7 +136,6 @@ class LoginController: UIViewController {
         loginHUD.show(in: self.view, animated: true)
     }
     fileprivate func showErrorHUD(detail: String){
-        loginHUD.dismiss(animated: true)
         let errorHUD = JGProgressHUD(style: .dark)
         errorHUD.textLabel.text = "錯誤"
         errorHUD.detailTextLabel.text = detail
@@ -147,12 +146,18 @@ class LoginController: UIViewController {
     //MARK: - Selector方法
     @objc func handleLogin(){
         self.view.endEditing(true)
-        loginViewModel.performLogin { [weak self] (error) in
-            if let error = error{
-                self?.showErrorHUD(detail: error.localizedDescription)
-                return
+        loginViewModel.isLogining = true
+        loginViewModel.performLogin { [weak self] (result) in
+            guard let self = self else { return }
+            switch result{
+            case .failure(let error):
+                self.loginViewModel.isLogining = false
+                self.showErrorHUD(detail: error.localizedDescription)
+            case .success(let message):
+                self.loginViewModel.isLogining = false
+                self.dismiss(animated: true, completion: nil)
+                print(message)
             }
-            self?.dismiss(animated: true, completion: nil)
         }
     }
     fileprivate func  addTextFieldTarget(){

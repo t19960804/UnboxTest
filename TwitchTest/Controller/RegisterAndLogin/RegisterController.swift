@@ -130,14 +130,18 @@ class RegisterController: UIViewController {
     }
     @objc func handleRegister(){
         self.view.endEditing(true)
-        registrationViewModel.performRegister { (error, values) in
-            if let error = error{
+        registrationViewModel.isRegistering = true
+        registrationViewModel.performRegister { [weak self] (result) in
+            guard let self = self else {return}
+            switch result{
+            case .failure(let error):
+                self.registrationViewModel.isRegistering = false
                 JGProgressHUD.showErrorHUD(in: self.view, detail: error.localizedDescription)
-                return
+            case .success(let values):
+                self.registrationViewModel.isRegistering = false
+                guard let userUID = values["uid"] as? String else{return}
+                self.createUser(with: userUID, values: values)
             }
-            guard let userUID = values?["uid"] as? String else{return}
-            self.createUser(with: userUID, values: values!)
-    
         }
     }
     fileprivate func showRegisterHUD(){
