@@ -33,6 +33,7 @@
 		0B8EC3AB21FAFE9F0056C617 /* UserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */; };
 		0B8EC3AE21FEF2890056C617 /* ArticlesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */; };
 		0B8EC3B02202D6BA0056C617 /* FollowersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */; };
+		0B9D76D322BF6480007DAF05 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9D76D222BF6480007DAF05 /* UIViewExtension.swift */; };
 		0BAD04B02246097900A6A669 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAD04AF2246097900A6A669 /* LoginViewModel.swift */; };
 		0BAD04BB224A152800A6A669 /* LeftPaddingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAD04BA224A152800A6A669 /* LeftPaddingTextField.swift */; };
 		0BC3413D21E59E8800BD3886 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC3413C21E59E8800BD3886 /* AppDelegate.swift */; };
@@ -95,6 +96,7 @@
 		0B8EC3AA21FAFE9F0056C617 /* UserInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoCell.swift; sourceTree = "<group>"; };
 		0B8EC3AD21FEF2890056C617 /* ArticlesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesController.swift; sourceTree = "<group>"; };
 		0B8EC3AF2202D6BA0056C617 /* FollowersController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersController.swift; sourceTree = "<group>"; };
+		0B9D76D222BF6480007DAF05 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		0BAD04AF2246097900A6A669 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		0BAD04BA224A152800A6A669 /* LeftPaddingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftPaddingTextField.swift; sourceTree = "<group>"; };
 		0BC3413921E59E8800BD3886 /* TwitchTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitchTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +172,7 @@
 				0BF01421222A82BC00F59CD1 /* DateExtension.swift */,
 				0B74224D225068FD002B7F08 /* JGProgressHUD.swift */,
 				0B74224F22506B6D002B7F08 /* RealTimeDataBase.swift */,
+				0B9D76D222BF6480007DAF05 /* UIViewExtension.swift */,
 			);
 			path = Extenstion;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				0B74225022506B6D002B7F08 /* RealTimeDataBase.swift in Sources */,
 				0B66DF9F224480580022F4EC /* RegistrationViewModel.swift in Sources */,
 				0B10847D21EC3FEE006F890E /* Article.swift in Sources */,
+				0B9D76D322BF6480007DAF05 /* UIViewExtension.swift in Sources */,
 				0B10847421E9DEC8006F890E /* ArticlesCollectionViewController.swift in Sources */,
 				0BE3DF9F220C3BCF00D53734 /* ArticleDetailCell.swift in Sources */,
 				0B10847821EAE670006F890E /* Alert.swift in Sources */,

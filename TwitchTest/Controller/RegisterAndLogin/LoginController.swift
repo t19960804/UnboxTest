@@ -89,10 +89,7 @@ class LoginController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) { NotificationCenter.default.removeObserver(self) }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { self.view.endEditing(true) }
     fileprivate func setUpConstraints(){
-        self.view.addSubview(logoImageView)
-        self.view.addSubview(sloganLabel)
-        self.view.addSubview(loginTableView)
-        self.view.addSubview(stackView)
+        self.view.addSubViews(with: logoImageView,sloganLabel,loginTableView,stackView)
         
         logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         logoImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true

@@ -166,9 +166,7 @@ class CommentController: UICollectionViewController {
         }
     }
     func setUpConstraints(){
-        self.view.addSubview(commentView)
-        self.view.addSubview(commentTextField)
-        self.view.addSubview(sendButton)
+        self.view.addSubViews(with: commentView,commentTextField,sendButton)
         
         commentView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         commentViewBottomAnchor = commentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)

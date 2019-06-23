@@ -69,7 +69,6 @@ class ArticlesCollectionViewController: UICollectionViewController {
             }
             self.messageLabel.isHidden = false
         }
-        
     }
     func setUpCollectionView(){
         self.collectionView!.register(ArticlesCell.self, forCellWithReuseIdentifier: reuseIdentifier)

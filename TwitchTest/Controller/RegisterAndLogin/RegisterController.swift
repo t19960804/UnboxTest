@@ -87,9 +87,7 @@ class RegisterController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
     
     func setUpConstraints(){
-        self.view.addSubview(uploadImageButton)
-        self.view.addSubview(registerTableView)
-        self.view.addSubview(stackView)
+        self.view.addSubViews(with: uploadImageButton,registerTableView,stackView)
         
         uploadImageButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         uploadImageButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true

@@ -107,12 +107,7 @@ class PostArticleController: UIViewController {
         self.navigationItem.rightBarButtonItem = uploadButtonItem
     }
     func setUpConstraints(){
-        self.view.addSubview(titleBackGround)
-        self.view.addSubview(titleTextField)
-        self.view.addSubview(reviewBackGround)
-        self.view.addSubview(reviewTextView)
-        self.view.addSubview(heartStackView)
-        self.view.addSubview(uploadImagesColletionView)
+        self.view.addSubViews(with: titleBackGround,titleTextField,reviewBackGround,reviewTextView,heartStackView,uploadImagesColletionView)
         
         uploadImagesColletionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 18).isActive = true
         uploadImagesColletionView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true

@@ -152,12 +152,8 @@ class ArticleDeatailController: UIViewController {
         self.view.addSubview(myScrollView)
         
         myScrollView.addSubview(backGroundView)
-        backGroundView.addSubview(titleLabel)
+        backGroundView.addSubViews(with: titleLabel,reviewTextView,detailCollectionView,userImageView,userNameLabel)
         
-        backGroundView.addSubview(reviewTextView)
-        backGroundView.addSubview(detailCollectionView)
-        backGroundView.addSubview(userImageView)
-        backGroundView.addSubview(userNameLabel)
         
         myScrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
         myScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
