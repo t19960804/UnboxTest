@@ -105,9 +105,6 @@ class CommentController: UICollectionViewController {
         }
     }
     @objc func handleSendComment(){
-        hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
-        hud.textLabel.text = "上傳中"
-        hud.show(in: self.view, animated: true)
         
         let commentUID = NSUUID().uuidString
         guard let currntUserUID = Auth.auth().currentUser?.uid else{return}
@@ -115,24 +112,37 @@ class CommentController: UICollectionViewController {
         let textInput = commentTextField.text
         
         if textInput?.isEmpty == false{
+            
+            hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
+            hud.textLabel.text = "上傳中"
+            hud.show(in: self.view, animated: true)
+            
             let value = ["comment" : textInput!,
                          "author" : currntUserUID,
                          "date" : Date.getTimeStamp()]
             //新增至"評論"以及該文章底下
-            ref.child("評論").child(commentUID).setValue(value)
-            ref.child("文章").child(articleUID).observeSingleEvent(of: .value) { (snapshot) in
-                if let dictionary = snapshot.value as? [String : Any]{
-                    if var comments = dictionary["comments"] as? [String]{
-                        comments.append(commentUID)
-                        self.update(with: articleUID, value: comments)
-                    }else{
-                        self.update(with: articleUID, value: [commentUID])
-                    }
-                }
-                
-            }
-            
+            addCommentToFireBase(value: value, with: commentUID, and: articleUID)
+        } else {
+            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+            hud.textLabel.text = "請輸入評論"
+            hud.show(in: self.view, animated: true)
+            hud.dismiss(afterDelay: 2, animated: true)
         }
+    }
+    fileprivate func addCommentToFireBase(value: [String : Any], with commentUID: String,and articleUID: String){
+        //新增至"評論"以及該文章底下
+        ref.child("評論").child(commentUID).setValue(value)
+        ref.child("文章").child(articleUID).observeSingleEvent(of: .value) { (snapshot) in
+            guard let dictionary = snapshot.value as? [String : Any] else { return}
+            if var comments = dictionary["comments"] as? [String]{
+                comments.append(commentUID)
+                self.update(with: articleUID, value: comments)
+            }else{
+                self.update(with: articleUID, value: [commentUID])
+            }
+        }
+        commentTextField.text = ""
+        commentTextField.resignFirstResponder()
     }
     func update(with articleUID: String,value: [String]){
         self.ref.child("文章").child(articleUID).updateChildValues(["comments" : value], withCompletionBlock: { (error, ref) in
