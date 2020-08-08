@@ -22,13 +22,11 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        hud.textLabel.text = "載入中"
-        hud.show(in: self.view, animated: true)
-        observeCurrentUser { (user) in
-            self.currentUser = user
-            print(self.currentUser?.userName)
-            //避免使用者剛載入就按下UserInfo
-            self.hud.dismiss(afterDelay: 0.5, animated: true)
+        if UserDefaults.standard.isLogIn(){
+            fetchCurrentUserInfo()
+            return
+        }else{
+            self.present(LoginController(), animated: true, completion: nil)
         }
     }
     
@@ -36,17 +34,32 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         super.viewDidLoad()
         setUpNavBar()
         setUpCollectionView()
-
-        if UserDefaults.standard.isLogIn(){
-            return
-        }else{
-            self.present(LoginController(), animated: true, completion: nil)
-        }
-        
-       
+        //由於User登入後,viewDidload之類的生命週期不會觸發,所以註冊登入通知來更新當前User資訊
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUserLoggedIn), name: NSNotification.Name(rawValue: "UserLoggedIn"), object: nil)
     }
-    func observeCurrentUser(completion: @escaping (User) -> Void){
-        guard let currentUser = Auth.auth().currentUser?.uid else{return}
+    @objc fileprivate func handleUserLoggedIn(){
+        print("Info - User Logged In")
+        fetchCurrentUserInfo()
+    }
+    fileprivate func fetchCurrentUserInfo(){
+       hud.textLabel.text = "載入中"
+       hud.show(in: self.view, animated: true)
+       observeCurrentUser { (user) in
+           guard let currentUser = user else {
+               print("Error - user is nil")
+               return
+           }
+           self.currentUser = currentUser
+           print("Info - Current user:",currentUser.userName ?? "NaN")
+           //避免使用者剛載入就按下UserInfo
+           self.hud.dismiss(afterDelay: 0.5, animated: true)
+       }
+    }
+    func observeCurrentUser(completion: @escaping (User?) -> Void){
+        guard let currentUser = Auth.auth().currentUser?.uid else{
+            completion(nil)
+            return
+        }
         let ref = Database.database().reference()
         ref.child("使用者").child(currentUser).observe(.value) { (snapshot) in
             if let dictionary = snapshot.value as? [String : Any]{
@@ -61,13 +74,6 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         self.collectionView.backgroundColor = .specialWhite
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.showsHorizontalScrollIndicator = false
-    }
-    func setUpNavBar(){
-        self.navigationItem.title = "商品分類"
-        let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
-        let checkProfileButton = UIBarButtonItem(image: UIImage(named: "avatar"), style: .plain, target: self, action: #selector(handleCheckProfile))
-        self.navigationItem.leftBarButtonItem = logoutButton
-        self.navigationItem.rightBarButtonItem = checkProfileButton
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
             layout.itemSize = CGSize(width: (self.view.frame.width - 30) / 2, height: 250)
@@ -75,6 +81,13 @@ class AllCommodityCollectionViewController: UICollectionViewController{
             layout.minimumInteritemSpacing = 10
             layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         }
+    }
+    func setUpNavBar(){
+        self.navigationItem.title = "商品分類"
+        let logoutButton = UIBarButtonItem(title: "登出", style: UIBarButtonItem.Style.plain, target: self, action: #selector(handleLogout))
+        let checkProfileButton = UIBarButtonItem(image: UIImage(named: "avatar"), style: .plain, target: self, action: #selector(handleCheckProfile))
+        self.navigationItem.leftBarButtonItem = logoutButton
+        self.navigationItem.rightBarButtonItem = checkProfileButton
     }
     
     @objc func handleCheckProfile(){

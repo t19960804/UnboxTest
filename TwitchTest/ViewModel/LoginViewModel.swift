@@ -30,7 +30,7 @@ class LoginViewModel {
                     return
                 }
                 UserDefaults.standard.setIsLogIn(value: true)
-                completion(.success("login success"))
+                completion(.success("Info - Login success"))
             }
         }
     }

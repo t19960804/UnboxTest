@@ -151,9 +151,10 @@ class LoginController: UIViewController {
                 self.loginViewModel.isLogining = false
                 self.showErrorHUD(detail: error.localizedDescription)
             case .success(let message):
-                self.loginViewModel.isLogining = false
-                self.dismiss(animated: true, completion: nil)
                 print(message)
+                self.loginViewModel.isLogining = false
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "UserLoggedIn"), object: nil)
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }
