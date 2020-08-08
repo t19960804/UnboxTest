@@ -21,6 +21,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     let hud = JGProgressHUD(style: .dark)
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         hud.textLabel.text = "載入中"
         hud.show(in: self.view, animated: true)
         observeCurrentUser { (user) in
