@@ -34,17 +34,9 @@ class AllCommodityCollectionViewController: UICollectionViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setUpNavBar()
         setUpCollectionView()
-        
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.itemSize = CGSize(width: (self.view.frame.width - 30) / 2, height: 250)
-            layout.minimumLineSpacing = 10
-            layout.minimumInteritemSpacing = 10
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        }
+
         if UserDefaults.standard.isLogIn(){
             return
         }else{
@@ -76,6 +68,13 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         let checkProfileButton = UIBarButtonItem(image: UIImage(named: "avatar"), style: .plain, target: self, action: #selector(handleCheckProfile))
         self.navigationItem.leftBarButtonItem = logoutButton
         self.navigationItem.rightBarButtonItem = checkProfileButton
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.itemSize = CGSize(width: (self.view.frame.width - 30) / 2, height: 250)
+            layout.minimumLineSpacing = 10
+            layout.minimumInteritemSpacing = 10
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
     }
     
     @objc func handleCheckProfile(){
