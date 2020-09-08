@@ -34,28 +34,20 @@ class RegistrationViewModel {
             completion(.failure(emptyError))
             return
         }
-        if userName.isEmpty{
-            let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Please fill the empty field"])
+        guard let _ = userImage else {
+            let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Please choose a Image"])
             completion(.failure(emptyError))
             return
         }
         
-        if let _ = userImage{
-            Auth.auth().createUser(withEmail: account, password: password) { (result, error) in
-                if let error = error{
-                    completion(.failure(error))
-                    return
-                }
-                guard let userUID = result?.user.uid else{ return }
-                self.saveImageAndUserInfo(completion: completion, with: userUID,userName,account)
+        Auth.auth().createUser(withEmail: account, password: password) { (result, error) in
+            if let error = error{
+                completion(.failure(error))
+                return
             }
-        }else{
-            let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Please choose a Image"])
-            completion(.failure(emptyError))
+            guard let userUID = result?.user.uid else { return }
+            self.saveImageAndUserInfo(completion: completion, with: userUID,userName,account)
         }
-        
-        
-        
     }
     fileprivate func saveImageAndUserInfo(completion: @escaping (Result<[String : Any],Error>) -> Void,with userUID: String,_ userName: String,_ account: String){
         let imageUID = NSUUID().uuidString
