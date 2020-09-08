@@ -210,6 +210,9 @@ class RegisterController: UIViewController {
             }
             self.registrationViewModel.isRegistering = false
             //dismiss所有的Controller,回到根畫面
+            let navigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+            let vc = navigationController?.viewControllers.first as? AllCommodityCollectionViewController
+            vc?.fetchCurrentUserInfo()
             self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
             UserDefaults.standard.setIsLogIn(value: true)
         }

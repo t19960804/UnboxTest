@@ -41,7 +41,7 @@ class AllCommodityCollectionViewController: UICollectionViewController{
         print("Info - User Logged In")
         fetchCurrentUserInfo()
     }
-    fileprivate func fetchCurrentUserInfo(){
+    func fetchCurrentUserInfo(){
        hud.textLabel.text = "載入中"
        hud.show(in: self.view, animated: true)
        observeCurrentUser { (user) in

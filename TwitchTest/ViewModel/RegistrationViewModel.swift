@@ -29,7 +29,11 @@ class RegistrationViewModel {
     
     
     func performRegister(completion: @escaping (Result<[String : Any],Error>) -> Void){
-        guard let account = account,let password = password,let userName = userName else{return}        
+        guard let account = account,let password = password,let userName = userName else{
+            let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Please fill the empty field"])
+            completion(.failure(emptyError))
+            return
+        }
         if userName.isEmpty{
             let emptyError = NSError(domain: "", code: 123, userInfo: [NSLocalizedDescriptionKey : "Please fill the empty field"])
             completion(.failure(emptyError))
