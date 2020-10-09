@@ -40,6 +40,7 @@ class RegisterController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIColor.specialWhite
+        tableView.isScrollEnabled = false
         return tableView
     }()
     let registerButton: UIButton = {
@@ -48,7 +49,7 @@ class RegisterController: UIViewController {
         button.backgroundColor = UIColor.themePink
         button.setTitleColor(.specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         return button
@@ -59,7 +60,7 @@ class RegisterController: UIViewController {
         button.backgroundColor = UIColor.clear
         button.setTitleColor(UIColor.themePink, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 10
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.themePink.cgColor
         button.layer.masksToBounds = true
@@ -69,10 +70,11 @@ class RegisterController: UIViewController {
     lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(registerTableView)
         stackView.addArrangedSubview(registerButton)
         stackView.addArrangedSubview(cancelButton)
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
+//        stackView.distribution = .fillEqually
         stackView.spacing = 20
         return stackView
     }()
@@ -80,30 +82,37 @@ class RegisterController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
         setUpConstraints()
-        addKeyboardObserver()
         setUpViewModelObserver()
     }
-    override func viewDidAppear(_ animated: Bool) {addTextfieldTarget()}
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {self.view.endEditing(true)}
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addKeyboardObserver()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addTextfieldTarget()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.view.endEditing(true)
+    }
     
     func setUpConstraints(){
-        self.view.addSubViews(with: uploadImageButton,registerTableView,stackView)
+        self.view.addSubViews(with: uploadImageButton,stackView)
         
         uploadImageButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        uploadImageButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
+        uploadImageButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true
         uploadImageButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         uploadImageButton.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
-        registerTableView.topAnchor.constraint(equalTo: uploadImageButton.bottomAnchor, constant: 60).isActive = true
-        registerTableView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        registerTableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
-        registerTableView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        
-        stackView.topAnchor.constraint(equalTo: registerTableView.bottomAnchor, constant: 40).isActive = true
+        stackView.topAnchor.constraint(equalTo: uploadImageButton.bottomAnchor, constant: 40).isActive = true
         stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         stackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
-        stackView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3).isActive = true
-        
+        stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
     }
     fileprivate func setUpViewModelObserver(){
         registrationViewModel.pickImageObserver = { [weak self] (userImage) in

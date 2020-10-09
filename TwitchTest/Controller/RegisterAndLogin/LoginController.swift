@@ -36,6 +36,7 @@ class LoginController: UIViewController {
         tableView.backgroundColor = .specialWhite
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.isScrollEnabled = false
         return tableView
     }()
     let loginButton: UIButton = {
@@ -44,7 +45,7 @@ class LoginController: UIViewController {
         button.backgroundColor = UIColor.themePink
         button.setTitleColor(.specialWhite, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 10
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
@@ -55,7 +56,7 @@ class LoginController: UIViewController {
         button.backgroundColor = UIColor.clear
         button.setTitleColor(UIColor.themePink, for: UIControl.State.normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 10
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.themePink.cgColor
         button.layer.masksToBounds = true
@@ -65,10 +66,10 @@ class LoginController: UIViewController {
     lazy var stackView: UIStackView = {
        let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(loginTableView)
         stackView.addArrangedSubview(loginButton)
         stackView.addArrangedSubview(registerButton)
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
         stackView.spacing = 20
         return stackView
     }()
@@ -82,14 +83,26 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .specialWhite
         setUpConstraints()
-        addKeyboardObserver()
         setUpViewModelObserver()
     }
-    override func viewDidAppear(_ animated: Bool) { addTextFieldTarget() }
-    override func viewWillDisappear(_ animated: Bool) { NotificationCenter.default.removeObserver(self) }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { self.view.endEditing(true) }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addKeyboardObserver()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addTextFieldTarget()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.view.endEditing(true)
+    }
     fileprivate func setUpConstraints(){
-        self.view.addSubViews(with: logoImageView,sloganLabel,loginTableView,stackView)
+        self.view.addSubViews(with: logoImageView,sloganLabel,stackView)
         
         logoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         logoImageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true
@@ -99,17 +112,10 @@ class LoginController: UIViewController {
         sloganLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         sloganLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 10).isActive = true
         
-        loginTableView.topAnchor.constraint(equalTo: sloganLabel.bottomAnchor, constant: 40).isActive = true
-        loginTableView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        loginTableView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
-        loginTableView.heightAnchor.constraint(equalToConstant: 250).isActive = true
-
-        stackView.topAnchor.constraint(equalTo: loginTableView.bottomAnchor, constant: 50).isActive = true
+        stackView.topAnchor.constraint(equalTo: sloganLabel.bottomAnchor, constant: 50).isActive = true
         stackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         stackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.6).isActive = true
-        stackView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3).isActive = true
-        
-
+        stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50).isActive = true
     }
     
     fileprivate func addKeyboardObserver(){
@@ -185,9 +191,8 @@ class LoginController: UIViewController {
             let bottomSpace = self.view.frame.height - stackView.frame.origin.y - stackView.frame.height
             let difference = keyboardHeight - bottomSpace
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.view.transform = CGAffineTransform(translationX: 0, y: -difference + 10)
+                self.view.transform = CGAffineTransform(translationX: 0, y: -difference)
             })
-            
         }
     }
     @objc func handleKeyboardHide(_ notification: Notification){

@@ -15,7 +15,6 @@ class PasswordCell: GeneralCell {
         textField.textColor = .themePink
         textField.backgroundColor = .specialWhite
         textField.isSecureTextEntry = true
-        textField.text = "Qqqqqq"
         textField.placeholder = "輸入密碼..."
         textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [.foregroundColor : UIColor.themePink])
         return textField

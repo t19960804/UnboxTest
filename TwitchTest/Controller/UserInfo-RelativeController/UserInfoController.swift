@@ -165,7 +165,6 @@ class UserInfoController: UIViewController {
         setUpNavBar()
         setUpTopView()
         setUpBottomView()
-        addKeyBoardObserver()
         fetchArticles { (user) in
             self.abouMeTextView.text = user.aboutMe ?? ""
             self.articlesArray.sort {$0.date! > $1.date!}
@@ -186,7 +185,12 @@ class UserInfoController: UIViewController {
         }
      
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addKeyBoardObserver()
+    }
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
     func setUpNavBar(){
@@ -445,23 +449,23 @@ class UserInfoController: UIViewController {
         chooseImageButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         chooseImageButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        
         userImageView.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
-        userImageView.topAnchor.constraint(equalTo: backView.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        userImageView.topAnchor.constraint(equalTo: backView.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         userImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
         userImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
         userNameLabel.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
-        userNameLabel.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 8).isActive = true
+        userNameLabel.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 10).isActive = true
+        userNameLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
-        stackView_Label.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor,constant: 15).isActive = true
+        stackView_Label.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor,constant: 10).isActive = true
         stackView_Label.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
-        stackView_Label.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        stackView_Label.heightAnchor.constraint(equalToConstant: 20).isActive = true
         stackView_Label.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 1).isActive = true
         
-        stackView_Number.topAnchor.constraint(equalTo: stackView_Label.bottomAnchor, constant: 5).isActive = true
+        stackView_Number.topAnchor.constraint(equalTo: stackView_Label.bottomAnchor).isActive = true
         stackView_Number.centerXAnchor.constraint(equalTo: backView.centerXAnchor).isActive = true
-        stackView_Number.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        stackView_Number.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -20).isActive = true
         stackView_Number.widthAnchor.constraint(equalTo: backView.widthAnchor, multiplier: 1).isActive = true
 
         followerButton.centerYAnchor.constraint(equalTo: backView.bottomAnchor).isActive = true

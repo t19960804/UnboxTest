@@ -14,7 +14,6 @@ class AccountCell: GeneralCell {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textColor = .themePink
         textField.backgroundColor = .specialWhite
-        textField.text = "asiagodtone@q.com"
         textField.placeholder = "輸入帳號..."
         textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [.foregroundColor : UIColor.themePink])
         return textField

@@ -114,10 +114,10 @@ class PostArticleController: UIViewController {
         uploadImagesColletionView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         uploadImagesColletionView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.25).isActive = true
         
-        titleBackGround.topAnchor.constraint(equalTo: uploadImagesColletionView.bottomAnchor, constant: 18).isActive = true
+        titleBackGround.topAnchor.constraint(equalTo: uploadImagesColletionView.bottomAnchor, constant: 10).isActive = true
         titleBackGround.leftAnchor.constraint(equalTo: uploadImagesColletionView.leftAnchor,constant: 18).isActive = true
         titleBackGround.rightAnchor.constraint(equalTo: uploadImagesColletionView.rightAnchor,constant: -18).isActive = true
-        titleBackGround.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        titleBackGround.heightAnchor.constraint(equalToConstant: 35).isActive = true
 
         titleTextField.centerYAnchor.constraint(equalTo: titleBackGround.centerYAnchor).isActive = true
         titleTextField.leftAnchor.constraint(equalTo: titleBackGround.leftAnchor, constant: 5).isActive = true
@@ -127,7 +127,7 @@ class PostArticleController: UIViewController {
         reviewBackGround.topAnchor.constraint(equalTo: titleBackGround.bottomAnchor, constant: 10).isActive = true
         reviewBackGround.leftAnchor.constraint(equalTo: titleBackGround.leftAnchor).isActive = true
         reviewBackGround.rightAnchor.constraint(equalTo: titleBackGround.rightAnchor).isActive = true
-        reviewBackGround.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        reviewBackGround.heightAnchor.constraint(equalToConstant: 300).isActive = true
 
         reviewTextView.topAnchor.constraint(equalTo: reviewBackGround.topAnchor, constant: 5).isActive = true
         reviewTextView.leftAnchor.constraint(equalTo: reviewBackGround.leftAnchor, constant: 5).isActive = true
